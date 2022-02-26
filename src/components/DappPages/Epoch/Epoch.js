@@ -15,8 +15,6 @@ import pinkGlow from '../../../assets/images/PINK_round.svg';
 import darkBlueGlow from '../../../assets/images/PURPLE_round.svg';
 import WHB from '../../../assets/images/Web-Header-Background.svg';
 import SSTarrow from '../../../assets/images/uiButtons/double-arrow-up.svg';
-import 'animate.css/animate.min.css';
-import { AnimationOnScroll } from 'react-animation-on-scroll';
 import ScrollToTop from 'react-scroll-to-top';
 import { useHistory } from 'react-router';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requires a loader
@@ -29,6 +27,8 @@ import EyeIcon from '../../../assets/svgs/personalEye.svg';
 import InformationButton from '../../Button/InformationButton/InformationButton';
 import InformationButtonGreyed from '../../Button/InformationButton/InformationButtonGreyed';
 import Countdown from 'react-countdown';
+import 'animate.css/animate.min.css';
+import { AnimationOnScroll } from 'react-animation-on-scroll';
 
 const PageWrapper = styled.div`
 	padding: 0 28px 64px 28px;
@@ -482,6 +482,7 @@ const HomePage = () => {
 
 	return (
 		<>
+			{' '}
 			<AnimationOnScroll animateIn="animate__fadeIn" animateOnce={true}>
 				<PageWrapper>
 					<PageHeader>
