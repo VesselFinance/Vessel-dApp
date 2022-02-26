@@ -316,7 +316,7 @@ const UserBoxContent = styled.div`
 	border-radius: 16px;
 	margin-bottom: 20px;
 	color: ${theme.color.text.primary};
-	border: 1px solid rgba(255, 255, 255, 0.2);
+	border: 1px solid rgba(255, 255, 255, 0.5);
 	width: 90%;
 	@media ${bp.sm} {
 		width: 100%;
@@ -340,11 +340,16 @@ const UserBoxDataBox = styled.div`
 
 const UserBoxDataBigNum = styled.h1`
 	font-size: 20px;
-	color: #00c1bc;
+	color: #ffffff;
+	text-align: center;
 	@media ${bp.md} {
 		font-size: 30px;
-		color: #00c1bc;
+		color: #ffffff;
 	}
+`;
+
+const UserBoxDataSubtitle = styled.div`
+	display: flex;
 `;
 
 const UserBoxDataContainer = styled.div`
@@ -439,13 +444,34 @@ const BoxIcon = styled.img`
 const UserBoxCountdownContent = styled.div`
 	display: flex;
 	flex-direction: column;
+	margin-top: 20px;
 	justify-content: center;
 	align-items: center;
-	color: ${theme.color.text.primary};
+	color: ${theme.color.text.secondary};
 	width: 90%;
 	@media ${bp.sm} {
 		width: 100%;
 	}
+`;
+
+const CountdownContentContainer = styled.div`
+	display: flex;
+	margin-top: 20px;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+`;
+
+const CountdownContainer = styled.div`
+	margin-top: 20px;
+	display: flex;
+	flex-direction: row;
+`;
+
+const ClaimStatus = styled.h1`
+	font-size: 14px;
+	color: #53f4d2;
+	font-weight: 100;
 `;
 
 const HomePage = () => {
@@ -460,21 +486,27 @@ const HomePage = () => {
 			return (
 				<span>
 					{' '}
-					<UserBoxDataContainer>
-						<UserBoxDataBox>
-							<UserBoxDataBigNum>{days}</UserBoxDataBigNum>days
-						</UserBoxDataBox>
-						<UserBoxDataBox>
-							<UserBoxDataBigNum>{hours}</UserBoxDataBigNum>hours
-						</UserBoxDataBox>
-						<UserBoxDataBox>
-							<UserBoxDataBigNum>{minutes}</UserBoxDataBigNum>minutes
-						</UserBoxDataBox>
-						<UserBoxDataBox>
-							<UserBoxDataBigNum>{seconds}</UserBoxDataBigNum>seconds
-						</UserBoxDataBox>
-					</UserBoxDataContainer>
-					<UserBoxCountdownContent>Until epoch can be reset.</UserBoxCountdownContent>
+					<CountdownContentContainer>
+						<CountdownContainer>
+							<UserBoxDataBox>
+								<UserBoxDataBigNum>{days}</UserBoxDataBigNum>
+								<UserBoxDataSubtitle>days</UserBoxDataSubtitle>
+							</UserBoxDataBox>
+							<UserBoxDataBox>
+								<UserBoxDataBigNum>{hours}</UserBoxDataBigNum>
+								<UserBoxDataSubtitle>hours</UserBoxDataSubtitle>
+							</UserBoxDataBox>
+							<UserBoxDataBox>
+								<UserBoxDataBigNum>{minutes}</UserBoxDataBigNum>
+								<UserBoxDataSubtitle>minutes</UserBoxDataSubtitle>
+							</UserBoxDataBox>
+							<UserBoxDataBox>
+								<UserBoxDataBigNum>{seconds}</UserBoxDataBigNum>
+								<UserBoxDataSubtitle>seconds</UserBoxDataSubtitle>
+							</UserBoxDataBox>
+						</CountdownContainer>
+						<UserBoxCountdownContent>Until epoch can be reset.</UserBoxCountdownContent>
+					</CountdownContentContainer>
 				</span>
 			);
 		}
@@ -515,17 +547,21 @@ const HomePage = () => {
 									</BoxHeader>
 									<UserBoxDataContainer>
 										<UserBoxDataBox>
-											<UserBoxDataBigNum>1,129,400 $VSL</UserBoxDataBigNum>current reward
+											<UserBoxDataBigNum>1,129,400 $VSL</UserBoxDataBigNum>
+											<UserBoxDataSubtitle>current reward</UserBoxDataSubtitle>
 										</UserBoxDataBox>
 										<UserBoxDataBox>
-											<UserBoxDataBigNum>0.4% </UserBoxDataBigNum> unclaimed
+											<UserBoxDataBigNum>0.4% </UserBoxDataBigNum>
+											<UserBoxDataSubtitle>
+												status: &nbsp; <ClaimStatus>unclaimed</ClaimStatus>
+											</UserBoxDataSubtitle>
 										</UserBoxDataBox>
 									</UserBoxDataContainer>
-									<BackgroundBlurRight src={pinkGlow} alt="blue Glow" />
 								</UserBoxContent>
 							</UserAndGraphContainer>
 						</AssetAllocationContainer>
 						<InformationButtonGreyed>Reset Epoch & Collect</InformationButtonGreyed>
+						<BackgroundBlurRight src={pinkGlow} alt="blue Glow" />
 					</DappCardWrapper>
 				</PageWrapper>
 			</AnimationOnScroll>

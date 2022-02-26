@@ -9,7 +9,7 @@ const StyledButton = styled.button`
 	border-color: ${theme.color.text.secondary};
 	border-radius: 12px;
 	padding: 10px 10px 10px 10px;
-	opacity: 30%;
+	opacity: 40%;
 	margin-left: 0px;
 	margin-right: 10px;
 	transition: all 0.2s ease;
