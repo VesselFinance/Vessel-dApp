@@ -1,45 +1,42 @@
 
 var c = contract.methods
 
-var totalTokens = () => c._tTotal();
-var rTotal      = () => c._rTotal();
-var totalFees   = () => c._tFeeTotal();
+var totalTokens = () => c._tTotal().call();
+var rTotal      = () => c._rTotal().call();
+var totalFees   = () => c._tFeeTotal().call();
 
-var getCoinAddress      = (index) => c.getCoinAddress(index);
-var getCoinVotes        = (index) => c.getCoinVotes(index);
-var getBalancedRatio    = (index) => c.getBalancedRatio(index);
-var getImbalancedRatio  = (index) => c.getImbalancedRatio(index);
-var getLastEpochPrices  = (index) => c.getLastEpochPrices(index);
+var getCoinAddress      = (index) => c.getCoinAddress(index).call();
+var getCoinVotes        = (index) => c.getCoinVotes(index).call();
+var getBalancedRatio    = (index) => c.getBalancedRatio(index).call();
+var getImbalancedRatio  = (index) => c.getImbalancedRatio(index).call();
+var getLastEpochPrices  = (index) => c.getLastEpochPrices(index).call();
 
-var f                   = () => c.f();
-var u                   = () => c.u();
-var v                   = () => c.v();
-var b                   = () => c.b();
+var f                   = () => c.f().call();
+var u                   = () => c.u().call();
+var v                   = () => c.v().call();
+var b                   = () => c.b().call();
 
-var totalVotesCast      = () => c.totalVotesCast();
-var lastVotesCast       = () => c.lastVotesCast();
+var totalVotesCast      = () => c.totalVotesCast().call();
+var lastVotesCast       = () => c.lastVotesCast().call();
 
-var epochNumber         = () => c.epochNumber();
-var lastEpochRebalance  = () => c.lastEpochRebalance();
-var epochLength         = () => c.epochLength();
-var theta               = () => c.theta();
-var theta_max           = () => c.theta_max();
-var theta_granularity   = () => c.theta_granularity();
-var delta               = () => c.delta();
-var delta_t             = () => c.delta_t();
-var delta_w             = () => c.delta_w();
-var delta_1             = () => c.delta_1();
-var delta_2             = () => c.delta_2();
-var rebalance_case      = () => c.rebalance_case();
+var epochNumber         = () => c.epochNumber().call();
+var lastEpochRebalance  = () => c.lastEpochRebalance().call();
+var epochLength         = () => c.epochLength().call();
+var theta               = () => c.theta().call();
+var theta_max           = () => c.theta_max().call();
+var theta_granularity   = () => c.theta_granularity().call();
+var delta               = () => c.delta().call();
+var delta_t             = () => c.delta_t().call();
+var delta_w             = () => c.delta_w().call();
+var delta_1             = () => c.delta_1().call();
+var delta_2             = () => c.delta_2().call();
+var rebalance_case      = () => c.rebalance_case().call();
 
-var nativecoin          = () => c.nativecoin();
-var stablecoin          = () => c.stablecoin();
+var nativecoin          = () => c.nativecoin().call();
+var stablecoin          = () => c.stablecoin().call();
 
-var maxVotesAllowed     = () => c.maxVotesAllowed();
-var decimals            = () => c.decimals();
+var maxVotesAllowed     = () => c.maxVotesAllowed().call();
+var decimals            = () => c.decimals().call();
 
-var balanceOf           = (address) => c.balanceOf(address);
-var lastEpochVoteCast   = (address) => c.lastEpochVoteCast(address);
-
-
-  
+var balanceOf           = (address) => c.balanceOf(address).call();
+var lastEpochVoteCast   = (address) => c.lastEpochVoteCast(address).call();
