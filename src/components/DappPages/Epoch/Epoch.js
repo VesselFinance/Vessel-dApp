@@ -314,6 +314,7 @@ const ClaimStatus = styled.h1`
 
 const HomePage = () => {
 	const [timeToNextEpoch, setTimeToNextEpoch] = React.useState(0);
+	const [countDownKey, setCountDownKey] = React.useState(0);
 	var ethTime;
 	React.useEffect(() => {
 		const getLastEpochRebalance = async () => {
@@ -321,9 +322,11 @@ const HomePage = () => {
 			var jsTime = Date.now() / 1000;
 			const timeToGoInSeconds = parseInt(ethTime) + 86400 * 7 - parseInt(jsTime);
 			if (ethTime + 86400 * 7 - jsTime > 0) {
+				console.log(timeToGoInSeconds * 1000);
 				setTimeToNextEpoch(timeToGoInSeconds * 1000);
 			} else {
 				setTimeToNextEpoch(0);
+				setCountDownKey(countDownKey++);
 			}
 		};
 		getLastEpochRebalance();
@@ -365,6 +368,10 @@ const HomePage = () => {
 		}
 	};
 
+	const now = () => {
+		return Date.now();
+	};
+
 	return (
 		<>
 			<AnimationOnScroll animateIn="animate__fadeIn" animateOnce={true}>
@@ -390,8 +397,10 @@ const HomePage = () => {
 									</BoxHeader>
 									<UserBoxDataContainer>
 										<Countdown
+											autoStart={true}
 											date={Date.now() + parseInt(timeToNextEpoch)}
 											renderer={countDownRenderer}
+											key={Date.now()}
 										/>
 									</UserBoxDataContainer>
 								</UserBoxContent>
