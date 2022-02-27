@@ -341,8 +341,28 @@ const UserBoxDataBox = styled.div`
 const UserBoxDataBigNum = styled.h1`
 	font-size: 20px;
 	color: #ffffff;
+	height: 100%;
 	text-align: center;
 	@media ${bp.md} {
+		font-size: 30px;
+		color: #ffffff;
+	}
+`;
+
+const UserBoxDataCurrentRewardBigNum = styled.h1`
+	font-size: 20px;
+	color: #ffffff;
+	text-align: center;
+	height: 100%;
+	@media ${bp.sm} {
+		font-size: 20px;
+		color: #ffffff;
+	}
+	@media ${bp.md} {
+		font-size: 20px;
+		color: #ffffff;
+	}
+	@media ${bp.lg} {
 		font-size: 30px;
 		color: #ffffff;
 	}
@@ -379,61 +399,6 @@ const BoxHeader = styled.h1`
 		padding-bottom: 4px;
 		border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 	}
-`;
-
-const ContentTextWrapperContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	max-width: 500px;
-	justify-content: center;
-	@media ${bp.sm} {
-		align-items: flex-start;
-	}
-`;
-
-const ChartWrapper = styled.div`
-	height: 130px;
-	width: 500px;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	font-color: #000000;
-	@media ${bp.md} {
-		height: 140px;
-		width: 500px;
-	}
-	@media ${bp.lg} {
-		height: 190px;
-		width: 500px;
-	}
-	@media ${bp.xl} {
-		height: 225px;
-		width: 500px;
-	}
-`;
-
-const ChartAllocationAvailable = styled.div`
-	display: flex;
-	flex-direction: column;
-	padding: 8px;
-	font-size: 14px;
-	margin-top: 10px;
-	width: 150px;
-	align-items: center;
-	background: rgba(155, 155, 155, 0.2);
-	backdrop-filter: blur(10px);
-	border-radius: 16px;
-	color: ${theme.color.text.primary};
-	border: 0px solid rgba(255, 255, 255, 0.5);
-	}
-`;
-
-const AllocationChartDataWrapper = styled.div`
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
 `;
 
 const BoxIcon = styled.img`
@@ -547,7 +512,9 @@ const HomePage = () => {
 									</BoxHeader>
 									<UserBoxDataContainer>
 										<UserBoxDataBox>
-											<UserBoxDataBigNum>1,129,400 $VSL</UserBoxDataBigNum>
+											<UserBoxDataCurrentRewardBigNum>
+												1,129,400 $VSL
+											</UserBoxDataCurrentRewardBigNum>
 											<UserBoxDataSubtitle>current reward</UserBoxDataSubtitle>
 										</UserBoxDataBox>
 										<UserBoxDataBox>
