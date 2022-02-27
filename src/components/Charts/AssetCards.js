@@ -134,7 +134,7 @@ const AssetCards = () => {
 		['#FFC371', '#26F390'],
 	];
 	return (
-		<Carousel showStatus={false} showThumbs={false} swipeable={false} renderIndicator={false}>
+		<Carousel showStatus={false} width={700} showThumbs={false} swipeable={false} renderIndicator={false}>
 			{[...Array(5)].map((e, i) => {
 				console.log(i);
 				return (

@@ -176,12 +176,12 @@ const UserBoxContent = styled.div`
 	display: flex;
 	flex-direction: column;
 	padding: 24px;
-	background: rgba(0, 30, 30, 0.5);
+	background: rgba(40, 50, 50, 0.7);
 	backdrop-filter: blur(10px);
 	border-radius: 16px;
 	margin-bottom: 20px;
 	color: ${theme.color.text.primary};
-	border: 1px solid rgba(255, 255, 255, 0.5);
+	border: 0px solid rgba(255, 255, 255, 0.5);
 	width: 88vw;
 	@media ${bp.sm} {
 		width: 100%;
