@@ -144,8 +144,6 @@ const AssetCards = () => {
 			return 700;
 		} else if (1280 < size[0] && size[0] < 1440) {
 			// lg breakpoint
-			console.log('hey');
-			console.log(1280 < size[0] && size[0] < 1440);
 			return 600;
 		} else if (1024 < size[0] && size[0] < 1280) {
 			// md breakpoint
@@ -157,6 +155,7 @@ const AssetCards = () => {
 			// sm breakpoint
 			return 600;
 		} else {
+			// mobile breakpoint
 			return size[0] - 20;
 		}
 	}
