@@ -6,9 +6,9 @@ import bp from '../Theme/breakpoints';
 
 const BoxContentWrapper = styled.div`
 	display: inline-grid;
-	grid-template-rows: 220px 220px;
-	grid-template-columns: 170px 170px;
-	grid-column-gap: 28px;
+	grid-template-rows: 250px 250px;
+	grid-template-columns: 160px 160px;
+	grid-column-gap: 8px;
 	grid-row-gap: 20px;
 	justify-content: center;
 	@media ${bp.sm} {
@@ -16,7 +16,7 @@ const BoxContentWrapper = styled.div`
 		grid-template-rows: 250px 250px;
 		grid-template-columns: 250px 250px;
 		grid-column-gap: 18px;
-		grid-row-gap: px;
+		grid-row-gap: 20px;
 		justify-content: flex-start;
 	}
 	@media ${bp.smd} {
@@ -24,7 +24,7 @@ const BoxContentWrapper = styled.div`
 		grid-template-rows: 220px 220px;
 		grid-template-columns: 175px 175px;
 		grid-column-gap: 18px;
-		grid-row-gap: px;
+		grid-row-gap: 20px;
 		justify-content: flex-start;
 	}
 	@media ${bp.md} {
@@ -63,6 +63,7 @@ const BoxContent = styled.div`
 	border-radius: 16px;
 	color: ${theme.color.text.primary};
 	border: 1px solid rgba(255, 255, 255, 0.5);
+	width: 100%;
 	@media ${bp.md} {
 		max-width: 300px;
 		height: 230px;
@@ -86,30 +87,43 @@ const BoxHeader = styled.h1`
 
 const BoxSubdata = styled.h1`
 	color: ${theme.color.text.primary};
-	margin-bottom: 4px;
+	margin-top: 10px;
+	margin-bottom: 0px;
 	text-align: flex-start;
 	font-size: 12px;
 	display: flex;
 	justify-content: space-between;
 	padding-bottom: 2px;
+	@media ${bp.sm} {
+		margin-top: 0px;
+		margin-bottom: 4px;
+	}
 `;
 const BoxSubdataTitle = styled.h1`
 	color: ${theme.color.text.primary};
 	margin-bottom: 4px;
 	text-align: flex-start;
-	font-size: 12px;
+	font-size: 10px;
+	font-weight: 100;
 	display: flex;
 	justify-content: space-between;
 	padding-bottom: 2px;
+	@media ${bp.sm} {
+		font-size: 12px;
+	}
 `;
 const BoxSubdataValue = styled.h1`
 	color: ${theme.color.text.primary};
 	margin-bottom: 4px;
 	text-align: flex-start;
-	font-size: 12px;
+	font-size: 10px;
 	display: flex;
+	font-weight: 600;
 	justify-content: space-between;
 	padding-bottom: 2px;
+	@media ${bp.sm} {
+		font-size: 12px;
+	}
 `;
 
 const AssetCards = () => {

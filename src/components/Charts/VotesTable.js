@@ -28,7 +28,7 @@ const TableContent = styled.div`
 const TokenomicsTable = styled.div`
 	display: grid;
 	grid-template-columns: 2fr;
-	width: 100%;
+	width: 88vw;
 	justify-content: center;
 	align-content: center;
 	margin-top: 50px;

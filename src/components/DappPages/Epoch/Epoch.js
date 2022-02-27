@@ -80,7 +80,7 @@ const UserAndGraphContainer = styled.div`
 	margin-top: 30px;
 	width: 90%;
 	align-items: center;
-	@media ${bp.sm} {
+	@media ${bp.md} {
 		display: flex;
 		flex-direction: row;
 		margin-top: 50px;
@@ -182,7 +182,7 @@ const UserBoxContent = styled.div`
 	margin-bottom: 20px;
 	color: ${theme.color.text.primary};
 	border: 1px solid rgba(255, 255, 255, 0.5);
-	width: 90%;
+	width: 88vw;
 	@media ${bp.sm} {
 		width: 100%;
 		margin-left: 20px;
@@ -194,6 +194,7 @@ const UserBoxDataBox = styled.div`
 	display: flex;
 	padding: 14px;
 	flex-direction: column;
+	justify-content: center;
 	align-items: center;
 	background: rgba(155, 155, 155, 0.2);
 	backdrop-filter: blur(10px);
@@ -215,26 +216,27 @@ const UserBoxDataBigNum = styled.h1`
 `;
 
 const UserBoxDataCurrentRewardBigNum = styled.h1`
-	font-size: 20px;
+	font-size: 22px;
 	color: #ffffff;
 	text-align: center;
 	height: 100%;
 	@media ${bp.sm} {
-		font-size: 20px;
+		font-size: 22px;
 		color: #ffffff;
 	}
 	@media ${bp.md} {
-		font-size: 20px;
+		font-size: 22px;
 		color: #ffffff;
 	}
 	@media ${bp.lg} {
-		font-size: 30px;
+		font-size: 26px;
 		color: #ffffff;
 	}
 `;
 
 const UserBoxDataSubtitle = styled.div`
 	display: flex;
+	just
 `;
 
 const UserBoxDataContainer = styled.div`
@@ -379,7 +381,7 @@ const HomePage = () => {
 											<UserBoxDataCurrentRewardBigNum>
 												1,129,400 $VSL
 											</UserBoxDataCurrentRewardBigNum>
-											<UserBoxDataSubtitle>current reward</UserBoxDataSubtitle>
+											<UserBoxDataSubtitle>reward</UserBoxDataSubtitle>
 										</UserBoxDataBox>
 										<UserBoxDataBox>
 											<UserBoxDataBigNum>0.4% </UserBoxDataBigNum>

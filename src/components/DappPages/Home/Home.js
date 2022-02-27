@@ -225,7 +225,7 @@ const UserBoxContent = styled.div`
 	margin-bottom: 20px;
 	color: ${theme.color.text.primary};
 	border: 1px solid rgba(255, 255, 255, 0.2);
-	width: 90%;
+	width: 88vw;
 	@media ${bp.sm} {
 		width: 90%;
 	}
