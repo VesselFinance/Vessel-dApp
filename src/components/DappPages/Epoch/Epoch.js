@@ -11,7 +11,8 @@ import InformationButtonGreyed from '../../Button/InformationButton/InformationB
 import Countdown from 'react-countdown';
 import 'animate.css/animate.min.css';
 import { AnimationOnScroll } from 'react-animation-on-scroll';
-
+import lockIcon from '../../../assets/svgs/bountylock.svg';
+import unlockIcon from '../../../assets/svgs/bountyunlock.svg';
 import middleware_setup from '../../../contract/middleware_setup';
 import * as contractMethods from '../../../contract/contract_methods';
 import React from 'react';
@@ -306,30 +307,56 @@ const CountdownContainer = styled.div`
 	flex-direction: row;
 `;
 
-const ClaimStatus = styled.h1`
+const ClaimStatusLocked = styled.h1`
+	font-size: 14px;
+	color: #fe5e6c;
+	font-weight: 100;
+`;
+
+const ClaimStatusUnlocked = styled.h1`
 	font-size: 14px;
 	color: #53f4d2;
 	font-weight: 100;
 `;
 
+const BountyLockIcon = styled.img`
+	width: 50px;
+	filter: invert(1);
+	display: flex;
+	margin-top: 10px;
+`;
+
 const HomePage = () => {
 	const [timeToNextEpoch, setTimeToNextEpoch] = React.useState(0);
-	const [countDownKey, setCountDownKey] = React.useState(0);
+	const [bountyValue, setBountyValue] = React.useState(0);
+	var [countDownKey, setCountDownKey] = React.useState(0);
+	const [bountyLockStatus, setBountyLockStatus] = React.useState(true);
 	var ethTime;
+	var bountyval;
 	React.useEffect(() => {
 		const getLastEpochRebalance = async () => {
 			ethTime = await contractMethods.lastEpochRebalance();
 			var jsTime = Date.now() / 1000;
 			const timeToGoInSeconds = parseInt(ethTime) + 86400 * 7 - parseInt(jsTime);
 			if (ethTime + 86400 * 7 - jsTime > 0) {
+				setBountyLockStatus(true);
 				console.log(timeToGoInSeconds * 1000);
 				setTimeToNextEpoch(timeToGoInSeconds * 1000);
 			} else {
+				setBountyLockStatus(false);
 				setTimeToNextEpoch(0);
-				setCountDownKey(countDownKey++);
 			}
+			setCountDownKey(countDownKey++);
 		};
 		getLastEpochRebalance();
+	}, []);
+
+	React.useEffect(() => {
+		const getBountyReward = async () => {
+			bountyval = await contractMethods.balanceOf('0x8da4e65beff3f2a14d1ad4d48c5a82e8ab894ac7');
+			setBountyValue(bountyval / 10 ** 18);
+		};
+		getBountyReward();
 	}, []);
 
 	const Completionist = () => <span>Epoch can be reset now.</span>;
@@ -412,21 +439,38 @@ const HomePage = () => {
 									<UserBoxDataContainer>
 										<UserBoxDataBox>
 											<UserBoxDataCurrentRewardBigNum>
-												1,129,400 $VSL
+												{bountyValue} $VSL
 											</UserBoxDataCurrentRewardBigNum>
 											<UserBoxDataSubtitle>reward</UserBoxDataSubtitle>
 										</UserBoxDataBox>
 										<UserBoxDataBox>
-											<UserBoxDataBigNum>0.4% </UserBoxDataBigNum>
+											<UserBoxDataBigNum>
+												{' '}
+												{bountyLockStatus == false ? (
+													<BountyLockIcon src={unlockIcon} />
+												) : (
+													<BountyLockIcon src={lockIcon} />
+												)}
+											</UserBoxDataBigNum>
 											<UserBoxDataSubtitle>
-												status: &nbsp; <ClaimStatus>unclaimed</ClaimStatus>
+												status: &nbsp;
+												{bountyLockStatus == false ? (
+													<ClaimStatusUnlocked>unlocked</ClaimStatusUnlocked>
+												) : (
+													<ClaimStatusLocked>locked</ClaimStatusLocked>
+												)}
 											</UserBoxDataSubtitle>
 										</UserBoxDataBox>
 									</UserBoxDataContainer>
 								</UserBoxContent>
 							</UserAndGraphContainer>
 						</AssetAllocationContainer>
-						<InformationButtonGreyed>Reset Epoch & Collect</InformationButtonGreyed>
+						{bountyLockStatus == false ? (
+							<InformationButton>Reset Epoch & Collect</InformationButton>
+						) : (
+							<InformationButtonGreyed>Reset Epoch & Collect</InformationButtonGreyed>
+						)}
+
 						<BackgroundBlurRight src={pinkGlow} alt="blue Glow" />
 					</DappCardWrapper>
 				</PageWrapper>
