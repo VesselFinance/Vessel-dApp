@@ -1,25 +1,11 @@
 import styled from 'styled-components';
 import theme from '../../Theme/theme';
-import ETF_big from '../../../assets/images/etf_big.png';
-import vault from '../../../assets/images/vault_render_big.png';
-import graph from '../../../assets/images/vsl_graph_both.png';
-import lock from '../../../assets/images/lock_cube.png';
-import scales from '../../../assets/images/scales_zoomed_cropped_4.png';
-import InformationButtonAccent from '../../Button/InformationButtonAccent/InformationButtonAccent';
-import PrimaryButton from '../../Button/Primary/PrimaryButton';
 import bp from '../../Theme/breakpoints';
 import Footer from '../../Navigation/Footer/Footer';
 import blueGlow from '../../../assets/images/BLUE_round.svg';
 import greenGlow from '../../../assets/images/GREEN_round.svg';
-import pinkGlow from '../../../assets/images/PINK_round.svg';
 import darkBlueGlow from '../../../assets/images/PURPLE_round.svg';
-import WHB from '../../../assets/images/Web-Header-Background.svg';
-import SSTarrow from '../../../assets/images/uiButtons/double-arrow-up.svg';
-import ScrollToTop from 'react-scroll-to-top';
-import { useHistory } from 'react-router';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requires a loader
-import { Carousel } from 'react-responsive-carousel';
-import GaugeChart from 'react-gauge-chart';
 import AssetCards from '../../Charts/AssetCards';
 import AllocationChart from '../../Charts/AllocationChart';
 import VotesTable from '../../Charts/VotesTable';
@@ -44,14 +30,6 @@ const PageWrapper = styled.div`
 		position: relative;
 		max-height: 100%;
 	}
-`;
-
-const AboutSection = styled.section`
-	display: flex;
-	justify-content: center;
-	border-radius: 50px;
-	position: relative;
-	background-color: transparent;
 `;
 
 const SectionWrapper = styled.div`
@@ -170,52 +148,6 @@ const AboutSectionSubHeader = styled.div`
 	}
 `;
 
-const AboutImageParent = styled.div`
-	width: 80%;
-	align-items: center;
-	justify-content: center;
-	display: flex;
-	margin-bottom: 24px;
-	@media ${bp.sm} {
-		max-width: 400px;
-		align-items: center;
-		display: flex;
-	}
-`;
-
-const AboutImg = styled.img`
-	max-width: 60%;
-	margin-bottom: 24px;
-	@media ${bp.sm} {
-		max-width: 70%;
-	}
-	@media ${bp.xl} {
-		max-width: 80%;
-	}
-`;
-
-const AboutPara = styled.p`
-	color: ${theme.color.text.secondary};
-	max-width: 700px;
-	text-align: flex-start;
-	font-size: 18px;
-	@media ${bp.sm} {
-		text-align: left;
-	}
-`;
-
-const AboutWrapperTextLeft = styled.div`
-	padding-top: 50px;
-	padding-bottom: 50px;
-	position: relative;
-	@media ${bp.sm} {
-		width: 90%;
-		display: flex;
-		flex-direction: row-reverse;
-		justify-content: space-between;
-	}
-`;
-
 const AboutWrapperTextRight = styled.div`
 	padding-top: 50px;
 	padding-bottom: 50px;
@@ -237,21 +169,6 @@ const AssetCardsContainer = styled.div`
 		display: flex;
 		justify-content: center;
 	}
-`;
-
-const AboutTextWrapperContainer = styled.div`
-	max-width: 500px;
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	justify-content: center;
-	@media ${bp.sm} {
-		align-items: flex-start;
-	}
-`;
-
-const SSTimg = styled.img`
-	width: 30px;
 `;
 
 const BackgroundBlurLeft = styled.img`
@@ -295,29 +212,6 @@ const BackgroundBlurRight = styled.img`
 		right: 0;
 		max-width: 100%;
 		margin-top: -100px;
-	}
-`;
-
-const BoxContentWrapper = styled.div`
-	display: grid;
-	grid-template-columns: repeat(2, 0.3fr);
-	grid-column-gap: 2px;
-	grid-row-gap: 28px;
-	margin: 20px;
-`;
-
-const BoxContent = styled.div`
-	display: flex;
-	flex-direction: column;
-	padding: 24px;
-	background: rgba(0, 0, 0, 0.5);
-	backdrop-filter: blur(10px);
-	border-radius: 16px;
-	color: ${theme.color.text.primary};
-	border: 1px solid rgba(255, 255, 255, 0.5);
-	@media ${bp.sm} {
-		max-width: 200px;
-		height: 150px;
 	}
 `;
 
@@ -393,17 +287,6 @@ const BoxHeader = styled.h1`
 	}
 `;
 
-const ContentTextWrapperContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	max-width: 500px;
-	justify-content: center;
-	@media ${bp.sm} {
-		align-items: flex-start;
-	}
-`;
-
 const ChartWrapper = styled.div`
 	height: 130px;
 	width: 500px;
@@ -454,8 +337,6 @@ const BoxIcon = styled.img`
 `;
 
 const HomePage = () => {
-	const history = useHistory();
-
 	return (
 		<>
 			<AnimationOnScroll animateIn="animate__fadeIn" animateOnce={true}>

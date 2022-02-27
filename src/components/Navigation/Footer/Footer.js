@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import theme from '../../Theme/theme';
-import { Link } from 'react-router-dom';
 import bp from '../../Theme/breakpoints';
 import twitter_img from '../../../assets/images/twitter.svg';
 import github_img from '../../../assets/images/github.svg';
@@ -74,35 +73,6 @@ const Copyright = styled.p`
 	justify-content: center;
 	display: flex;
 	margin-bottom: 24px;
-`;
-
-const StyledLink = styled(Link)`
-	text-decoration: none;
-	color: ${theme.color.text};
-	margin-bottom: 16px;
-	padding: 5px;
-	font-size: 12px;
-	transition: all 0.2s ease;
-
-	&:hover {
-		color: ${theme.color.accentHover};
-	}
-`;
-
-const StyledList = styled.ul`
-	list-style: none;
-	text-align: center;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
-	color: ${theme.color.text.primary};
-	padding-left: 0;
-	padding-bottom: 16px;
-
-	@media ${bp.sm} {
-		align-items: center;
-	}
 `;
 
 const FooterSocials = styled.div`

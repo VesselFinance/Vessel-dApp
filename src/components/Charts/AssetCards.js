@@ -3,7 +3,6 @@ import GaugeChart from 'react-gauge-chart';
 import styled from 'styled-components';
 import theme from '../Theme/theme';
 import bp from '../Theme/breakpoints';
-import assetLockIcon from '../../assets/svgs/assetLock.svg';
 
 const BoxContentWrapper = styled.div`
 	display: inline-grid;

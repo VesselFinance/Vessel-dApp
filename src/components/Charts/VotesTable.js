@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import theme from '../Theme/theme';
 import bp from '../Theme/breakpoints';
 
 const ChartLegendGrid = styled.div`
@@ -22,42 +21,6 @@ const TableContent = styled.div`
 	text-align: flex-start;
 	color: #ffffff;
 	@media ${bp.sm} {
-		padding: 24px;
-	}
-`;
-
-const TableContentTitle = styled.div`
-	display: flex;
-	flex-direction: row;
-	padding: 4px 24px 4px 24px;
-	text-align: flex-start;
-	color: #ffffff;
-	@media ${bp.sm} {
-		padding: 24px;
-	}
-`;
-
-const TableContentPercent = styled.div`
-	display: flex;
-	flex-direction: row;
-	padding: 4px 24px 4px 24px;
-	font-weight: 1000;
-	text-align: flex-start;
-	color: #ffffff;
-	@media ${bp.sm} {
-		padding: 24px;
-	}
-`;
-
-const TableContentDesc = styled.div`
-	display: flex;
-	flex-direction: row;
-	padding: 4px 24px 24px 24px;
-	text-align: flex-start;
-	color: #aaaaaa;
-	border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-	@media ${bp.sm} {
-		border-bottom: 1px solid rgba(255, 255, 255, 0);
 		padding: 24px;
 	}
 `;
