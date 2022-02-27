@@ -3,6 +3,7 @@ import GaugeChart from 'react-gauge-chart';
 import styled from 'styled-components';
 import theme from '../Theme/theme';
 import bp from '../Theme/breakpoints';
+import React, { useLayoutEffect, useState } from 'react';
 
 const BoxContentWrapper = styled.div`
 	display: inline-grid;
@@ -29,7 +30,7 @@ const BoxContentWrapper = styled.div`
 	}
 	@media ${bp.md} {
 		display: inline-grid;
-		grid-template-rows: 240px 230px;
+		grid-template-rows: 240px 240px;
 		grid-template-columns: 200px 200px;
 		grid-column-gap: 22px;
 		grid-row-gap: 22px;
@@ -127,20 +128,60 @@ const BoxSubdataValue = styled.h1`
 `;
 
 const AssetCards = () => {
+	function useWindowSize() {
+		const [size, setSize] = useState([0, 0]);
+		useLayoutEffect(() => {
+			function updateSize() {
+				setSize([window.innerWidth, window.innerHeight]);
+			}
+			window.addEventListener('resize', updateSize);
+			updateSize();
+			return () => window.removeEventListener('resize', updateSize);
+		}, []);
+		console.log(size[0]);
+		if (size[0] > 1440) {
+			// xl breakpoint
+			return 700;
+		} else if (1280 < size[0] && size[0] < 1440) {
+			// lg breakpoint
+			console.log('hey');
+			console.log(1280 < size[0] && size[0] < 1440);
+			return 600;
+		} else if (1024 < size[0] && size[0] < 1280) {
+			// md breakpoint
+			return 500;
+		} else if (900 < size[0] && size[0] < 1024) {
+			// smd breakpoint
+			return 440;
+		} else if (768 < size[0] && size[0] < 900) {
+			// sm breakpoint
+			return 600;
+		} else {
+			return size[0] - 20;
+		}
+	}
+
 	const GraphColors = [
 		['#FF5F6D', '#FFC371'],
 		['#E53EF4', '#FF5F6D'],
 		['#3E71F4', '#26F390'],
 		['#FFC371', '#26F390'],
 	];
+
+	console.log(useWindowSize());
+
 	return (
-		<Carousel showStatus={false} width={700} showThumbs={false} swipeable={false} renderIndicator={false}>
+		<Carousel
+			showStatus={false}
+			width={useWindowSize()}
+			showThumbs={false}
+			swipeable={false}
+			renderIndicator={false}
+		>
 			{[...Array(5)].map((e, i) => {
-				console.log(i);
 				return (
 					<BoxContentWrapper key={(i + 1).toString()}>
 						{[...Array(4)].map((e, j) => {
-							console.log(GraphColors[i]);
 							return (
 								<BoxContent key={(j + 4 * i).toString()}>
 									<BoxHeader>Token #{j + 4 * i}</BoxHeader>

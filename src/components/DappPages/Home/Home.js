@@ -164,6 +164,8 @@ const AssetCardsContainer = styled.div`
 	padding-bottom: 50px;
 	position: relative;
 	justify-content: center;
+	margin-left: 20px;
+	margin-right: 20px;
 	@media ${bp.sm} {
 		width: 55%;
 		display: flex;
