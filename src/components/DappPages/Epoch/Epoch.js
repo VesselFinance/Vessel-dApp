@@ -12,6 +12,12 @@ import Countdown from 'react-countdown';
 import 'animate.css/animate.min.css';
 import { AnimationOnScroll } from 'react-animation-on-scroll';
 
+import middleware_setup from '../../../contract/middleware_setup';
+import * as contractMethods from '../../../contract/contract_methods';
+import React from 'react';
+
+contractMethods.nativecoin().then(x => console.log(x));
+
 const PageWrapper = styled.div`
 	padding: 0 28px 64px 28px;
 	max-width: 1560px;
@@ -307,6 +313,22 @@ const ClaimStatus = styled.h1`
 `;
 
 const HomePage = () => {
+	const [timeToNextEpoch, setTimeToNextEpoch] = React.useState(0);
+	var ethTime;
+	React.useEffect(() => {
+		const getLastEpochRebalance = async () => {
+			ethTime = await contractMethods.lastEpochRebalance();
+			var jsTime = Date.now() / 1000;
+			const timeToGoInSeconds = parseInt(ethTime) + 86400 * 7 - parseInt(jsTime);
+			if (ethTime + 86400 * 7 - jsTime > 0) {
+				setTimeToNextEpoch(timeToGoInSeconds * 1000);
+			} else {
+				setTimeToNextEpoch(0);
+			}
+		};
+		getLastEpochRebalance();
+	}, []);
+
 	const Completionist = () => <span>Epoch can be reset now.</span>;
 	const countDownRenderer = ({ days, hours, minutes, seconds, completed }) => {
 		if (completed) {
@@ -345,7 +367,6 @@ const HomePage = () => {
 
 	return (
 		<>
-			{' '}
 			<AnimationOnScroll animateIn="animate__fadeIn" animateOnce={true}>
 				<PageWrapper>
 					<PageHeader>
@@ -368,7 +389,10 @@ const HomePage = () => {
 										<BoxIcon src={EyeIcon} />
 									</BoxHeader>
 									<UserBoxDataContainer>
-										<Countdown date={Date.now() + 604800000} renderer={countDownRenderer} />
+										<Countdown
+											date={Date.now() + parseInt(timeToNextEpoch)}
+											renderer={countDownRenderer}
+										/>
 									</UserBoxDataContainer>
 								</UserBoxContent>
 								<UserBoxContent>
