@@ -86,7 +86,7 @@ const BoxHeader = styled.h1`
 	border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 `;
 
-const BoxSubdata = styled.h1`
+const BoxSubdata = styled.div`
 	color: ${theme.color.text.primary};
 	margin-top: 10px;
 	margin-bottom: 0px;
@@ -100,7 +100,7 @@ const BoxSubdata = styled.h1`
 		margin-bottom: 4px;
 	}
 `;
-const BoxSubdataTitle = styled.h1`
+const BoxSubdataTitle = styled.h3`
 	color: ${theme.color.text.primary};
 	margin-bottom: 4px;
 	text-align: flex-start;
@@ -113,7 +113,7 @@ const BoxSubdataTitle = styled.h1`
 		font-size: 12px;
 	}
 `;
-const BoxSubdataValue = styled.h1`
+const BoxSubdataValue = styled.h3`
 	color: ${theme.color.text.primary};
 	margin-bottom: 4px;
 	text-align: flex-start;

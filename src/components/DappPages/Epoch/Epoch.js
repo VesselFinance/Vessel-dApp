@@ -13,7 +13,7 @@ import 'animate.css/animate.min.css';
 import { AnimationOnScroll } from 'react-animation-on-scroll';
 import lockIcon from '../../../assets/svgs/bountylock.svg';
 import unlockIcon from '../../../assets/svgs/bountyunlock.svg';
-import middleware_setup from '../../../contract/middleware_setup';
+import middleware_setup, { contract } from '../../../contract/middleware_setup';
 import * as contractMethods from '../../../contract/contract_methods';
 import React from 'react';
 
@@ -359,6 +359,11 @@ const HomePage = () => {
 		getBountyReward();
 	}, []);
 
+	const triggerRebalance = async () => {
+		await contractMethods.rebalance_case();
+		setBountyLockStatus(true);
+	};
+
 	const Completionist = () => <span>Epoch can be reset now.</span>;
 	const countDownRenderer = ({ days, hours, minutes, seconds, completed }) => {
 		if (completed) {
@@ -439,9 +444,9 @@ const HomePage = () => {
 									<UserBoxDataContainer>
 										<UserBoxDataBox>
 											<UserBoxDataCurrentRewardBigNum>
-												{bountyValue} $VSL
+												{bountyValue}
 											</UserBoxDataCurrentRewardBigNum>
-											<UserBoxDataSubtitle>reward</UserBoxDataSubtitle>
+											<UserBoxDataSubtitle> $VSL reward</UserBoxDataSubtitle>
 										</UserBoxDataBox>
 										<UserBoxDataBox>
 											<UserBoxDataBigNum>
@@ -466,9 +471,9 @@ const HomePage = () => {
 							</UserAndGraphContainer>
 						</AssetAllocationContainer>
 						{bountyLockStatus == false ? (
-							<InformationButton>Reset Epoch & Collect</InformationButton>
+							<InformationButton onClick={triggerRebalance()}>Reset Epoch & Collect</InformationButton>
 						) : (
-							<InformationButtonGreyed>Reset Epoch & Collect</InformationButtonGreyed>
+							<InformationButtonGreyed disabled={true}>Reset Epoch & Collect</InformationButtonGreyed>
 						)}
 
 						<BackgroundBlurRight src={pinkGlow} alt="blue Glow" />

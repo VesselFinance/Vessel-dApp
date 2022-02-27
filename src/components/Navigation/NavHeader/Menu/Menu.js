@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import bp from '../../../Theme/breakpoints';
-import PrimaryButton from '../../../Button/Primary/PrimaryButton';
+import ConnectButton from '../../../Button/ConnectWallet/ConnectWallet';
 import SecondaryButton from '../../../Button/Secondary/SecondaryButton';
 import NavItem from '../NavItem/NavItem';
 
@@ -21,7 +21,7 @@ const Menu = () => {
 		<MenuNav>
 			<NavItem link="/">Vote</NavItem>
 			<NavItem link="/Epoch">Epoch</NavItem>
-			<PrimaryButton>Connect Wallet</PrimaryButton>
+			<ConnectButton />
 			<SecondaryButton>Buy $VSL</SecondaryButton>
 		</MenuNav>
 	);
