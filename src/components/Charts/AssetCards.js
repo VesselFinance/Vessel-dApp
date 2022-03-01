@@ -138,7 +138,6 @@ const AssetCards = () => {
 			updateSize();
 			return () => window.removeEventListener('resize', updateSize);
 		}, []);
-		console.log(size[0]);
 		if (size[0] > 1440) {
 			// xl breakpoint
 			return 700;
@@ -166,8 +165,6 @@ const AssetCards = () => {
 		['#3E71F4', '#26F390'],
 		['#FFC371', '#26F390'],
 	];
-
-	console.log(useWindowSize());
 
 	return (
 		<Carousel
