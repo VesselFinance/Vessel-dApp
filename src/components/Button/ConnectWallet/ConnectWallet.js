@@ -92,7 +92,7 @@ const ConnectButton = ({ style }) => {
 		<>
 			{walletIsActive ? (
 				<StyledButton style={style} onClick={() => disconnect()}>
-					{defaultAccount}
+					{defaultAccount.slice(0, 6) + '...' + defaultAccount.slice(-4)}
 				</StyledButton>
 			) : (
 				<StyledButton style={style} onClick={() => connectWalletHandler()}>
