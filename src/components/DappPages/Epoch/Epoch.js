@@ -319,10 +319,10 @@ const ClaimStatusUnlocked = styled.h1`
 `;
 
 const BountyLockIcon = styled.img`
-	width: 50px;
+	width: 30px;
 	filter: invert(1);
 	display: flex;
-	margin-top: 10px;
+	margin-bottom: 10px;
 `;
 
 const HomePage = () => {
@@ -351,7 +351,7 @@ const HomePage = () => {
 		};
 
 		const getBountyReward = async () => {
-			const contractBal = await contractMethods.balanceOf(contractMethods.cAddr);
+			const contractBal = await contractMethods.balanceOf(contractMethods.bountyAddr);
 			setBountyValue(contractBal / 10 ** 18 > 1000000 ? 1000000 : contractBal / 10 ** 18);
 		};
 		getLastEpochRebalance();

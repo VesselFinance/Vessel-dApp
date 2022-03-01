@@ -48,6 +48,7 @@ const DropdownUl = styled.ul`
 const DropdownListItem = styled.li`
 	padding: 8px 2px;
 	color: #ffffff;
+	text-align: center;
 	&:hover {
 		background-color: rgba(0, 0, 0, 0.14);
 		cursor: pointer;
