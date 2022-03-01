@@ -14,6 +14,10 @@ import InformationButton from '../../Button/InformationButton/InformationButton'
 import InformationButtonGreyed from '../../Button/InformationButton/InformationButtonGreyed';
 import 'animate.css/animate.min.css';
 import { AnimationOnScroll } from 'react-animation-on-scroll';
+import * as contractMethods from '../../../contract/contract_methods';
+import React from 'react';
+import { ethers } from 'ethers';
+import Web3 from 'web3';
 
 const PageWrapper = styled.div`
 	padding: 0 28px 64px 28px;
@@ -339,6 +343,31 @@ const BoxIcon = styled.img`
 `;
 
 const HomePage = () => {
+	const [VSLValue, setVSLValue] = React.useState(0);
+
+	// get VSL balance of user
+	React.useEffect(() => {
+		const getAccountBalance = async () => {
+			try {
+				if (!window.ethereum || localStorage.getItem('account') === '') {
+					throw new Error('No crypto wallet found. Please install it.');
+				}
+
+				const web3 = new Web3(window.ethereum);
+				web3.eth.setProvider(Web3.givenProvider);
+				const contract = new web3.eth.Contract(contractMethods.cABI);
+				const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+				const account = accounts[0];
+				const getBountyReward = async () => {
+					const vslBal = await contractMethods.balanceOf(account);
+					setVSLValue(vslBal / 10 ** 18);
+				};
+			} catch (err) {
+				console.log(err.message);
+			}
+		};
+		getAccountBalance();
+	}, []);
 	return (
 		<>
 			<AnimationOnScroll animateIn="animate__fadeIn" animateOnce={true}>
@@ -365,7 +394,7 @@ const HomePage = () => {
 									</BoxHeader>
 									<UserBoxDataContainer>
 										<UserBoxDataBox>
-											<UserBoxDataBigNum>1294</UserBoxDataBigNum>VSL balance
+											<UserBoxDataBigNum>{VSLValue}</UserBoxDataBigNum>VSL balance
 										</UserBoxDataBox>
 										<UserBoxDataBox>
 											<UserBoxDataBigNum>0.4% </UserBoxDataBigNum> voting share

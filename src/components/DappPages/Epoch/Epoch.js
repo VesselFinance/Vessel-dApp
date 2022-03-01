@@ -13,7 +13,6 @@ import 'animate.css/animate.min.css';
 import { AnimationOnScroll } from 'react-animation-on-scroll';
 import lockIcon from '../../../assets/svgs/bountylock.svg';
 import unlockIcon from '../../../assets/svgs/bountyunlock.svg';
-import middleware_setup, { contract } from '../../../contract/middleware_setup';
 import * as contractMethods from '../../../contract/contract_methods';
 import React from 'react';
 import { ethers } from 'ethers';
