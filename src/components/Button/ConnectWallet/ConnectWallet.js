@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import theme from '../../Theme/theme';
 import { useWeb3React } from '@web3-react/core';
 import { injected } from '../../../contract/Connectors';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import web3 from 'web3';
 import { ethers } from 'ethers';
 
@@ -19,11 +19,53 @@ const StyledButton = styled.button`
 	}
 `;
 
+const ButtonContainer = styled.button`
+	position: relative;
+	display: inline-block;
+	background-color: transparent;
+	border: 0px;
+`;
+
+const Dropdown = styled.div`
+	position: absolute;
+	top: 100%;
+	left: 0;
+	width: fit-content;
+	margin-top: 10px;
+	z-index: 2;
+	border-radius: 20px;
+	background: rgba(40, 50, 50, 0.7);
+	border: 1px solid rgba(0, 0, 0, 0.04);
+	box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14);
+`;
+
+const DropdownUl = styled.ul`
+	list-style: none;
+	padding: 0;
+	margin: 0;
+`;
+
+const DropdownListItem = styled.li`
+	padding: 8px 2px;
+	color: #ffffff;
+	&:hover {
+		background-color: rgba(0, 0, 0, 0.14);
+		cursor: pointer;
+	}
+`;
+
+const DisconnectWalletButton = styled.h1`
+	font-size: 14px;
+	color: #fe5e6c;
+	font-weight: 100;
+`;
+
 const ConnectButton = ({ style }) => {
 	const [walletIsActive, setWalletIsActive] = useState(false);
 	const [errorMessage, setErrorMessage] = useState(null);
 	const [defaultAccount, setDefaultAccount] = useState('');
 	const [userBalance, setUserBalance] = useState(null);
+	const [dropdownOpen, setDropdownOpen] = useState(false);
 
 	useEffect(() => {
 		const checkWalletInStorage = () => {
@@ -34,7 +76,9 @@ const ConnectButton = ({ style }) => {
 		checkWalletInStorage();
 	}, []);
 
+	// handler for connecting wallet
 	const connectWalletHandler = () => {
+		setDropdownOpen(false);
 		if (window.ethereum && window.ethereum.isMetaMask) {
 			console.log('MetaMask Here!');
 
@@ -61,6 +105,7 @@ const ConnectButton = ({ style }) => {
 		getAccountBalance(newAccount.toString());
 	};
 
+	// get balance of wallet account
 	const getAccountBalance = account => {
 		window.ethereum
 			.request({ method: 'eth_getBalance', params: [account, 'latest'] })
@@ -77,23 +122,68 @@ const ConnectButton = ({ style }) => {
 		window.location.reload();
 	};
 
-	const disconnect = () => {
+	// disconnect wallet
+	const disconnect = async () => {
 		setDefaultAccount(null);
 		setWalletIsActive(false);
 		localStorage.removeItem('acount');
 	};
+
+	// toggle drop down box
+	const handleDisconnectDropdown = () => {
+		setDropdownOpen(!dropdownOpen);
+	};
+
+	// detect outside dropdown click
+	function useOutsideAlerter(ref) {
+		useEffect(() => {
+			/**
+			 * Alert if clicked on outside of element
+			 */
+			function handleClickOutside(event) {
+				if (ref.current && !ref.current.contains(event.target)) {
+					setDropdownOpen(false);
+				}
+			}
+
+			// Bind the event listener
+			document.addEventListener('mousedown', handleClickOutside);
+			return () => {
+				// Unbind the event listener on clean up
+				document.removeEventListener('mousedown', handleClickOutside);
+			};
+		}, [ref]);
+	}
 
 	// listen for account changes
 	window.ethereum.on('accountsChanged', accountChangedHandler);
 
 	window.ethereum.on('chainChanged', chainChangedHandler);
 
+	const wrapperRef = useRef(null);
+	useOutsideAlerter(wrapperRef);
+
 	return (
 		<>
 			{walletIsActive ? (
-				<StyledButton style={style} onClick={() => disconnect()}>
-					{defaultAccount.slice(0, 6) + '...' + defaultAccount.slice(-4)}
-				</StyledButton>
+				<ButtonContainer>
+					<StyledButton style={style} onClick={() => handleDisconnectDropdown()}>
+						{defaultAccount.slice(0, 6) + '...' + defaultAccount.slice(-4)}
+					</StyledButton>
+					{dropdownOpen ? (
+						<Dropdown ref={wrapperRef}>
+							<DropdownUl>
+								<DropdownListItem
+									onClick={() => {
+										disconnect();
+									}}
+								>
+									<DisconnectWalletButton>Disconnect Wallet</DisconnectWalletButton>
+								</DropdownListItem>
+							</DropdownUl>
+						</Dropdown>
+					) : null}
+				</ButtonContainer>
 			) : (
 				<StyledButton style={style} onClick={() => connectWalletHandler()}>
 					{'connect wallet'} {'❯'}
