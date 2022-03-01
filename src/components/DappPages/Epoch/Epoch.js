@@ -364,7 +364,7 @@ const HomePage = () => {
 	}, []);
 
 	// function for triggering epoch rebalance
-	const testHandleTriggerRebalance = async () => {
+	const HandleTriggerRebalance = async () => {
 		try {
 			if (!window.ethereum || localStorage.getItem('account') === '') {
 				throw new Error('No crypto wallet found. Please install it.');
@@ -505,17 +505,11 @@ const HomePage = () => {
 							</UserAndGraphContainer>
 						</AssetAllocationContainer>
 						{bountyLockStatus === false ? (
-							<InformationButton onClick={testHandleTriggerRebalance()}>
+							<InformationButton onClick={HandleTriggerRebalance()}>
 								Reset Epoch & Collect
 							</InformationButton>
 						) : (
-							<InformationButtonGreyed
-								onClick={() => {
-									testHandleTriggerRebalance();
-								}}
-							>
-								Reset Epoch & Collect
-							</InformationButtonGreyed>
+							<InformationButtonGreyed>Reset Epoch & Collect</InformationButtonGreyed>
 						)}
 
 						<BackgroundBlurRight src={pinkGlow} alt="blue Glow" />
