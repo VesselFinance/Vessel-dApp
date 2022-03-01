@@ -19,7 +19,7 @@ const StyledButton = styled.button`
 	}
 `;
 
-const ButtonContainer = styled.button`
+const ButtonContainer = styled.div`
 	position: relative;
 	display: inline-block;
 	background-color: transparent;
