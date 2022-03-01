@@ -126,6 +126,7 @@ const ConnectButton = ({ style }) => {
 	const disconnect = async () => {
 		setDefaultAccount(null);
 		setWalletIsActive(false);
+		localStorage.setItem('account', '');
 		localStorage.removeItem('acount');
 	};
 

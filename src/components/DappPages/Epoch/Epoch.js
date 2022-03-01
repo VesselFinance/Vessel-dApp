@@ -366,10 +366,11 @@ const HomePage = () => {
 	// function for triggering epoch rebalance
 	const testHandleTriggerRebalance = async () => {
 		try {
-			if (!window.ethereum) {
+			if (!window.ethereum || localStorage.getItem('account') === '') {
 				throw new Error('No crypto wallet found. Please install it.');
 				alert('install Metamask to continue.');
 			}
+
 			const web3 = new Web3(window.ethereum);
 			web3.eth.setProvider(Web3.givenProvider);
 			const contract = new web3.eth.Contract(contractMethods.cABI);
