@@ -355,8 +355,8 @@ const HomePage = () => {
 	// initialise getting bounty reward content for component
 	React.useEffect(() => {
 		const getBountyReward = async () => {
-			bountyval = await contractMethods.balanceOf('0x8da4e65beff3f2a14d1ad4d48c5a82e8ab894ac7');
-			setBountyValue(bountyval / 10 ** 18);
+			const contractBal = await contractMethods.balanceOf(contractMethods.cAddr);
+			setBountyValue(contractBal / 10 ** 18 > 1000000 ? 1000000 : contractBal / 10 ** 18);
 		};
 		getBountyReward();
 	}, []);
