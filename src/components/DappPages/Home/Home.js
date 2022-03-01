@@ -18,6 +18,7 @@ import * as contractMethods from '../../../contract/contract_methods';
 import React from 'react';
 import { ethers } from 'ethers';
 import Web3 from 'web3';
+import { min } from 'd3';
 
 const PageWrapper = styled.div`
 	padding: 0 28px 64px 28px;
@@ -343,31 +344,51 @@ const BoxIcon = styled.img`
 `;
 
 const HomePage = () => {
-	const [VSLValue, setVSLValue] = React.useState(0);
+	const [VSLBalance, setVSLBalance] = React.useState(0);
+	const [votingShare, setVotingShare] = React.useState(0);
+	const [tSupply, settSupply] = React.useState(0);
+	const [burnSupply, setBurnSupply] = React.useState(0);
+	const [bountySupply, setBountySupply] = React.useState(0);
+	const [vaultSupply, setVaultSupply] = React.useState(0);
 
 	// get VSL balance of user
 	React.useEffect(() => {
-		const getAccountBalance = async () => {
+		const getContractData = async () => {
 			try {
 				if (!window.ethereum || localStorage.getItem('account') === '') {
 					throw new Error('No crypto wallet found. Please install it.');
 				}
-
 				const web3 = new Web3(window.ethereum);
 				web3.eth.setProvider(Web3.givenProvider);
-				const contract = new web3.eth.Contract(contractMethods.cABI);
 				const accounts = await window.ethereum.request({ method: 'eth_accounts' });
 				const account = accounts[0];
-				const getBountyReward = async () => {
+				const burnAddr = contractMethods.burnAddr;
+				const bountyAddr = contractMethods.bountyAddr;
+				const vaultAddr = contractMethods.vaultAddr;
+				const getAndSetVesselContractData = async () => {
 					const vslBal = await contractMethods.balanceOf(account);
-					setVSLValue(vslBal / 10 ** 18);
+					const burnSupp = await contractMethods.balanceOf(burnAddr);
+					const bountySupp = await contractMethods.balanceOf(bountyAddr);
+					const vaultSupp = await contractMethods.balanceOf(vaultAddr);
+					const tSupp = await contractMethods.totalTokens();
+					setVSLBalance(vslBal / 10 ** 18);
+					settSupply(tSupp);
+					setBurnSupply(burnSupp);
+					setBountySupply(bountySupp);
+					setVaultSupply(vaultSupp);
+					const vShareCalculation = VSLBalance / tSupply - (burnSupply + bountySupply + vaultSupply);
+					const VSCorZero = vShareCalculation ? vShareCalculation : 0; //convert 'falsey' values to 0 if true;
+					setVotingShare(Number(Math.min(0.1, VSCorZero)));
 				};
+
+				getAndSetVesselContractData();
 			} catch (err) {
 				console.log(err.message);
 			}
 		};
-		getAccountBalance();
+		getContractData();
 	}, []);
+
 	return (
 		<>
 			<AnimationOnScroll animateIn="animate__fadeIn" animateOnce={true}>
@@ -394,10 +415,10 @@ const HomePage = () => {
 									</BoxHeader>
 									<UserBoxDataContainer>
 										<UserBoxDataBox>
-											<UserBoxDataBigNum>{VSLValue}</UserBoxDataBigNum>VSL balance
+											<UserBoxDataBigNum>{VSLBalance}</UserBoxDataBigNum>VSL balance
 										</UserBoxDataBox>
 										<UserBoxDataBox>
-											<UserBoxDataBigNum>0.4% </UserBoxDataBigNum> voting share
+											<UserBoxDataBigNum>{votingShare}% </UserBoxDataBigNum> voting share
 										</UserBoxDataBox>
 									</UserBoxDataContainer>
 								</UserBoxContent>

@@ -342,7 +342,6 @@ const HomePage = () => {
 			const timeToGoInSeconds = parseInt(ethTime) + 86400 * 7 - parseInt(jsTime);
 			if (ethTime + 86400 * 7 - jsTime > 0) {
 				setBountyLockStatus(true);
-				console.log(timeToGoInSeconds * 1000);
 				setTimeToNextEpoch(timeToGoInSeconds * 1000);
 			} else {
 				setBountyLockStatus(false);
@@ -389,7 +388,7 @@ const HomePage = () => {
 				method: 'eth_sendTransaction',
 				params: [transactionParameters],
 			});
-			console.log('yeh ' + account);
+			console.log(account);
 
 			setBountyLockStatus(true);
 		} catch (err) {

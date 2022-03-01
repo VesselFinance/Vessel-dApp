@@ -5,6 +5,10 @@ var cABI = middleware_setup.ABI;
 
 var cAddr = middleware_setup.contractAddress;
 
+var bountyAddr = '0x0000000000000000000000000000000000000002';
+var vaultAddr = '0x0000000000000000000000000000000000000001';
+var burnAddr = '0x000000000000000000000000000000000000dEaD';
+
 var totalTokens = () => c._tTotal().call();
 var rTotal = () => c._rTotal().call();
 var totalFees = () => c._tFeeTotal().call();
@@ -87,4 +91,7 @@ export {
 	maxVotesAllowed,
 	decimals,
 	rebalanceEpoch,
+	burnAddr,
+	bountyAddr,
+	vaultAddr,
 };
