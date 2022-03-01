@@ -349,15 +349,12 @@ const HomePage = () => {
 			}
 			setCountDownKey(countDownKey++);
 		};
-		getLastEpochRebalance();
-	}, []);
 
-	// initialise getting bounty reward content for component
-	React.useEffect(() => {
 		const getBountyReward = async () => {
 			const contractBal = await contractMethods.balanceOf(contractMethods.cAddr);
 			setBountyValue(contractBal / 10 ** 18 > 1000000 ? 1000000 : contractBal / 10 ** 18);
 		};
+		getLastEpochRebalance();
 		getBountyReward();
 	}, []);
 
