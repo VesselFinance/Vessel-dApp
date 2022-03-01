@@ -16,8 +16,8 @@ import unlockIcon from '../../../assets/svgs/bountyunlock.svg';
 import middleware_setup, { contract } from '../../../contract/middleware_setup';
 import * as contractMethods from '../../../contract/contract_methods';
 import React from 'react';
-
-contractMethods.nativecoin().then(x => console.log(x));
+import { ethers } from 'ethers';
+import Web3 from 'web3';
 
 const PageWrapper = styled.div`
 	padding: 0 28px 64px 28px;
@@ -331,8 +331,11 @@ const HomePage = () => {
 	const [bountyValue, setBountyValue] = React.useState(0);
 	var [countDownKey, setCountDownKey] = React.useState(0);
 	const [bountyLockStatus, setBountyLockStatus] = React.useState(true);
+
 	var ethTime;
 	var bountyval;
+
+	// initialise getting lastEpochBalance time for calculating time to next epoch rebalance.
 	React.useEffect(() => {
 		const getLastEpochRebalance = async () => {
 			ethTime = await contractMethods.lastEpochRebalance();
@@ -351,6 +354,7 @@ const HomePage = () => {
 		getLastEpochRebalance();
 	}, []);
 
+	// initialise getting bounty reward content for component
 	React.useEffect(() => {
 		const getBountyReward = async () => {
 			bountyval = await contractMethods.balanceOf('0x8da4e65beff3f2a14d1ad4d48c5a82e8ab894ac7');
@@ -359,9 +363,35 @@ const HomePage = () => {
 		getBountyReward();
 	}, []);
 
-	const triggerRebalance = async () => {
-		await contractMethods.rebalance_case();
-		setBountyLockStatus(true);
+	// function for triggering epoch rebalance
+	const testHandleTriggerRebalance = async () => {
+		try {
+			if (!window.ethereum) throw new Error('No crypto wallet found. Please install it.');
+			const web3 = new Web3(window.ethereum);
+			web3.eth.setProvider(Web3.givenProvider);
+			const contract = new web3.eth.Contract(contractMethods.cABI);
+			const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+			const account = accounts[0];
+			const contractAddress = contractMethods.cAddr;
+
+			const transactionParameters = {
+				from: account,
+				to: contractAddress,
+				data: contract.methods._rebalanceEpoch().encodeABI(),
+				gasPrice: web3.utils.toHex(20000000000),
+				gasLimit: web3.utils.toHex(800000),
+			};
+
+			await window.ethereum.request({
+				method: 'eth_sendTransaction',
+				params: [transactionParameters],
+			});
+			console.log('yeh ' + account);
+
+			setBountyLockStatus(true);
+		} catch (err) {
+			console.log(err.message);
+		}
 	};
 
 	const Completionist = () => <span>Epoch can be reset now.</span>;
@@ -451,7 +481,7 @@ const HomePage = () => {
 										<UserBoxDataBox>
 											<UserBoxDataBigNum>
 												{' '}
-												{bountyLockStatus == false ? (
+												{bountyLockStatus === false ? (
 													<BountyLockIcon src={unlockIcon} />
 												) : (
 													<BountyLockIcon src={lockIcon} />
@@ -459,7 +489,7 @@ const HomePage = () => {
 											</UserBoxDataBigNum>
 											<UserBoxDataSubtitle>
 												status: &nbsp;
-												{bountyLockStatus == false ? (
+												{bountyLockStatus === false ? (
 													<ClaimStatusUnlocked>unlocked</ClaimStatusUnlocked>
 												) : (
 													<ClaimStatusLocked>locked</ClaimStatusLocked>
@@ -470,10 +500,18 @@ const HomePage = () => {
 								</UserBoxContent>
 							</UserAndGraphContainer>
 						</AssetAllocationContainer>
-						{bountyLockStatus == false ? (
-							<InformationButton onClick={triggerRebalance()}>Reset Epoch & Collect</InformationButton>
+						{bountyLockStatus === false ? (
+							<InformationButton onClick={testHandleTriggerRebalance()}>
+								Reset Epoch & Collect
+							</InformationButton>
 						) : (
-							<InformationButtonGreyed disabled={true}>Reset Epoch & Collect</InformationButtonGreyed>
+							<InformationButtonGreyed
+								onClick={() => {
+									testHandleTriggerRebalance();
+								}}
+							>
+								Reset Epoch & Collect
+							</InformationButtonGreyed>
 						)}
 
 						<BackgroundBlurRight src={pinkGlow} alt="blue Glow" />

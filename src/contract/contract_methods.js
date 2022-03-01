@@ -1,6 +1,9 @@
 import * as middleware_setup from './middleware_setup';
 
 var c = middleware_setup.contract.methods;
+var cABI = middleware_setup.ABI;
+
+var cAddr = middleware_setup.contractAddress;
 
 var totalTokens = () => c._tTotal().call();
 var rTotal = () => c._rTotal().call();
@@ -46,7 +49,11 @@ var balanceOf = address => {
 };
 var lastEpochVoteCast = address => c.lastEpochVoteCast(address).call();
 
+var rebalanceEpoch = address => c._rebalanceEpoch().send({ from: address });
+
 export {
+	cABI,
+	cAddr,
 	totalTokens,
 	rTotal,
 	totalFees,
@@ -79,4 +86,5 @@ export {
 	stablecoin,
 	maxVotesAllowed,
 	decimals,
+	rebalanceEpoch,
 };
