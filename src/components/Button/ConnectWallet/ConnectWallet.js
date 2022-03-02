@@ -35,10 +35,7 @@ const Dropdown = styled.div`
 	margin-top: 10px;
 	z-index: 2;
 	border-radius: 20px;
-	background: rgba(20, 30, 30, 0.9);
-	backdrop-filter: blur(9px);
-	border: 1px solid rgba(0, 0, 0, 0.04);
-	box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14);
+	background: transparent;
 `;
 
 const DropdownUl = styled.ul`
@@ -46,6 +43,7 @@ const DropdownUl = styled.ul`
 	padding: 0;
 	margin: 0;
 	width: fit-content;
+	height: 30px;
 `;
 
 const DropdownListItem = styled.li`
@@ -53,26 +51,31 @@ const DropdownListItem = styled.li`
 	color: #ffffff;
 	border-radius: 12px;
 	width: fit-content;
-
 	text-align: center;
 	backdrop-filter: blur(9px);
-	&:hover {
-		background-color: rgba(0, 0, 0, 0.14);
-		cursor: pointer;
-	}
 `;
 
 const DisconnectWalletButton = styled.button`
 	font-size: 14px;
 	color: #fe5e6c;
+	padding: 13px;
 	width: 180px;
-	background-color: transparent;
+	background: rgba(20, 30, 30, 0.9);
+	backdrop-filter: blur(9px);
+	border: 1px solid rgba(0, 0, 0, 0.04);
+	box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14);
 	border-radius: 12px;
-	border: 0px solid;
 	font-weight: 100;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	&:hover {
+		background: rgba(17, 27, 27, 0.9);
+		cursor: pointer;
+	}
+	&:active {
+		background: rgba(12, 22, 22, 0.9);
+	}
 `;
 
 const BoxIcon = styled.img`
