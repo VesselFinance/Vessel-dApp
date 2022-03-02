@@ -1,5 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 import theme from '../Theme/theme';
+import boatIcon from '../../assets/images/boat.png';
 
 const ldsHeart = keyframes`
   0% {
@@ -22,49 +23,46 @@ const ldsHeart = keyframes`
   }
 `;
 
+const BoatLoaderIcon = styled.img`
+	width: 50px;
+	display: flex;
+	margin-bottom: 10px;
+`;
+
 const StyledRing = styled.div`
 	display: inline-block;
 	position: relative;
 	width: 80px;
 	height: 80px;
-	transform: rotate(45deg);
-	transform-origin: 40px 40px;
+	//transform-origin: 40px 40px;
 `;
 
 const StyledDiv = styled.div`
-	top: 32px;
-	left: 32px;
 	position: absolute;
-	width: 32px;
-	height: 32px;
-	background: ${theme.color.accent};
 	animation: ${ldsHeart} 1.2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
 
 	&:after,
 	&:before {
 		content: ' ';
 		position: absolute;
-		display: block;
-		width: 32px;
-		height: 32px;
 		background: ${theme.color.accent};
 	}
 
 	&:before {
 		left: -24px;
-		border-radius: 50% 0 0 50%;
 	}
 
 	&:after {
 		top: -24px;
-		border-radius: 50% 50% 0 0;
 	}
 `;
 
 const Spinner = () => {
 	return (
 		<StyledRing>
-			<StyledDiv></StyledDiv>
+			<StyledDiv>
+				<BoatLoaderIcon src={boatIcon}></BoatLoaderIcon>
+			</StyledDiv>
 		</StyledRing>
 	);
 };

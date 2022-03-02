@@ -17,6 +17,7 @@ import * as contractMethods from '../../../contract/contract_methods';
 import React from 'react';
 import { ethers } from 'ethers';
 import Web3 from 'web3';
+import Loader from '../../Loader/Loader';
 
 const PageWrapper = styled.div`
 	padding: 0 28px 64px 28px;
@@ -325,7 +326,14 @@ const BountyLockIcon = styled.img`
 	margin-bottom: 10px;
 `;
 
+const LoaderContainer = styled.div`
+	position: absolute;
+	top: 50vh;
+	left: 50vw;
+`;
+
 const HomePage = () => {
+	const [isLoaded, setIsLoaded] = React.useState(false);
 	const [timeToNextEpoch, setTimeToNextEpoch] = React.useState(0);
 	const [bountyValue, setBountyValue] = React.useState(0);
 	var [countDownKey, setCountDownKey] = React.useState(0);
@@ -334,9 +342,10 @@ const HomePage = () => {
 	var ethTime;
 	var bountyval;
 
-	// initialise getting lastEpochBalance time for calculating time to next epoch rebalance.
+	// initialise getting lastEpochBalance time for calculating time to next epoch rebalance, and then get the value of the bounty reward.
 	React.useEffect(() => {
-		const getLastEpochRebalance = async () => {
+		const getContractData = async () => {
+			// get lastEpochBalance time for calculating time to next epoch rebalance.
 			ethTime = await contractMethods.lastEpochRebalance();
 			var jsTime = Date.now() / 1000;
 			const timeToGoInSeconds = parseInt(ethTime) + 86400 * 7 - parseInt(jsTime);
@@ -348,14 +357,13 @@ const HomePage = () => {
 				setTimeToNextEpoch(0);
 			}
 			setCountDownKey(countDownKey++);
-		};
 
-		const getBountyReward = async () => {
+			// get bounty reward value
 			const contractBal = await contractMethods.balanceOf(contractMethods.bountyAddr);
 			setBountyValue(contractBal / 10 ** 18 > 1000000 ? 1000000 : contractBal / 10 ** 18);
 		};
-		getLastEpochRebalance();
-		getBountyReward();
+
+		getContractData().then(setIsLoaded(true));
 	}, []);
 
 	// function for triggering epoch rebalance
@@ -433,7 +441,11 @@ const HomePage = () => {
 		return Date.now();
 	};
 
-	return (
+	return !isLoaded ? (
+		<LoaderContainer>
+			<Loader />
+		</LoaderContainer>
+	) : (
 		<>
 			<AnimationOnScroll animateIn="animate__fadeIn" animateOnce={true}>
 				<PageWrapper>

@@ -19,6 +19,7 @@ import React from 'react';
 import { ethers } from 'ethers';
 import Web3 from 'web3';
 import { min } from 'd3';
+import Loader from '../../Loader/Loader';
 
 const PageWrapper = styled.div`
 	padding: 0 28px 64px 28px;
@@ -343,7 +344,14 @@ const BoxIcon = styled.img`
 	filter: invert(1);
 `;
 
+const LoaderContainer = styled.div`
+	position: absolute;
+	top: 50vh;
+	left: 50vw;
+`;
+
 const HomePage = () => {
+	const [isLoaded, setIsLoaded] = React.useState(false);
 	const [VSLBalance, setVSLBalance] = React.useState(0);
 	const [votingShare, setVotingShare] = React.useState(0);
 	const [tSupply, settSupply] = React.useState(0);
@@ -386,10 +394,14 @@ const HomePage = () => {
 				console.log(err.message);
 			}
 		};
-		getContractData();
+		getContractData().then(setIsLoaded(true));
 	}, []);
 
-	return (
+	return !isLoaded ? (
+		<LoaderContainer>
+			<Loader />
+		</LoaderContainer>
+	) : (
 		<>
 			<AnimationOnScroll animateIn="animate__fadeIn" animateOnce={true}>
 				<PageWrapper>
