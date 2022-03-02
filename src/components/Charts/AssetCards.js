@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import theme from '../Theme/theme';
 import bp from '../Theme/breakpoints';
 import React, { useLayoutEffect, useState } from 'react';
+import { tokenData } from '../../Data/tokens';
 
 const BoxContentWrapper = styled.div`
 	display: inline-grid;
@@ -127,7 +128,8 @@ const BoxSubdataValue = styled.h3`
 	}
 `;
 
-const AssetCards = () => {
+const AssetCards = props => {
+	console.log('calling from assetcards file: ' + props.ratio);
 	function useWindowSize() {
 		const [size, setSize] = useState([0, 0]);
 		useLayoutEffect(() => {
@@ -178,16 +180,17 @@ const AssetCards = () => {
 				return (
 					<BoxContentWrapper key={(i + 1).toString()}>
 						{[...Array(4)].map((e, j) => {
+							var tokenDataContractKey = props.wrappertokens[j + 4 * i];
 							return (
 								<BoxContent key={(j + 4 * i).toString()}>
-									<BoxHeader>Token #{j + 4 * i}</BoxHeader>
+									<BoxHeader>{tokenData[tokenDataContractKey]}</BoxHeader>
 
 									<GaugeChart
 										id={(j + 4 * i).toString()}
 										nrOfLevels={10}
 										colors={GraphColors[j]}
 										arcWidth={0.3}
-										percent={0.37}
+										percent={props.ratio[j + 4 * i] / 10 ** 18}
 									/>
 									<BoxSubdata>
 										<BoxSubdataTitle>Current Value:</BoxSubdataTitle>

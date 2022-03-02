@@ -358,6 +358,8 @@ const HomePage = () => {
 	const [burnSupply, setBurnSupply] = React.useState(0);
 	const [bountySupply, setBountySupply] = React.useState(0);
 	const [vaultSupply, setVaultSupply] = React.useState(0);
+	const [VSLTokens, setVSLTokens] = React.useState([]);
+	const [balancedRatio, setBalancedRatio] = React.useState([]);
 
 	// get VSL balance of user
 	React.useEffect(() => {
@@ -374,6 +376,8 @@ const HomePage = () => {
 				const bountyAddr = contractMethods.bountyAddr;
 				const vaultAddr = contractMethods.vaultAddr;
 				const AssetTokens = [];
+				const BalancedRatio = [];
+				const TokenPrices = [];
 				const getAndSetVesselContractData = async () => {
 					const vslBal = await contractMethods.balanceOf(account);
 					const burnSupp = await contractMethods.balanceOf(burnAddr);
@@ -382,7 +386,10 @@ const HomePage = () => {
 					const tSupp = await contractMethods.totalTokens();
 					for (var i = 0; i < 20; i++) {
 						AssetTokens.push(await contractMethods.getCoinAddress(i));
+						BalancedRatio.push(await contractMethods.getBalancedRatio(i));
 					}
+					setVSLTokens(AssetTokens);
+					setBalancedRatio(BalancedRatio);
 					setVSLBalance(vslBal / 10 ** 18);
 					settSupply(tSupp);
 					setBurnSupply(burnSupp);
@@ -423,7 +430,7 @@ const HomePage = () => {
 						<AboutSectionSubHeader>Asset Allocation</AboutSectionSubHeader>
 						<AssetAllocationContainer>
 							<AssetCardsContainer>
-								<AssetCards />
+								<AssetCards wrappertokens={VSLTokens} ratio={balancedRatio} />
 							</AssetCardsContainer>
 							<UserAndGraphContainer>
 								<UserBoxContent>
