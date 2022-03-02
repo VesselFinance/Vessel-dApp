@@ -129,7 +129,6 @@ const BoxSubdataValue = styled.h3`
 `;
 
 const AssetCards = props => {
-	console.log('calling from assetcards file: ' + props.ratio);
 	function useWindowSize() {
 		const [size, setSize] = useState([0, 0]);
 		useLayoutEffect(() => {

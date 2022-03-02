@@ -398,7 +398,6 @@ const HomePage = () => {
 					const vShareCalculation = VSLBalance / tSupply - (burnSupply + bountySupply + vaultSupply);
 					const VSCorZero = vShareCalculation ? vShareCalculation : 0; //convert 'falsey' values to 0 if true;
 					setVotingShare(Number(Math.min(0.1, VSCorZero)));
-					console.log(AssetTokens.toString());
 				};
 
 				await getAndSetVesselContractData();
@@ -451,7 +450,7 @@ const HomePage = () => {
 									<BoxHeader>Allocations</BoxHeader>
 									<AllocationChartDataWrapper>
 										<ChartWrapper>
-											<AllocationChart />
+											<AllocationChart wrappertokens={VSLTokens} ratio={balancedRatio} />
 										</ChartWrapper>
 										<ChartAllocationAvailable>Available: 30%</ChartAllocationAvailable>
 									</AllocationChartDataWrapper>
