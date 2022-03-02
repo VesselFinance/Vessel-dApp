@@ -345,25 +345,29 @@ const HomePage = () => {
 	// initialise getting lastEpochBalance time for calculating time to next epoch rebalance, and then get the value of the bounty reward.
 	React.useEffect(() => {
 		const getContractData = async () => {
-			// get lastEpochBalance time for calculating time to next epoch rebalance.
-			ethTime = await contractMethods.lastEpochRebalance();
-			var jsTime = Date.now() / 1000;
-			const timeToGoInSeconds = parseInt(ethTime) + 86400 * 7 - parseInt(jsTime);
-			if (ethTime + 86400 * 7 - jsTime > 0) {
-				setBountyLockStatus(true);
-				setTimeToNextEpoch(timeToGoInSeconds * 1000);
-			} else {
-				setBountyLockStatus(false);
-				setTimeToNextEpoch(0);
-			}
-			setCountDownKey(countDownKey++);
+			const getAndSetVesselContractData = async () => {
+				// get lastEpochBalance time for calculating time to next epoch rebalance.
+				ethTime = await contractMethods.lastEpochRebalance();
+				var jsTime = Date.now() / 1000;
+				const timeToGoInSeconds = parseInt(ethTime) + 86400 * 7 - parseInt(jsTime);
+				if (ethTime + 86400 * 7 - jsTime > 0) {
+					setBountyLockStatus(true);
+					setTimeToNextEpoch(timeToGoInSeconds * 1000);
+				} else {
+					setBountyLockStatus(false);
+					setTimeToNextEpoch(0);
+				}
+				setCountDownKey(countDownKey++);
 
-			// get bounty reward value
-			const contractBal = await contractMethods.balanceOf(contractMethods.bountyAddr);
-			setBountyValue(contractBal / 10 ** 18 > 1000000 ? 1000000 : contractBal / 10 ** 18);
+				// get bounty reward value
+				const contractBal = await contractMethods.balanceOf(contractMethods.bountyAddr);
+				setBountyValue(contractBal / 10 ** 18 > 1000000 ? 1000000 : contractBal / 10 ** 18);
+			};
+			await getAndSetVesselContractData();
+			setIsLoaded(true);
 		};
 
-		getContractData().then(setIsLoaded(true));
+		getContractData();
 	}, []);
 
 	// function for triggering epoch rebalance

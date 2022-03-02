@@ -373,12 +373,16 @@ const HomePage = () => {
 				const burnAddr = contractMethods.burnAddr;
 				const bountyAddr = contractMethods.bountyAddr;
 				const vaultAddr = contractMethods.vaultAddr;
+				const AssetTokens = [];
 				const getAndSetVesselContractData = async () => {
 					const vslBal = await contractMethods.balanceOf(account);
 					const burnSupp = await contractMethods.balanceOf(burnAddr);
 					const bountySupp = await contractMethods.balanceOf(bountyAddr);
 					const vaultSupp = await contractMethods.balanceOf(vaultAddr);
 					const tSupp = await contractMethods.totalTokens();
+					for (var i = 0; i < 20; i++) {
+						AssetTokens.push(await contractMethods.getCoinAddress(i));
+					}
 					setVSLBalance(vslBal / 10 ** 18);
 					settSupply(tSupp);
 					setBurnSupply(burnSupp);
@@ -387,14 +391,16 @@ const HomePage = () => {
 					const vShareCalculation = VSLBalance / tSupply - (burnSupply + bountySupply + vaultSupply);
 					const VSCorZero = vShareCalculation ? vShareCalculation : 0; //convert 'falsey' values to 0 if true;
 					setVotingShare(Number(Math.min(0.1, VSCorZero)));
+					console.log(AssetTokens.toString());
 				};
 
-				getAndSetVesselContractData();
+				await getAndSetVesselContractData();
+				setIsLoaded(true);
 			} catch (err) {
 				console.log(err.message);
 			}
 		};
-		getContractData().then(setIsLoaded(true));
+		getContractData();
 	}, []);
 
 	return !isLoaded ? (
