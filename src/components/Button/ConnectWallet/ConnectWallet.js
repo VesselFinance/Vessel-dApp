@@ -5,6 +5,7 @@ import { injected } from '../../../contract/Connectors';
 import React, { useEffect, useState, useRef } from 'react';
 import web3 from 'web3';
 import { ethers } from 'ethers';
+import exitIcon from '../../../assets/svgs/exit.svg';
 
 const StyledButton = styled.button`
 	background: linear-gradient(250deg, #428afa 0%, #00bea8 100%);
@@ -44,12 +45,15 @@ const DropdownUl = styled.ul`
 	list-style: none;
 	padding: 0;
 	margin: 0;
+	width: fit-content;
 `;
 
 const DropdownListItem = styled.li`
 	padding: 8px 2px;
 	color: #ffffff;
-	border-radius: 20px;
+	border-radius: 12px;
+	width: fit-content;
+
 	text-align: center;
 	backdrop-filter: blur(9px);
 	&:hover {
@@ -58,10 +62,23 @@ const DropdownListItem = styled.li`
 	}
 `;
 
-const DisconnectWalletButton = styled.h1`
+const DisconnectWalletButton = styled.button`
 	font-size: 14px;
 	color: #fe5e6c;
+	width: 180px;
+	background-color: transparent;
+	border-radius: 12px;
+	border: 0px solid;
 	font-weight: 100;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+`;
+
+const BoxIcon = styled.img`
+	width: 20px;
+	margin-left: 20px;
+	filter: invert(1);
 `;
 
 const ConnectButton = ({ style }) => {
@@ -183,7 +200,9 @@ const ConnectButton = ({ style }) => {
 										disconnect();
 									}}
 								>
-									<DisconnectWalletButton>Disconnect Wallet</DisconnectWalletButton>
+									<DisconnectWalletButton>
+										Disconnect Wallet <BoxIcon src={exitIcon} />
+									</DisconnectWalletButton>
 								</DropdownListItem>
 							</DropdownUl>
 						</Dropdown>
