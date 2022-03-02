@@ -34,7 +34,8 @@ const Dropdown = styled.div`
 	margin-top: 10px;
 	z-index: 2;
 	border-radius: 20px;
-	background: rgba(40, 50, 50, 0.7);
+	background: rgba(20, 30, 30, 0.9);
+	backdrop-filter: blur(9px);
 	border: 1px solid rgba(0, 0, 0, 0.04);
 	box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14);
 `;
@@ -48,7 +49,9 @@ const DropdownUl = styled.ul`
 const DropdownListItem = styled.li`
 	padding: 8px 2px;
 	color: #ffffff;
+	border-radius: 20px;
 	text-align: center;
+	backdrop-filter: blur(9px);
 	&:hover {
 		background-color: rgba(0, 0, 0, 0.14);
 		cursor: pointer;
