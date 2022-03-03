@@ -361,7 +361,7 @@ const HomePage = () => {
 	const [VSLTokens, setVSLTokens] = React.useState([]);
 	const [balancedRatio, setBalancedRatio] = React.useState([]);
 
-	// get VSL balance of user
+	// get necessary data from Contract to display
 	React.useEffect(() => {
 		const getContractData = async () => {
 			try {
@@ -404,6 +404,15 @@ const HomePage = () => {
 				setIsLoaded(true);
 			} catch (err) {
 				console.log(err.message);
+				const AssetTokens = [];
+				const BalancedRatio = [];
+				for (var i = 0; i < 20; i++) {
+					AssetTokens.push(await contractMethods.getCoinAddress(i));
+					BalancedRatio.push(await contractMethods.getBalancedRatio(i));
+				}
+				setVSLTokens(AssetTokens);
+				setBalancedRatio(BalancedRatio);
+				setIsLoaded(true);
 			}
 		};
 		getContractData();
