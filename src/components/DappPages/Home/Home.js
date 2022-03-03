@@ -384,12 +384,21 @@ const HomePage = () => {
 					const bountySupp = await contractMethods.balanceOf(bountyAddr);
 					const vaultSupp = await contractMethods.balanceOf(vaultAddr);
 					const tSupp = await contractMethods.totalTokens();
-					for (var i = 0; i < 20; i++) {
-						AssetTokens.push(await contractMethods.getCoinAddress(i));
-						BalancedRatio.push(await contractMethods.getBalancedRatio(i));
-					}
-					setVSLTokens(AssetTokens);
-					setBalancedRatio(BalancedRatio);
+
+					let addresses = await Promise.all(
+						[...Array(20)].map((e, i) => {
+							return contractMethods.getCoinAddress(i);
+						}),
+					);
+
+					let ratios = await Promise.all(
+						[...Array(20)].map((e, i) => {
+							return contractMethods.getBalancedRatio(i);
+						}),
+					);
+
+					setVSLTokens(addresses);
+					setBalancedRatio(ratios);
 					setVSLBalance(vslBal / 10 ** 18);
 					settSupply(tSupp);
 					setBurnSupply(burnSupp);
@@ -406,12 +415,25 @@ const HomePage = () => {
 				console.log(err.message);
 				const AssetTokens = [];
 				const BalancedRatio = [];
+
+				let addresses = await Promise.all(
+					[...Array(20)].map((e, i) => {
+						return contractMethods.getCoinAddress(i);
+					}),
+				);
+
+				let ratios = await Promise.all(
+					[...Array(20)].map((e, i) => {
+						return contractMethods.getBalancedRatio(i);
+					}),
+				);
+
 				for (var i = 0; i < 20; i++) {
 					AssetTokens.push(await contractMethods.getCoinAddress(i));
 					BalancedRatio.push(await contractMethods.getBalancedRatio(i));
 				}
-				setVSLTokens(AssetTokens);
-				setBalancedRatio(BalancedRatio);
+				setVSLTokens(addresses);
+				setBalancedRatio(ratios);
 				setIsLoaded(true);
 			}
 		};
