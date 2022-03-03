@@ -180,6 +180,8 @@ const AssetCards = props => {
 					<BoxContentWrapper key={(i + 1).toString()}>
 						{[...Array(4)].map((e, j) => {
 							var tokenDataContractKey = props.wrappertokens[j + 4 * i];
+							var tokenRatio = props.ratio[j + 4 * i] / 10 ** 18;
+							console.log(tokenRatio);
 							return (
 								<BoxContent key={(j + 4 * i).toString()}>
 									<BoxHeader>{tokenData[tokenDataContractKey]}</BoxHeader>
@@ -189,7 +191,7 @@ const AssetCards = props => {
 										nrOfLevels={10}
 										colors={GraphColors[j]}
 										arcWidth={0.3}
-										percent={props.ratio[j + 4 * i] / 10 ** 18}
+										percent={tokenRatio}
 									/>
 									<BoxSubdata>
 										<BoxSubdataTitle>Current Value:</BoxSubdataTitle>

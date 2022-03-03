@@ -2,126 +2,130 @@ import React from 'react';
 import { ResponsivePie } from '@nivo/pie';
 import { tokenData } from '../../Data/tokens';
 
+const removePrecision = num => {
+	return num / 10 ** 18;
+};
+
 const getData = (ratio, wrappertokens) => {
 	const pieData = [
 		{
-			id: 'token-0',
+			id: '0.' + tokenData[wrappertokens[0]],
 			label: tokenData[wrappertokens[0]],
-			value: ratio[0] / 100,
+			value: removePrecision(ratio[0]),
 			color: 'hsl(291, 61%, 57%)',
 		},
 		{
-			id: 'token-1',
+			id: '1.' + tokenData[wrappertokens[1]],
 			label: tokenData[wrappertokens[1]],
-			value: ratio[1] / 100,
+			value: removePrecision(ratio[1]),
 			color: 'hsl(50, 60%, 52%)',
 		},
 		{
-			id: 'token-2',
+			id: '2.' + tokenData[wrappertokens[2]],
 			label: tokenData[wrappertokens[2]],
-			value: ratio[2] / 100,
+			value: removePrecision(ratio[2]),
 			color: 'hsl(45, 83%, 45%)',
 		},
 		{
-			id: 'token-3',
+			id: '3.' + tokenData[wrappertokens[3]],
 			label: tokenData[wrappertokens[3]],
-			value: ratio[3] / 100,
+			value: removePrecision(ratio[3]),
 			color: 'hsl(218, 58%, 75%)',
 		},
 		{
-			id: 'token-4',
+			id: '4.' + tokenData[wrappertokens[4]],
 			label: tokenData[wrappertokens[4]],
-			value: ratio[4] / 100,
+			value: removePrecision(ratio[4]),
 			color: 'hsl(2, 55%, 61%)',
 		},
 		{
-			id: 'token-5',
+			id: '5.' + tokenData[wrappertokens[5]],
 			label: tokenData[wrappertokens[5]],
-			value: ratio[5] / 100,
+			value: removePrecision(ratio[5]),
 			color: 'hsl(195, 51%, 61%)',
 		},
 		{
-			id: 'token-6',
+			id: '6.' + tokenData[wrappertokens[6]],
 			label: tokenData[wrappertokens[6]],
-			value: ratio[6] / 100,
+			value: removePrecision(ratio[6]),
 			color: 'hsl(216, 62%, 57%)',
 		},
 		{
-			id: 'token-7',
+			id: '7.' + tokenData[wrappertokens[7]],
 			label: tokenData[wrappertokens[7]],
-			value: ratio[7] / 100,
+			value: removePrecision(ratio[7]),
 			color: 'hsl(293, 62%, 48%)',
 		},
 		{
-			id: 'token-8',
+			id: '8.' + tokenData[wrappertokens[8]],
 			label: tokenData[wrappertokens[8]],
-			value: ratio[8] / 100,
+			value: removePrecision(ratio[8]),
 			color: 'hsl(167, 35%, 55%)',
 		},
 		{
-			id: 'token-9',
+			id: '9.' + tokenData[wrappertokens[9]],
 			label: tokenData[wrappertokens[9]],
-			value: ratio[9] / 100,
+			value: removePrecision(ratio[9]),
 			color: 'hsl(199, 86%, 44%)',
 		},
 		{
-			id: 'token-10',
+			id: '10.' + tokenData[wrappertokens[10]],
 			label: tokenData[wrappertokens[10]],
-			value: ratio[10] / 100,
+			value: removePrecision(ratio[10]),
 			color: 'hsl(291, 61%, 57%)',
 		},
 		{
-			id: 'token-11',
+			id: '11.' + tokenData[wrappertokens[11]],
 			label: tokenData[wrappertokens[11]],
-			value: ratio[11] / 100,
+			value: removePrecision(ratio[11]),
 			color: 'hsl(50, 60%, 52%)',
 		},
 		{
-			id: 'token-12',
+			id: '12.' + tokenData[wrappertokens[12]],
 			label: tokenData[wrappertokens[12]],
-			value: ratio[12] / 100,
+			value: removePrecision(ratio[12]),
 			color: 'hsl(45, 83%, 45%)',
 		},
 		{
-			id: 'token-13',
+			id: '13.' + tokenData[wrappertokens[13]],
 			label: tokenData[wrappertokens[13]],
-			value: ratio[13] / 100,
+			value: removePrecision(ratio[13]),
 			color: 'hsl(218, 58%, 75%)',
 		},
 		{
-			id: 'token-14',
+			id: '14.' + tokenData[wrappertokens[14]],
 			label: tokenData[wrappertokens[14]],
-			value: ratio[14] / 100,
+			value: removePrecision(ratio[14]),
 			color: 'hsl(2, 55%, 61%)',
 		},
 		{
-			id: 'token-15',
+			id: '15.' + tokenData[wrappertokens[15]],
 			label: tokenData[wrappertokens[15]],
-			value: ratio[15] / 100,
+			value: removePrecision(ratio[15]),
 			color: 'hsl(195, 51%, 61%)',
 		},
 		{
-			id: 'token-16',
+			id: '16.' + tokenData[wrappertokens[16]],
 			label: tokenData[wrappertokens[16]],
-			value: ratio[16] / 100,
+			value: removePrecision(ratio[16]),
 			color: 'hsl(216, 62%, 57%)',
 		},
 		{
-			id: 'token-17',
+			id: '17.' + tokenData[wrappertokens[17]],
 			label: tokenData[wrappertokens[17]],
-			value: ratio[17] / 100,
+			value: removePrecision(ratio[17]),
 			color: 'hsl(293, 62%, 48%)',
 		},
 		{
-			id: 'token-18',
+			id: '18.' + tokenData[wrappertokens[18]],
 			label: tokenData[wrappertokens[18]],
-			value: ratio[18] / 100,
+			value: removePrecision(ratio[18]),
 			color: 'hsl(167, 35%, 55%)',
 		},
 		{
-			id: 'token-19',
+			id: '19.' + tokenData[wrappertokens[19]],
 			label: tokenData[wrappertokens[19]],
-			value: ratio[19] / 100,
+			value: removePrecision(ratio[19]),
 			color: 'hsl(199, 86%, 44%)',
 		},
 	];
@@ -133,9 +137,9 @@ const Pie = props => {
 		<ResponsivePie
 			data={getData(props.ratio, props.wrappertokens)}
 			margin={{ top: 30, right: 40, bottom: 30, left: 40 }}
-			innerRadius={0.5}
-			padAngle={0.7}
-			valueFormat=" >-0.0~%"
+			innerRadius={0.3}
+			padAngle={0.01}
+			valueFormat=" >0~%"
 			isInteractive={false}
 			cornerRadius={3}
 			colors={{ datum: 'data.color' }}
