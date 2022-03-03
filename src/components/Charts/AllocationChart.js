@@ -137,15 +137,15 @@ const Pie = props => {
 		<ResponsivePie
 			data={getData(props.ratio, props.wrappertokens)}
 			margin={{ top: 30, right: 40, bottom: 30, left: 40 }}
-			innerRadius={0.3}
-			padAngle={0.01}
+			innerRadius={0.35}
+			padAngle={0.2}
 			valueFormat=" >0~%"
 			isInteractive={false}
 			cornerRadius={3}
 			colors={{ datum: 'data.color' }}
 			borderWidth={1}
 			borderColor={{ from: 'color', modifiers: [['darker', 0.2]] }}
-			arcLinkLabelsSkipAngle={15}
+			arcLinkLabelsSkipAngle={20}
 			arcLinkLabelsTextColor="#ffffff"
 			arcLinkLabelsThickness={2}
 			arcLinkLabelsColor={{ from: 'color' }}
