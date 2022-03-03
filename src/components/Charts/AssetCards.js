@@ -97,8 +97,8 @@ const BoxSubdata = styled.div`
 	justify-content: space-between;
 	padding-bottom: 2px;
 	@media ${bp.sm} {
-		margin-top: 0px;
-		margin-bottom: 4px;
+		margin-top: 12px;
+		margin-bottom: 2px;
 	}
 `;
 const BoxSubdataTitle = styled.h3`
@@ -185,16 +185,22 @@ const AssetCards = props => {
 						{[...Array(4)].map((e, j) => {
 							var tokenDataContractKey = props.wrappertokens[j + 4 * i];
 							var tokenRatio = removePrecision(props.ratio[j + 4 * i]);
+							var n = 3;
+
 							return (
 								<BoxContent key={(j + 4 * i).toString()}>
 									<BoxHeader>{tokenData[tokenDataContractKey]}</BoxHeader>
 
 									<GaugeChart
 										id={(j + 4 * i).toString()}
-										nrOfLevels={10}
+										nrOfLevels={25}
 										colors={GraphColors[j]}
 										arcWidth={0.3}
-										percent={tokenRatio}
+										percent={((n + 1) * tokenRatio) / (n * tokenRatio + 1)}
+										cornerRadius={0}
+										formatTextValue={value =>
+											Math.ceil(((n * tokenRatio + 1) * value) / (n + 1)) + '%'
+										}
 									/>
 									<BoxSubdata>
 										<BoxSubdataTitle>Current Value:</BoxSubdataTitle>
@@ -203,10 +209,6 @@ const AssetCards = props => {
 									<BoxSubdata>
 										<BoxSubdataTitle>Total Votes:</BoxSubdataTitle>
 										<BoxSubdataValue>{removePrecision(props.votes[j + 4 * i])}</BoxSubdataValue>
-									</BoxSubdata>
-									<BoxSubdata>
-										<BoxSubdataTitle>Addresses :</BoxSubdataTitle>
-										<BoxSubdataValue>28</BoxSubdataValue>
 									</BoxSubdata>
 								</BoxContent>
 							);

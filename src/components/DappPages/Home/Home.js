@@ -386,6 +386,8 @@ const HomePage = () => {
 					const bountySupp = await contractMethods.balanceOf(bountyAddr);
 					const vaultSupp = await contractMethods.balanceOf(vaultAddr);
 					const tSupp = await contractMethods.totalTokens();
+					const votesThisEpoch = await contractMethods.totalVotesCast();
+					console.log('vte: ' + votesThisEpoch / 10 ** 18);
 
 					let addresses = await Promise.all(
 						[...Array(20)].map((e, i) => {
