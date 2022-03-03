@@ -128,6 +128,10 @@ const BoxSubdataValue = styled.h3`
 	}
 `;
 
+const removePrecision = num => {
+	return num / 10 ** 18;
+};
+
 const AssetCards = props => {
 	function useWindowSize() {
 		const [size, setSize] = useState([0, 0]);
@@ -180,7 +184,7 @@ const AssetCards = props => {
 					<BoxContentWrapper key={(i + 1).toString()}>
 						{[...Array(4)].map((e, j) => {
 							var tokenDataContractKey = props.wrappertokens[j + 4 * i];
-							var tokenRatio = props.ratio[j + 4 * i] / 10 ** 18;
+							var tokenRatio = removePrecision(props.ratio[j + 4 * i]);
 							return (
 								<BoxContent key={(j + 4 * i).toString()}>
 									<BoxHeader>{tokenData[tokenDataContractKey]}</BoxHeader>
@@ -194,11 +198,11 @@ const AssetCards = props => {
 									/>
 									<BoxSubdata>
 										<BoxSubdataTitle>Current Value:</BoxSubdataTitle>
-										<BoxSubdataValue>0.2</BoxSubdataValue>
+										<BoxSubdataValue>{removePrecision(props.prices[j + 4 * i])}</BoxSubdataValue>
 									</BoxSubdata>
 									<BoxSubdata>
 										<BoxSubdataTitle>Total Votes:</BoxSubdataTitle>
-										<BoxSubdataValue>24000</BoxSubdataValue>
+										<BoxSubdataValue>{removePrecision(props.votes[j + 4 * i])}</BoxSubdataValue>
 									</BoxSubdata>
 									<BoxSubdata>
 										<BoxSubdataTitle>Addresses :</BoxSubdataTitle>

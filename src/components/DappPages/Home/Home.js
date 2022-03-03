@@ -360,6 +360,8 @@ const HomePage = () => {
 	const [vaultSupply, setVaultSupply] = React.useState(0);
 	const [VSLTokens, setVSLTokens] = React.useState([]);
 	const [balancedRatio, setBalancedRatio] = React.useState([]);
+	const [assetVotes, setAssetVotes] = React.useState([]);
+	const [assetPrices, setAssetPrices] = React.useState([]);
 
 	// get necessary data from Contract to display
 	React.useEffect(() => {
@@ -397,8 +399,22 @@ const HomePage = () => {
 						}),
 					);
 
+					let assetTotalVotes = await Promise.all(
+						[...Array(20)].map((e, i) => {
+							return contractMethods.getCoinVotes(i);
+						}),
+					);
+
+					let assetTotalPrices = await Promise.all(
+						[...Array(20)].map((e, i) => {
+							return contractMethods.getLastEpochPrices(i);
+						}),
+					);
+
 					setVSLTokens(addresses);
 					setBalancedRatio(ratios);
+					setAssetVotes(assetTotalVotes);
+					setAssetPrices(assetTotalPrices);
 					setVSLBalance(vslBal / 10 ** 18);
 					settSupply(tSupp);
 					setBurnSupply(burnSupp);
@@ -460,7 +476,12 @@ const HomePage = () => {
 						<AboutSectionSubHeader>Asset Allocation</AboutSectionSubHeader>
 						<AssetAllocationContainer>
 							<AssetCardsContainer>
-								<AssetCards wrappertokens={VSLTokens} ratio={balancedRatio} />
+								<AssetCards
+									prices={assetPrices}
+									votes={assetVotes}
+									wrappertokens={VSLTokens}
+									ratio={balancedRatio}
+								/>
 							</AssetCardsContainer>
 							<UserAndGraphContainer>
 								<UserBoxContent>
