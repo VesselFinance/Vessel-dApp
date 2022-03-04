@@ -97,8 +97,8 @@ const BoxSubdata = styled.div`
 	justify-content: space-between;
 	padding-bottom: 2px;
 	@media ${bp.sm} {
-		margin-top: 12px;
-		margin-bottom: 2px;
+		margin-top: 2px;
+		margin-bottom: 0px;
 	}
 `;
 const BoxSubdataTitle = styled.h3`
@@ -203,8 +203,14 @@ const AssetCards = props => {
 										}
 									/>
 									<BoxSubdata>
-										<BoxSubdataTitle>Current Value:</BoxSubdataTitle>
+										<BoxSubdataTitle>Value at Last Epoch:</BoxSubdataTitle>
 										<BoxSubdataValue>{removePrecision(props.prices[j + 4 * i])}</BoxSubdataValue>
+									</BoxSubdata>
+									<BoxSubdata>
+										<BoxSubdataTitle>Realtime Price:</BoxSubdataTitle>
+										<BoxSubdataValue>
+											{'$' + Math.round(props.realtimeprices[j + 4 * i] * 100) / 100}
+										</BoxSubdataValue>
 									</BoxSubdata>
 									<BoxSubdata>
 										<BoxSubdataTitle>Total Votes:</BoxSubdataTitle>

@@ -20,6 +20,7 @@ import { ethers } from 'ethers';
 import Web3 from 'web3';
 import { min } from 'd3';
 import Loader from '../../Loader/Loader';
+import getPCSPrice from '../../../contract/priceGetterPCS';
 
 const PageWrapper = styled.div`
 	padding: 0 28px 64px 28px;
@@ -362,10 +363,12 @@ const HomePage = () => {
 	const [balancedRatio, setBalancedRatio] = React.useState([]);
 	const [assetVotes, setAssetVotes] = React.useState([]);
 	const [assetPrices, setAssetPrices] = React.useState([]);
+	const [rtAssetPrices, setRealTimeAssetPrices] = React.useState([]);
 
 	// get necessary data from Contract to display
 	React.useEffect(() => {
 		const getContractData = async () => {
+			// if wallet is connected, pull contract data and wallet data
 			try {
 				if (!window.ethereum || localStorage.getItem('account') === '') {
 					throw new Error('No crypto wallet found. Please install it.');
@@ -381,14 +384,68 @@ const HomePage = () => {
 				const BalancedRatio = [];
 				const TokenPrices = [];
 				const getAndSetVesselContractData = async () => {
-					const vslBal = await contractMethods.balanceOf(account);
-					const burnSupp = await contractMethods.balanceOf(burnAddr);
-					const bountySupp = await contractMethods.balanceOf(bountyAddr);
-					const vaultSupp = await contractMethods.balanceOf(vaultAddr);
 					const tSupp = await contractMethods.totalTokens();
-					const votesThisEpoch = await contractMethods.totalVotesCast();
-					console.log('vte: ' + votesThisEpoch / 10 ** 18);
+					const walletAddresses = [account, burnAddr, bountyAddr, vaultAddr];
 
+					let balances = await Promise.all(
+						walletAddresses.map((e, i) => {
+							return contractMethods.balanceOf(walletAddresses[i]);
+						}),
+					);
+
+					let addresses = await Promise.all(
+						[...Array(20)].map((e, i) => {
+							return contractMethods.getCoinAddress(i);
+						}),
+					);
+
+					let ratios = await Promise.all(
+						[...Array(20)].map((e, i) => {
+							return contractMethods.getBalancedRatio(i);
+						}),
+					);
+
+					let assetTotalVotes = await Promise.all(
+						[...Array(20)].map((e, i) => {
+							return contractMethods.getCoinVotes(i);
+						}),
+					);
+
+					let assetTotalPrices = await Promise.all(
+						[...Array(20)].map((e, i) => {
+							return contractMethods.getLastEpochPrices(i);
+						}),
+					);
+
+					let realTimeAssetPrices = await Promise.all(
+						addresses.map((e, i) => {
+							return getPCSPrice(addresses[i]);
+						}),
+					);
+
+					setVSLTokens(addresses);
+					setBalancedRatio(ratios);
+					setAssetVotes(assetTotalVotes);
+					setAssetPrices(assetTotalPrices);
+					setVSLBalance(balances[0] / 10 ** 18);
+					settSupply(tSupp);
+					setBurnSupply(balances[1]);
+					setBountySupply(balances[2]);
+					setVaultSupply(balances[3]);
+					setRealTimeAssetPrices(realTimeAssetPrices);
+					const vShareCalculation = VSLBalance / tSupply - (burnSupply + bountySupply + vaultSupply);
+					const VSCorZero = Math.round((vShareCalculation ? vShareCalculation : 0) * 100) / 100; //convert 'falsey' values to 0 if true;
+					setVotingShare(Number(Math.min(0.1, VSCorZero)));
+				};
+
+				await getAndSetVesselContractData();
+				setIsLoaded(true);
+
+				// if wallet not connected, just pull contract data
+			} catch (err) {
+				console.log(err.message);
+
+				const getAndSetVesselContractData = async () => {
 					let addresses = await Promise.all(
 						[...Array(20)].map((e, i) => {
 							return contractMethods.getCoinAddress(i);
@@ -417,41 +474,9 @@ const HomePage = () => {
 					setBalancedRatio(ratios);
 					setAssetVotes(assetTotalVotes);
 					setAssetPrices(assetTotalPrices);
-					setVSLBalance(vslBal / 10 ** 18);
-					settSupply(tSupp);
-					setBurnSupply(burnSupp);
-					setBountySupply(bountySupp);
-					setVaultSupply(vaultSupp);
-					const vShareCalculation = VSLBalance / tSupply - (burnSupply + bountySupply + vaultSupply);
-					const VSCorZero = vShareCalculation ? vShareCalculation : 0; //convert 'falsey' values to 0 if true;
-					setVotingShare(Number(Math.min(0.1, VSCorZero)));
+					setIsLoaded(true);
 				};
-
 				await getAndSetVesselContractData();
-				setIsLoaded(true);
-			} catch (err) {
-				console.log(err.message);
-				const AssetTokens = [];
-				const BalancedRatio = [];
-
-				let addresses = await Promise.all(
-					[...Array(20)].map((e, i) => {
-						return contractMethods.getCoinAddress(i);
-					}),
-				);
-
-				let ratios = await Promise.all(
-					[...Array(20)].map((e, i) => {
-						return contractMethods.getBalancedRatio(i);
-					}),
-				);
-
-				for (var i = 0; i < 20; i++) {
-					AssetTokens.push(await contractMethods.getCoinAddress(i));
-					BalancedRatio.push(await contractMethods.getBalancedRatio(i));
-				}
-				setVSLTokens(addresses);
-				setBalancedRatio(ratios);
 				setIsLoaded(true);
 			}
 		};
@@ -483,6 +508,7 @@ const HomePage = () => {
 									votes={assetVotes}
 									wrappertokens={VSLTokens}
 									ratio={balancedRatio}
+									realtimeprices={rtAssetPrices}
 								/>
 							</AssetCardsContainer>
 							<UserAndGraphContainer>
