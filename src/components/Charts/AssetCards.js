@@ -177,6 +177,28 @@ const AssetCards = props => {
 		['#FFC371', '#26F390'],
 	];
 
+	const sortedCards = (tokens, ratios, prices, RTPs, votes) => {
+		var allCardsList = [];
+		for (var i = 0; i < tokens.length; i++) {
+			allCardsList.push([tokens[i], Number(ratios[i]), Number(prices[i]), Number(RTPs[i]), Number(votes[i])]);
+		}
+
+		console.log(allCardsList);
+
+		function sortRatioFunction(a, b) {
+			if (a[1] === b[1]) {
+				return 0;
+			} else {
+				return a[1] > b[1] ? -1 : 1;
+			}
+		}
+
+		return allCardsList.sort(sortRatioFunction);
+	};
+
+	var sortedAssets = sortedCards(props.wrappertokens, props.ratio, props.prices, props.realtimeprices, props.votes);
+	console.log(sortedAssets);
+
 	return (
 		<Carousel
 			showStatus={false}
@@ -189,8 +211,8 @@ const AssetCards = props => {
 				return (
 					<BoxContentWrapper key={(i + 1).toString()}>
 						{[...Array(4)].map((e, j) => {
-							var tokenDataContractKey = props.wrappertokens[j + 4 * i];
-							var tokenRatio = removePrecision(props.ratio[j + 4 * i]);
+							var tokenDataContractKey = sortedAssets[j + 4 * i][0];
+							var tokenRatio = removePrecision(sortedAssets[j + 4 * i][1]);
 							var n = 3;
 
 							return (
@@ -211,19 +233,19 @@ const AssetCards = props => {
 									<BoxSubdata>
 										<BoxSubdataTitle>Value at Last Epoch:</BoxSubdataTitle>
 										<BoxSubdataValue>
-											{roundedToTwo(removePrecision(props.prices[j + 4 * i]))}
+											{roundedToTwo(removePrecision(sortedAssets[j + 4 * i][2]))}
 										</BoxSubdataValue>
 									</BoxSubdata>
 									<BoxSubdata>
 										<BoxSubdataTitle>Realtime Price:</BoxSubdataTitle>
 										<BoxSubdataValue>
-											{'$' + roundedToTwo(removePrecision(props.realtimeprices[j + 4 * i]))}
+											{'$' + roundedToTwo(removePrecision(sortedAssets[j + 4 * i][3]))}
 										</BoxSubdataValue>
 									</BoxSubdata>
 									<BoxSubdata>
 										<BoxSubdataTitle>Total Votes:</BoxSubdataTitle>
 										<BoxSubdataValue>
-											{roundedToTwo(removePrecision(props.votes[j + 4 * i]))}
+											{roundedToTwo(removePrecision(sortedAssets[j + 4 * i][4]))}
 										</BoxSubdataValue>
 									</BoxSubdata>
 								</BoxContent>
