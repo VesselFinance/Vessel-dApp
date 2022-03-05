@@ -183,8 +183,6 @@ const AssetCards = props => {
 			allCardsList.push([tokens[i], Number(ratios[i]), Number(prices[i]), Number(RTPs[i]), Number(votes[i])]);
 		}
 
-		console.log(allCardsList);
-
 		function sortRatioFunction(a, b) {
 			if (a[1] === b[1]) {
 				return 0;
@@ -197,7 +195,6 @@ const AssetCards = props => {
 	};
 
 	var sortedAssets = sortedCards(props.wrappertokens, props.ratio, props.prices, props.realtimeprices, props.votes);
-	console.log(sortedAssets);
 
 	return (
 		<Carousel

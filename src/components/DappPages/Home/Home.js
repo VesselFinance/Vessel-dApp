@@ -296,6 +296,27 @@ const BoxHeader = styled.h1`
 	}
 `;
 
+const BoxSubHeader = styled.h1`
+	color: ${theme.color.text.primary};
+	margin-bottom: 16px;
+	text-align: flex-start;
+	font-size: 18px;
+	display: flex;
+	justify-content: flex-start;
+	padding-bottom: 4px;
+
+	@media ${bp.md} {
+		color: ${theme.color.text.primary};
+		margin-bottom: 16px;
+		text-align: flex-start;
+		font-size: 16px;
+		font-weight: 700;
+		display: flex;
+		justify-content: flex-start;
+		padding-bottom: 4px;
+	}
+`;
+
 const ChartWrapper = styled.div`
 	height: 130px;
 	width: 500px;
@@ -317,27 +338,17 @@ const ChartWrapper = styled.div`
 	}
 `;
 
-const ChartAllocationAvailable = styled.div`
+const VoteContainer = styled.div`
 	display: flex;
 	flex-direction: column;
-	padding: 8px;
-	font-size: 14px;
-	margin-top: 10px;
-	width: 150px;
-	align-items: center;
-	background: rgba(155, 155, 155, 0.2);
-	backdrop-filter: blur(10px);
-	border-radius: 16px;
-	color: ${theme.color.text.primary};
-	border: 0px solid rgba(255, 255, 255, 0.5);
-	}
 `;
 
-const AllocationChartDataWrapper = styled.div`
+const VoteDescriptionContainer = styled.div`
 	display: flex;
-	justify-content: center;
-	align-items: center;
 	flex-direction: column;
+	font-weight: 100px;
+	font-size: 16px;
+	margin-bottom: 20px;
 `;
 
 const BoxIcon = styled.img`
@@ -351,6 +362,14 @@ const LoaderContainer = styled.div`
 	top: 50vh;
 	left: 50vw;
 `;
+
+const removePrecision = num => {
+	return num / 10 ** 18;
+};
+
+const roundedToTwo = num => {
+	return num.toFixed(2);
+};
 
 const HomePage = () => {
 	const [isLoaded, setIsLoaded] = React.useState(false);
@@ -377,14 +396,12 @@ const HomePage = () => {
 				const web3 = new Web3(window.ethereum);
 				web3.eth.setProvider(Web3.givenProvider);
 				const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-				const account = accounts[0];
-				const burnAddr = contractMethods.burnAddr;
-				const bountyAddr = contractMethods.bountyAddr;
-				const vaultAddr = contractMethods.vaultAddr;
-				const AssetTokens = [];
-				const BalancedRatio = [];
-				const TokenPrices = [];
+
 				const getAndSetVesselContractData = async () => {
+					const account = accounts[0];
+					const burnAddr = contractMethods.burnAddr;
+					const bountyAddr = contractMethods.bountyAddr;
+					const vaultAddr = contractMethods.vaultAddr;
 					const tSupp = await contractMethods.totalTokens();
 					const walletAddresses = [account, burnAddr, bountyAddr, vaultAddr];
 
@@ -424,6 +441,14 @@ const HomePage = () => {
 						}),
 					);
 
+					const numerator = removePrecision(balances[0]);
+					const denominator =
+						removePrecision(tSupp) -
+						(removePrecision(balances[1]) + removePrecision(balances[2]) + removePrecision(balances[3]));
+					const vShareCalculation = numerator / denominator;
+					const VSCorZero = vShareCalculation;
+					console.log(VSCorZero);
+
 					setVSLTokens(addresses);
 					setBalancedRatio(ratios);
 					setAssetVotes(assetTotalVotes);
@@ -434,9 +459,7 @@ const HomePage = () => {
 					setBountySupply(balances[2]);
 					setVaultSupply(balances[3]);
 					setRealTimeAssetPrices(realTimeAssetPrices);
-					const vShareCalculation =
-						balances[0] / 10 ** 18 / tSupply - (burnSupply + bountySupply + vaultSupply);
-					const VSCorZero = Math.round((vShareCalculation ? vShareCalculation : 0) * 100) / 100; //convert 'falsey' values to 0 if true;
+
 					setVotingShare(Number(Math.min(0.1, VSCorZero)));
 				};
 
@@ -530,23 +553,26 @@ const HomePage = () => {
 												<UserBoxDataBigNum first>{VSLBalance}</UserBoxDataBigNum>VSL balance
 											</UserBoxDataBox>
 											<UserBoxDataBox>
-												<UserBoxDataBigNum>{votingShare}% </UserBoxDataBigNum> voting share
+												<UserBoxDataBigNum>{roundedToTwo(votingShare)}% </UserBoxDataBigNum>{' '}
+												voting share
 											</UserBoxDataBox>
 										</UserBoxDataContainer>
 									</Blur>
 								</UserBoxContent>
 								<UserBoxContent>
-									<BoxHeader>Allocations</BoxHeader>
-									<AllocationChartDataWrapper>
-										<ChartWrapper>
-											<AllocationChart wrappertokens={VSLTokens} ratio={balancedRatio} />
-										</ChartWrapper>
-										<ChartAllocationAvailable>Available: 30%</ChartAllocationAvailable>
-									</AllocationChartDataWrapper>
+									<BoxHeader>Voting</BoxHeader>
+									<VoteContainer>
+										<BoxSubHeader>How Does voting work?</BoxSubHeader>
+										<VoteDescriptionContainer>
+											You must vote for the percentage allocation of all 20 tokens in the wrapper.
+											In doing so you have the power to change and evolve the direction and
+											performance of the mutual fund.
+										</VoteDescriptionContainer>
+										<InformationButtonGreyed>Vote now</InformationButtonGreyed>
+									</VoteContainer>
 								</UserBoxContent>
 							</UserAndGraphContainer>
 						</AssetAllocationContainer>
-						<InformationButtonGreyed>Submit</InformationButtonGreyed>
 					</DappCardWrapper>
 
 					<BackgroundBlurLeft src={darkBlueGlow} alt="blue Glow" />
