@@ -16,13 +16,12 @@ import InformationButtonGreyed from '../../Button/InformationButton/InformationB
 import 'animate.css/animate.min.css';
 import { AnimationOnScroll } from 'react-animation-on-scroll';
 import * as contractMethods from '../../../contract/contract_methods';
-import Blur from 'react-css-blur'
+import Blur from 'react-css-blur';
 import React from 'react';
 import { ethers } from 'ethers';
 import Web3 from 'web3';
 import { min } from 'd3';
 import Loader from '../../Loader/Loader';
-import getPCSPrice from '../../../contract/priceGetterPCS';
 
 const PageWrapper = styled.div`
 	padding: 0 28px 64px 28px;
@@ -265,7 +264,7 @@ const UserBoxDataBox = styled.div`
 
 const UserBoxDataBigNum = styled.h1`
 	font-size: 20px;
-	color: ${props => props.first ? "#00AADE" : "#00C1BC"};
+	color: ${props => (props.first ? '#00AADE' : '#00C1BC')};
 	@media ${bp.md} {
 		font-size: 30px;
 	}
@@ -421,7 +420,7 @@ const HomePage = () => {
 
 					let realTimeAssetPrices = await Promise.all(
 						addresses.map((e, i) => {
-							return getPCSPrice(addresses[i]);
+							return contractMethods.getQuote(addresses[i]);
 						}),
 					);
 
@@ -485,10 +484,10 @@ const HomePage = () => {
 		getContractData();
 	}, []);
 
-	const [showUserInfo, setShowUserInfo] = React.useState(true)
+	const [showUserInfo, setShowUserInfo] = React.useState(true);
 	const eyeClick = () => {
 		setShowUserInfo(!showUserInfo);
-	}
+	};
 
 	return !isLoaded ? (
 		<LoaderContainer>
@@ -522,17 +521,17 @@ const HomePage = () => {
 								<UserBoxContent>
 									<BoxHeader>
 										Your Profile
-										<BoxIcon src={showUserInfo ? EyeIcon : NoEyeIcon} onClick={() => eyeClick()}/>
+										<BoxIcon src={showUserInfo ? EyeIcon : NoEyeIcon} onClick={() => eyeClick()} />
 									</BoxHeader>
 									<Blur radius={showUserInfo ? '0' : '10px'} transition="400ms">
-									<UserBoxDataContainer>
-										<UserBoxDataBox>
-											<UserBoxDataBigNum first>{VSLBalance}</UserBoxDataBigNum>VSL balance
-										</UserBoxDataBox>
-										<UserBoxDataBox>
-											<UserBoxDataBigNum>{votingShare}% </UserBoxDataBigNum> voting share
-										</UserBoxDataBox>
-									</UserBoxDataContainer>
+										<UserBoxDataContainer>
+											<UserBoxDataBox>
+												<UserBoxDataBigNum first>{VSLBalance}</UserBoxDataBigNum>VSL balance
+											</UserBoxDataBox>
+											<UserBoxDataBox>
+												<UserBoxDataBigNum>{votingShare}% </UserBoxDataBigNum> voting share
+											</UserBoxDataBox>
+										</UserBoxDataContainer>
 									</Blur>
 								</UserBoxContent>
 								<UserBoxContent>

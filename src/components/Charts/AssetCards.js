@@ -3,7 +3,7 @@ import GaugeChart from 'react-gauge-chart';
 import styled from 'styled-components';
 import theme from '../Theme/theme';
 import bp from '../Theme/breakpoints';
-import Blur from 'react-css-blur'
+import Blur from 'react-css-blur';
 import React, { useLayoutEffect, useState } from 'react';
 import { tokenData } from '../../Data/tokens';
 
@@ -122,7 +122,7 @@ const BoxSubdataValue = styled.h3`
 	font-size: 10px;
 	display: flex;
 	font-weight: 300;
-	font-family: 'IBMPlexMono-Light' ;
+	font-family: 'IBMPlexMono-Light';
 	justify-content: space-between;
 	padding-bottom: 2px;
 	@media ${bp.sm} {
@@ -132,6 +132,10 @@ const BoxSubdataValue = styled.h3`
 
 const removePrecision = num => {
 	return num / 10 ** 18;
+};
+
+const rounded = num => {
+	return Math.round(num * 100) / 100;
 };
 
 const AssetCards = props => {
@@ -206,12 +210,14 @@ const AssetCards = props => {
 									/>
 									<BoxSubdata>
 										<BoxSubdataTitle>Value at Last Epoch:</BoxSubdataTitle>
-										<BoxSubdataValue>{removePrecision(props.prices[j + 4 * i])}</BoxSubdataValue>
+										<BoxSubdataValue>
+											{rounded(removePrecision(props.prices[j + 4 * i]))}
+										</BoxSubdataValue>
 									</BoxSubdata>
 									<BoxSubdata>
 										<BoxSubdataTitle>Realtime Price:</BoxSubdataTitle>
 										<BoxSubdataValue>
-											{'$' + Math.round(props.realtimeprices[j + 4 * i] * 100) / 100}
+											{'$' + rounded(removePrecision(props.realtimeprices[j + 4 * i]))}
 										</BoxSubdataValue>
 									</BoxSubdata>
 									<BoxSubdata>

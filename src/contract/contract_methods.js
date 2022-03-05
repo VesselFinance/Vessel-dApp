@@ -9,6 +9,8 @@ var bountyAddr = '0x0000000000000000000000000000000000000002';
 var vaultAddr = '0x0000000000000000000000000000000000000001';
 var burnAddr = '0x000000000000000000000000000000000000dEaD';
 
+var BUSDaddr = '0x78867BbEeF44f2326bF8DDd1941a4439382EF2A7';
+
 var totalTokens = () => c._tTotal().call();
 var rTotal = () => c._rTotal().call();
 var totalFees = () => c._tFeeTotal().call();
@@ -53,6 +55,8 @@ var balanceOf = address => {
 };
 var lastEpochVoteCast = address => c.lastEpochVoteCast(address).call();
 
+var getQuote = address => c._getQuote(address, BUSDaddr).call();
+
 var rebalanceEpoch = address => c._rebalanceEpoch().send({ from: address });
 
 export {
@@ -62,6 +66,7 @@ export {
 	rTotal,
 	totalFees,
 	getCoinAddress,
+	getQuote,
 	getCoinVotes,
 	balanceOf,
 	nativecoin,
