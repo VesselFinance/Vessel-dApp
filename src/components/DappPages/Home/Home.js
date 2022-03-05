@@ -434,7 +434,8 @@ const HomePage = () => {
 					setBountySupply(balances[2]);
 					setVaultSupply(balances[3]);
 					setRealTimeAssetPrices(realTimeAssetPrices);
-					const vShareCalculation = VSLBalance / tSupply - (burnSupply + bountySupply + vaultSupply);
+					const vShareCalculation =
+						balances[0] / 10 ** 18 / tSupply - (burnSupply + bountySupply + vaultSupply);
 					const VSCorZero = Math.round((vShareCalculation ? vShareCalculation : 0) * 100) / 100; //convert 'falsey' values to 0 if true;
 					setVotingShare(Number(Math.min(0.1, VSCorZero)));
 				};

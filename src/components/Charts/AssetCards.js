@@ -134,8 +134,8 @@ const removePrecision = num => {
 	return num / 10 ** 18;
 };
 
-const rounded = num => {
-	return Math.round(num * 100) / 100;
+const roundedToTwo = num => {
+	return num.toFixed(2);
 };
 
 const AssetCards = props => {
@@ -211,18 +211,20 @@ const AssetCards = props => {
 									<BoxSubdata>
 										<BoxSubdataTitle>Value at Last Epoch:</BoxSubdataTitle>
 										<BoxSubdataValue>
-											{rounded(removePrecision(props.prices[j + 4 * i]))}
+											{roundedToTwo(removePrecision(props.prices[j + 4 * i]))}
 										</BoxSubdataValue>
 									</BoxSubdata>
 									<BoxSubdata>
 										<BoxSubdataTitle>Realtime Price:</BoxSubdataTitle>
 										<BoxSubdataValue>
-											{'$' + rounded(removePrecision(props.realtimeprices[j + 4 * i]))}
+											{'$' + roundedToTwo(removePrecision(props.realtimeprices[j + 4 * i]))}
 										</BoxSubdataValue>
 									</BoxSubdata>
 									<BoxSubdata>
 										<BoxSubdataTitle>Total Votes:</BoxSubdataTitle>
-										<BoxSubdataValue>{removePrecision(props.votes[j + 4 * i])}</BoxSubdataValue>
+										<BoxSubdataValue>
+											{roundedToTwo(removePrecision(props.votes[j + 4 * i]))}
+										</BoxSubdataValue>
 									</BoxSubdata>
 								</BoxContent>
 							);
