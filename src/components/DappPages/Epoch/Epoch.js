@@ -470,7 +470,6 @@ const HomePage = () => {
 								<UserBoxContent>
 									<BoxHeader>
 										Reset
-										<BoxIcon src={EyeIcon} />
 									</BoxHeader>
 									<UserBoxDataContainer>
 										<Countdown
@@ -484,7 +483,6 @@ const HomePage = () => {
 								<UserBoxContent>
 									<BoxHeader>
 										Collect Bounty
-										<BoxIcon src={EyeIcon} />
 									</BoxHeader>
 									<UserBoxDataContainer>
 										<UserBoxDataBox>

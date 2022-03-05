@@ -3,6 +3,7 @@ import GaugeChart from 'react-gauge-chart';
 import styled from 'styled-components';
 import theme from '../Theme/theme';
 import bp from '../Theme/breakpoints';
+import Blur from 'react-css-blur'
 import React, { useLayoutEffect, useState } from 'react';
 import { tokenData } from '../../Data/tokens';
 
@@ -64,7 +65,7 @@ const BoxContent = styled.div`
 	backdrop-filter: blur(10px);
 	border-radius: 16px;
 	color: ${theme.color.text.primary};
-	border: 1px solid rgba(255, 255, 255, 0.5);
+	border: 1px solid rgba(132, 132, 132, 0.5);
 	width: 100%;
 	@media ${bp.md} {
 		max-width: 300px;
@@ -106,7 +107,7 @@ const BoxSubdataTitle = styled.h3`
 	margin-bottom: 4px;
 	text-align: flex-start;
 	font-size: 10px;
-	font-weight: 100;
+	font-weight: 200;
 	display: flex;
 	justify-content: space-between;
 	padding-bottom: 2px;
@@ -120,7 +121,8 @@ const BoxSubdataValue = styled.h3`
 	text-align: flex-start;
 	font-size: 10px;
 	display: flex;
-	font-weight: 600;
+	font-weight: 300;
+	font-family: 'IBMPlexMono-Light' ;
 	justify-content: space-between;
 	padding-bottom: 2px;
 	@media ${bp.sm} {
