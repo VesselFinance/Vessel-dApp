@@ -10,11 +10,13 @@ import AssetCards from '../../Charts/AssetCards';
 import AllocationChart from '../../Charts/AllocationChart';
 import VotesTable from '../../Charts/VotesTable';
 import EyeIcon from '../../../assets/svgs/personalEye.svg';
+import NoEyeIcon from '../../../assets/svgs/noeyeicon.svg';
 import InformationButton from '../../Button/InformationButton/InformationButton';
 import InformationButtonGreyed from '../../Button/InformationButton/InformationButtonGreyed';
 import 'animate.css/animate.min.css';
 import { AnimationOnScroll } from 'react-animation-on-scroll';
 import * as contractMethods from '../../../contract/contract_methods';
+import Blur from 'react-css-blur'
 import React from 'react';
 import { ethers } from 'ethers';
 import Web3 from 'web3';
@@ -228,7 +230,7 @@ const UserBoxContent = styled.div`
 	display: flex;
 	flex-direction: column;
 	padding: 24px;
-	background: rgba(40, 50, 50, 0.7);
+	background: rgba(30, 55, 52, 0.62);
 	backdrop-filter: blur(10px);
 	border-radius: 16px;
 	margin-bottom: 20px;
@@ -263,10 +265,9 @@ const UserBoxDataBox = styled.div`
 
 const UserBoxDataBigNum = styled.h1`
 	font-size: 20px;
-	color: #00c1bc;
+	color: ${props => props.first ? "#00AADE" : "#00C1BC"};
 	@media ${bp.md} {
 		font-size: 30px;
-		color: #00c1bc;
 	}
 `;
 
@@ -343,6 +344,7 @@ const AllocationChartDataWrapper = styled.div`
 const BoxIcon = styled.img`
 	width: 20px;
 	filter: invert(1);
+	cursor: pointer;
 `;
 
 const LoaderContainer = styled.div`
@@ -483,6 +485,11 @@ const HomePage = () => {
 		getContractData();
 	}, []);
 
+	const [showUserInfo, setShowUserInfo] = React.useState(true)
+	const eyeClick = () => {
+		setShowUserInfo(!showUserInfo);
+	}
+
 	return !isLoaded ? (
 		<LoaderContainer>
 			<Loader />
@@ -515,16 +522,18 @@ const HomePage = () => {
 								<UserBoxContent>
 									<BoxHeader>
 										Your Profile
-										<BoxIcon src={EyeIcon} />
+										<BoxIcon src={showUserInfo ? EyeIcon : NoEyeIcon} onClick={() => eyeClick()}/>
 									</BoxHeader>
+									<Blur radius={showUserInfo ? '0' : '10px'} transition="400ms">
 									<UserBoxDataContainer>
 										<UserBoxDataBox>
-											<UserBoxDataBigNum>{VSLBalance}</UserBoxDataBigNum>VSL balance
+											<UserBoxDataBigNum first>{VSLBalance}</UserBoxDataBigNum>VSL balance
 										</UserBoxDataBox>
 										<UserBoxDataBox>
 											<UserBoxDataBigNum>{votingShare}% </UserBoxDataBigNum> voting share
 										</UserBoxDataBox>
 									</UserBoxDataContainer>
+									</Blur>
 								</UserBoxContent>
 								<UserBoxContent>
 									<BoxHeader>Allocations</BoxHeader>

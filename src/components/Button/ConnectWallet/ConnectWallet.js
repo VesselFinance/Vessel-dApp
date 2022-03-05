@@ -213,7 +213,7 @@ const ConnectButton = ({ style }) => {
 				</ButtonContainer>
 			) : (
 				<StyledButton style={style} onClick={() => connectWalletHandler()}>
-					{'connect wallet'} {'❯'}
+					{'Connect Wallet'} {'❯'}
 				</StyledButton>
 			)}
 		</>
