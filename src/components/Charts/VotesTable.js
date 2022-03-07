@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import bp from '../Theme/breakpoints';
+import { tokenData } from '../../Data/tokens';
 
 const ChartLegendGrid = styled.div`
 	display: contents;
@@ -12,6 +13,20 @@ const ChartLegendGrid = styled.div`
 	align-items: center;
 	align-content: center;
 	border-radius: 16px;
+	border-bottom: 1px solid #ffffff;
+`;
+
+const TokenRow = styled.div`
+	display: contents;
+	grid-column-gap: 40px;
+	grid-row-gap: 80px;
+	height: 50px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	justify-content: space-between;
+	align-items: center;
+	align-content: center;
+	border-radius: 16px;
 `;
 
 const TableContent = styled.div`
@@ -20,8 +35,20 @@ const TableContent = styled.div`
 	padding: 24px 24px 10px 24px;
 	text-align: flex-start;
 	color: #ffffff;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.5);
 	@media ${bp.sm} {
-		padding: 24px;
+		padding: 16px;
+	}
+`;
+
+const TokenCell = styled.div`
+	display: flex;
+	flex-direction: row;
+	padding: 24px 24px 10px 24px;
+	text-align: flex-start;
+	color: #ffffff;
+	@media ${bp.sm} {
+		padding: 12px;
 	}
 `;
 
@@ -52,17 +79,55 @@ const TokenomicsTable = styled.div`
 	}
 `;
 
-const VoteTable = () => {
+const TokenIcon = styled.img`
+	width: 20px;
+	height: 20px;
+	display: flex;
+	margin-right: 10px;
+	margin-bottom: 10px;
+`;
+
+const removePrecision = num => {
+	return num / 10 ** 18;
+};
+
+const roundedToTwo = num => {
+	return num.toFixed(2);
+};
+
+const convertToPercentage = num => {
+	return num * 100;
+};
+
+const VoteTable = props => {
 	return (
 		<TokenomicsTable>
 			<ChartLegendGrid>
 				<TableContent>Token</TableContent>
-				<TableContent>Current %</TableContent>
-				<TableContent>Your allocation</TableContent>
-				<TableContent>your votes cast</TableContent>
-				<TableContent># votes cast</TableContent>
+				<TableContent>Price</TableContent>
+				<TableContent>Holding chart</TableContent>
+				<TableContent>% of total</TableContent>
 				<TableContent>total votes cast</TableContent>
+				<TableContent>your votes cast</TableContent>
 			</ChartLegendGrid>
+			{[...Array(20)].map((e, i) => {
+				var tokenDataContractKey = props.wrappertokens[i];
+				console.log(tokenData[tokenDataContractKey].path);
+				return (
+					<TokenRow key={i}>
+						<TokenCell>
+							<TokenIcon src={'/tokenImgs/' + tokenData[tokenDataContractKey].path}></TokenIcon>
+							{tokenData[tokenDataContractKey].name}
+						</TokenCell>
+						<TokenCell>{'$' + roundedToTwo(removePrecision(props.realtimeprices[i]))}</TokenCell>
+						<TokenCell>[Holding chart]</TokenCell>
+						<TokenCell>{convertToPercentage(removePrecision(props.ratio[i])) + '%'}</TokenCell>
+						<TokenCell>{roundedToTwo(removePrecision(props.votes[i]))}</TokenCell>
+						<TokenCell>your votes cast</TokenCell>
+					</TokenRow>
+				);
+			})}
+			;
 		</TokenomicsTable>
 	);
 };

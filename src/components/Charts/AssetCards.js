@@ -221,7 +221,7 @@ const AssetCards = props => {
 								var n = 3;
 								return (
 									<BoxContent key={(j + 8 * i).toString()}>
-										<BoxHeader>{tokenData[tokenDataContractKey]}</BoxHeader>
+										<BoxHeader>{tokenData[tokenDataContractKey].name}</BoxHeader>
 
 										<GaugeChart
 											id={(j + 8 * i).toString()}
@@ -237,7 +237,7 @@ const AssetCards = props => {
 										<BoxSubdata>
 											<BoxSubdataTitle>Value at Last Epoch:</BoxSubdataTitle>
 											<BoxSubdataValue>
-												{roundedToTwo(removePrecision(sortedAssets[j + 8 * i][2]))}
+												{'$' + roundedToTwo(removePrecision(sortedAssets[j + 8 * i][2]))}
 											</BoxSubdataValue>
 										</BoxSubdata>
 										<BoxSubdata>

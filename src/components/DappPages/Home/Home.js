@@ -612,7 +612,13 @@ const HomePage = () => {
 						</DappCardWrapper>
 					) : (
 						<DappCardWrapper>
-							<VotesTable />
+							<VotesTable
+								prices={assetPrices}
+								votes={assetVotes}
+								wrappertokens={VSLTokens}
+								ratio={balancedRatio}
+								realtimeprices={rtAssetPrices}
+							/>
 						</DappCardWrapper>
 					)}
 					<BackgroundBlurLeft src={darkBlueGlow} alt="blue Glow" />
