@@ -17,7 +17,7 @@ const BoxContentWrapper = styled.div`
 	@media ${bp.sm} {
 		display: inline-grid;
 		grid-template-rows: 250px 250px;
-		grid-template-columns: 250px 250px;
+		grid-template-columns: 250px 250px 250px 250px;
 		grid-column-gap: 18px;
 		grid-row-gap: 20px;
 		justify-content: flex-start;
@@ -25,7 +25,7 @@ const BoxContentWrapper = styled.div`
 	@media ${bp.smd} {
 		display: inline-grid;
 		grid-template-rows: 220px 220px;
-		grid-template-columns: 175px 175px;
+		grid-template-columns: 175px 175px 175px 175px;
 		grid-column-gap: 18px;
 		grid-row-gap: 20px;
 		justify-content: flex-start;
@@ -33,7 +33,7 @@ const BoxContentWrapper = styled.div`
 	@media ${bp.md} {
 		display: inline-grid;
 		grid-template-rows: 240px 240px;
-		grid-template-columns: 200px 200px;
+		grid-template-columns: 200px 200px 200px 200px;
 		grid-column-gap: 22px;
 		grid-row-gap: 22px;
 		justify-content: flex-start;
@@ -41,7 +41,7 @@ const BoxContentWrapper = styled.div`
 	@media ${bp.lg} {
 		display: inline-grid;
 		grid-template-rows: 270px 270px;
-		grid-template-columns: 250px 250px;
+		grid-template-columns: 250px 250px 250px 250px;
 		grid-column-gap: 28px;
 		grid-row-gap: 20px;
 		justify-content: flex-start;
@@ -49,7 +49,7 @@ const BoxContentWrapper = styled.div`
 	@media ${bp.xl} {
 		display: inline-grid;
 		grid-template-rows: 300px 300px;
-		grid-template-columns: 300px 300px;
+		grid-template-columns: 300px 300px 300px 300px;
 		grid-column-gap: 28px;
 		grid-row-gap: 20px;
 		justify-content: flex-start;
@@ -151,13 +151,13 @@ const AssetCards = props => {
 		}, []);
 		if (size[0] > 1440) {
 			// xl breakpoint
-			return 700;
+			return 1400;
 		} else if (1280 < size[0] && size[0] < 1440) {
 			// lg breakpoint
-			return 600;
+			return 1200;
 		} else if (1024 < size[0] && size[0] < 1280) {
 			// md breakpoint
-			return 500;
+			return 1000;
 		} else if (900 < size[0] && size[0] < 1024) {
 			// smd breakpoint
 			return 440;
@@ -171,6 +171,10 @@ const AssetCards = props => {
 	}
 
 	const GraphColors = [
+		['#FF5F6D', '#FFC371'],
+		['#E53EF4', '#FF5F6D'],
+		['#3E71F4', '#26F390'],
+		['#FFC371', '#26F390'],
 		['#FF5F6D', '#FFC371'],
 		['#E53EF4', '#FF5F6D'],
 		['#3E71F4', '#26F390'],
@@ -204,49 +208,53 @@ const AssetCards = props => {
 			swipeable={false}
 			renderIndicator={false}
 		>
-			{[...Array(5)].map((e, i) => {
+			{[...Array(3)].map((e, i) => {
 				return (
 					<BoxContentWrapper key={(i + 1).toString()}>
-						{[...Array(4)].map((e, j) => {
-							var tokenDataContractKey = sortedAssets[j + 4 * i][0];
-							var tokenRatio = removePrecision(sortedAssets[j + 4 * i][1]);
-							var n = 3;
+						{[...Array(8)].map((e, j) => {
+							if (j + 8 * i > 19) {
+								console.log(j + 8 * i);
+								return null;
+							} else {
+								var tokenDataContractKey = sortedAssets[j + 8 * i][0];
+								var tokenRatio = removePrecision(sortedAssets[j + 8 * i][1]);
+								var n = 3;
+								return (
+									<BoxContent key={(j + 8 * i).toString()}>
+										<BoxHeader>{tokenData[tokenDataContractKey]}</BoxHeader>
 
-							return (
-								<BoxContent key={(j + 4 * i).toString()}>
-									<BoxHeader>{tokenData[tokenDataContractKey]}</BoxHeader>
-
-									<GaugeChart
-										id={(j + 4 * i).toString()}
-										nrOfLevels={25}
-										colors={GraphColors[j]}
-										arcWidth={0.3}
-										percent={((n + 1) * tokenRatio) / (n * tokenRatio + 1)}
-										cornerRadius={0}
-										formatTextValue={value =>
-											Math.ceil(((n * tokenRatio + 1) * value) / (n + 1)) + '%'
-										}
-									/>
-									<BoxSubdata>
-										<BoxSubdataTitle>Value at Last Epoch:</BoxSubdataTitle>
-										<BoxSubdataValue>
-											{roundedToTwo(removePrecision(sortedAssets[j + 4 * i][2]))}
-										</BoxSubdataValue>
-									</BoxSubdata>
-									<BoxSubdata>
-										<BoxSubdataTitle>Realtime Price:</BoxSubdataTitle>
-										<BoxSubdataValue>
-											{'$' + roundedToTwo(removePrecision(sortedAssets[j + 4 * i][3]))}
-										</BoxSubdataValue>
-									</BoxSubdata>
-									<BoxSubdata>
-										<BoxSubdataTitle>Total Votes:</BoxSubdataTitle>
-										<BoxSubdataValue>
-											{roundedToTwo(removePrecision(sortedAssets[j + 4 * i][4]))}
-										</BoxSubdataValue>
-									</BoxSubdata>
-								</BoxContent>
-							);
+										<GaugeChart
+											id={(j + 8 * i).toString()}
+											nrOfLevels={25}
+											colors={GraphColors[j]}
+											arcWidth={0.3}
+											percent={((n + 1) * tokenRatio) / (n * tokenRatio + 1)}
+											cornerRadius={0}
+											formatTextValue={value =>
+												Math.ceil(((n * tokenRatio + 1) * value) / (n + 1)) + '%'
+											}
+										/>
+										<BoxSubdata>
+											<BoxSubdataTitle>Value at Last Epoch:</BoxSubdataTitle>
+											<BoxSubdataValue>
+												{roundedToTwo(removePrecision(sortedAssets[j + 8 * i][2]))}
+											</BoxSubdataValue>
+										</BoxSubdata>
+										<BoxSubdata>
+											<BoxSubdataTitle>Realtime Price:</BoxSubdataTitle>
+											<BoxSubdataValue>
+												{'$' + roundedToTwo(removePrecision(sortedAssets[j + 8 * i][3]))}
+											</BoxSubdataValue>
+										</BoxSubdata>
+										<BoxSubdata>
+											<BoxSubdataTitle>Total Votes:</BoxSubdataTitle>
+											<BoxSubdataValue>
+												{roundedToTwo(removePrecision(sortedAssets[j + 8 * i][4]))}
+											</BoxSubdataValue>
+										</BoxSubdata>
+									</BoxContent>
+								);
+							}
 						})}
 					</BoxContentWrapper>
 				);

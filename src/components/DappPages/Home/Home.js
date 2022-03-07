@@ -13,6 +13,7 @@ import EyeIcon from '../../../assets/svgs/personalEye.svg';
 import NoEyeIcon from '../../../assets/svgs/noeyeicon.svg';
 import InformationButton from '../../Button/InformationButton/InformationButton';
 import InformationButtonGreyed from '../../Button/InformationButton/InformationButtonGreyed';
+import PrimaryButton from '../../Button/Primary/PrimaryButton';
 import 'animate.css/animate.min.css';
 import { AnimationOnScroll } from 'react-animation-on-scroll';
 import * as contractMethods from '../../../contract/contract_methods';
@@ -31,6 +32,7 @@ const PageWrapper = styled.div`
 	background-color: transparent;
 	position: relative;
 	overflow: hidden;
+
 	@media ${bp.sm} {
 		position: relative;
 	}
@@ -68,13 +70,13 @@ const DappCardWrapper = styled.div`
 `;
 
 const PageHeader = styled.div`
-	border-radius: 15px;
-	width: 80%;
+	width: 85%;
 	display: flex;
-	margin-bottom: -40px;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+	flex-direction: row;
+	justify-content: space-between;
+	padding-top: 70px;
+	margin: 0 auto;
+	align-items: space-between;
 	position: relative;
 	background-color: transparent;
 `;
@@ -90,7 +92,7 @@ const AssetAllocationContainer = styled.div`
 	@media ${bp.smd} {
 		display: flex;
 		flex-direction: row;
-		justify-content: flex-end;
+		justify-content: center;
 		width: 100%;
 		align-items: center;
 		margin-bottom: 10px;
@@ -102,31 +104,31 @@ const UserAndGraphContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	margin-top: 30px;
-	width: 90%;
+	width: 100%;
 	align-items: center;
 	@media ${bp.sm} {
 		display: flex;
 		flex-direction: column;
 		margin-top: 30px;
-		align-items: center;
+		align-items: flex-end;
 	}
 	@media ${bp.md} {
 		display: flex;
 		flex-direction: column;
 		margin-top: 30px;
-		align-items: center;
+		align-items: flex-end;
 	}
 	@media ${bp.lg} {
 		display: flex;
 		flex-direction: column;
 		margin-top: 20px;
-		align-items: center;
+		align-items: flex-end;
 	}
 	@media ${bp.xl} {
 		display: flex;
 		flex-direction: column;
 		margin-top: -15px;
-		align-items: center;
+		align-items: flex-end;
 	}
 `;
 
@@ -149,10 +151,13 @@ const AboutSectionSubHeader = styled.div`
 	text-align: flex-start;
 	justify-content: flex-start;
 	justify-text: flex-start;
-	font-size: 26px;
+	font-size: 20px;
+	&:hover {
+		cursor: pointer;
+	}
 	@media ${bp.sm} {
 		text-align: left;
-		font-size: 30px;
+		font-size: 28px;
 	}
 `;
 
@@ -169,7 +174,7 @@ const AboutWrapperTextRight = styled.div`
 
 const AssetCardsContainer = styled.div`
 	padding-top: 50px;
-	padding-bottom: 50px;
+	padding-bottom: 10px;
 	position: relative;
 	justify-content: center;
 	margin-left: 20px;
@@ -343,12 +348,28 @@ const VoteContainer = styled.div`
 	flex-direction: column;
 `;
 
+const TitleContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: space-between;
+`;
+
+const SubheaderContainer = styled.div`
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	width: 470px;
+`;
+
 const VoteDescriptionContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	font-weight: 100px;
 	font-size: 16px;
-	margin-bottom: 20px;
+	margin-bottom: 40px;
+	padding-left: 5px;
+	padding-right: 10px;
 `;
 
 const BoxIcon = styled.img`
@@ -372,6 +393,8 @@ const roundedToTwo = num => {
 };
 
 const HomePage = () => {
+	const [viewAssetAllocation, setViewAssetAllocation] = React.useState(true);
+	const [viewVotes, setViewVotes] = React.useState(false);
 	const [isLoaded, setIsLoaded] = React.useState(false);
 	const [VSLBalance, setVSLBalance] = React.useState(0);
 	const [votingShare, setVotingShare] = React.useState(0);
@@ -384,6 +407,7 @@ const HomePage = () => {
 	const [assetVotes, setAssetVotes] = React.useState([]);
 	const [assetPrices, setAssetPrices] = React.useState([]);
 	const [rtAssetPrices, setRealTimeAssetPrices] = React.useState([]);
+	const [canVote, setCanVote] = React.useState(true);
 
 	// get necessary data from Contract to display
 	React.useEffect(() => {
@@ -495,10 +519,17 @@ const HomePage = () => {
 						}),
 					);
 
+					let realTimeAssetPrices = await Promise.all(
+						addresses.map((e, i) => {
+							return contractMethods.getQuote(addresses[i]);
+						}),
+					);
+
 					setVSLTokens(addresses);
 					setBalancedRatio(ratios);
 					setAssetVotes(assetTotalVotes);
 					setAssetPrices(assetTotalPrices);
+					setRealTimeAssetPrices(realTimeAssetPrices);
 					setIsLoaded(true);
 				};
 				await getAndSetVesselContractData();
@@ -522,64 +553,71 @@ const HomePage = () => {
 			<AnimationOnScroll animateIn="animate__fadeIn" animateOnce={true}>
 				<PageWrapper>
 					<PageHeader>
-						<AboutWrapperTextRight>
+						<TitleContainer>
 							<AboutSectionHeader>Voting</AboutSectionHeader>
-						</AboutWrapperTextRight>
+							<SubheaderContainer>
+								<AboutSectionSubHeader
+									onClick={() => {
+										setViewAssetAllocation(true);
+										setViewVotes(false);
+									}}
+								>
+									Asset Allocation
+								</AboutSectionSubHeader>
+
+								<AboutSectionSubHeader
+									onClick={() => {
+										setViewAssetAllocation(false);
+										setViewVotes(true);
+									}}
+								>
+									Votes
+								</AboutSectionSubHeader>
+							</SubheaderContainer>
+						</TitleContainer>
+						<UserAndGraphContainer>
+							<UserBoxContent>
+								<BoxHeader>Voting</BoxHeader>
+								<VoteContainer>
+									<BoxSubHeader>How Does voting work?</BoxSubHeader>
+									<VoteDescriptionContainer>
+										You must vote for the percentage allocation of all 20 tokens in the wrapper. In
+										doing so, you have the power to change how Vessel evolves.
+									</VoteDescriptionContainer>
+									{canVote ? (
+										<PrimaryButton>Vote now</PrimaryButton>
+									) : (
+										<InformationButtonGreyed>Vote now</InformationButtonGreyed>
+									)}
+								</VoteContainer>
+							</UserBoxContent>
+						</UserAndGraphContainer>
 					</PageHeader>
 
 					<BackgroundBlurLeft src={greenGlow} alt="blue Glow" />
 
-					<DappCardWrapper>
-						<AboutSectionSubHeader>Asset Allocation</AboutSectionSubHeader>
-						<AssetAllocationContainer>
-							<AssetCardsContainer>
-								<AssetCards
-									prices={assetPrices}
-									votes={assetVotes}
-									wrappertokens={VSLTokens}
-									ratio={balancedRatio}
-									realtimeprices={rtAssetPrices}
-								/>
-							</AssetCardsContainer>
-							<UserAndGraphContainer>
-								<UserBoxContent>
-									<BoxHeader>
-										Your Profile
-										<BoxIcon src={showUserInfo ? EyeIcon : NoEyeIcon} onClick={() => eyeClick()} />
-									</BoxHeader>
-									<Blur radius={showUserInfo ? '0' : '10px'} transition="400ms">
-										<UserBoxDataContainer>
-											<UserBoxDataBox>
-												<UserBoxDataBigNum first>{VSLBalance}</UserBoxDataBigNum>VSL balance
-											</UserBoxDataBox>
-											<UserBoxDataBox>
-												<UserBoxDataBigNum>{roundedToTwo(votingShare)}% </UserBoxDataBigNum>{' '}
-												voting share
-											</UserBoxDataBox>
-										</UserBoxDataContainer>
-									</Blur>
-								</UserBoxContent>
-								<UserBoxContent>
-									<BoxHeader>Voting</BoxHeader>
-									<VoteContainer>
-										<BoxSubHeader>How Does voting work?</BoxSubHeader>
-										<VoteDescriptionContainer>
-											You must vote for the percentage allocation of all 20 tokens in the wrapper.
-											In doing so you have the power to change and evolve the direction and
-											performance of the mutual fund.
-										</VoteDescriptionContainer>
-										<InformationButtonGreyed>Vote now</InformationButtonGreyed>
-									</VoteContainer>
-								</UserBoxContent>
-							</UserAndGraphContainer>
-						</AssetAllocationContainer>
-					</DappCardWrapper>
-
+					{viewAssetAllocation && !viewVotes ? (
+						<DappCardWrapper>
+							<AssetAllocationContainer>
+								<AssetCardsContainer>
+									<AssetCards
+										prices={assetPrices}
+										votes={assetVotes}
+										wrappertokens={VSLTokens}
+										ratio={balancedRatio}
+										realtimeprices={rtAssetPrices}
+									/>
+								</AssetCardsContainer>
+							</AssetAllocationContainer>
+						</DappCardWrapper>
+					) : (
+						<DappCardWrapper>
+							<VotesTable />
+						</DappCardWrapper>
+					)}
 					<BackgroundBlurLeft src={darkBlueGlow} alt="blue Glow" />
 					<SectionWrapper>
 						<BackgroundBlurRight src={blueGlow} alt="blue Glow" />
-						<AboutSectionSubHeader>Current Votes</AboutSectionSubHeader>
-						<VotesTable />
 					</SectionWrapper>
 				</PageWrapper>
 			</AnimationOnScroll>
