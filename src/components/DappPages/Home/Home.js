@@ -161,6 +161,23 @@ const AboutSectionSubHeader = styled.div`
 	}
 `;
 
+const AboutSectionSubHeaderInactive = styled.div`
+	width: 100%;
+	color: ${theme.color.text.secondary};
+	margin-bottom: 0px;
+	text-align: flex-start;
+	justify-content: flex-start;
+	justify-text: flex-start;
+	font-size: 20px;
+	&:hover {
+		cursor: pointer;
+	}
+	@media ${bp.sm} {
+		text-align: left;
+		font-size: 28px;
+	}
+`;
+
 const AboutWrapperTextRight = styled.div`
 	padding-top: 50px;
 	padding-bottom: 50px;
@@ -560,25 +577,47 @@ const HomePage = () => {
 					<PageHeader>
 						<TitleContainer>
 							<AboutSectionHeader>Voting</AboutSectionHeader>
-							<SubheaderContainer>
-								<AboutSectionSubHeader
-									onClick={() => {
-										setViewAssetAllocation(true);
-										setViewVotes(false);
-									}}
-								>
-									Asset Allocation
-								</AboutSectionSubHeader>
+							{viewAssetAllocation ? (
+								<SubheaderContainer>
+									<AboutSectionSubHeader
+										onClick={() => {
+											setViewAssetAllocation(true);
+											setViewVotes(false);
+										}}
+									>
+										Asset Allocation
+									</AboutSectionSubHeader>
 
-								<AboutSectionSubHeader
-									onClick={() => {
-										setViewAssetAllocation(false);
-										setViewVotes(true);
-									}}
-								>
-									Votes
-								</AboutSectionSubHeader>
-							</SubheaderContainer>
+									<AboutSectionSubHeaderInactive
+										onClick={() => {
+											setViewAssetAllocation(false);
+											setViewVotes(true);
+										}}
+									>
+										Votes
+									</AboutSectionSubHeaderInactive>
+								</SubheaderContainer>
+							) : (
+								<SubheaderContainer>
+									<AboutSectionSubHeaderInactive
+										onClick={() => {
+											setViewAssetAllocation(true);
+											setViewVotes(false);
+										}}
+									>
+										Asset Allocation
+									</AboutSectionSubHeaderInactive>
+
+									<AboutSectionSubHeader
+										onClick={() => {
+											setViewAssetAllocation(false);
+											setViewVotes(true);
+										}}
+									>
+										Votes
+									</AboutSectionSubHeader>
+								</SubheaderContainer>
+							)}
 						</TitleContainer>
 						<UserAndGraphContainer>
 							<UserBoxContent>
