@@ -90,7 +90,7 @@ const BoxHeader = styled.h1`
 
 const BoxSubdata = styled.div`
 	color: ${theme.color.text.primary};
-	margin-top: 10px;
+	margin-top: 20px;
 	margin-bottom: 0px;
 	text-align: flex-start;
 	font-size: 12px;
@@ -98,7 +98,7 @@ const BoxSubdata = styled.div`
 	justify-content: space-between;
 	padding-bottom: 2px;
 	@media ${bp.sm} {
-		margin-top: 2px;
+		margin-top: 10px;
 		margin-bottom: 0px;
 	}
 `;
@@ -244,12 +244,6 @@ const AssetCards = props => {
 											<BoxSubdataTitle>Realtime Price:</BoxSubdataTitle>
 											<BoxSubdataValue>
 												{'$' + roundedToTwo(removePrecision(sortedAssets[j + 8 * i][3]))}
-											</BoxSubdataValue>
-										</BoxSubdata>
-										<BoxSubdata>
-											<BoxSubdataTitle>Total Votes:</BoxSubdataTitle>
-											<BoxSubdataValue>
-												{roundedToTwo(removePrecision(sortedAssets[j + 8 * i][4]))}
 											</BoxSubdataValue>
 										</BoxSubdata>
 									</BoxContent>

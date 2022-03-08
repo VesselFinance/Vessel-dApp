@@ -107,7 +107,7 @@ const VoteTable = props => {
 				<TableContent>Token</TableContent>
 				<TableContent>Price</TableContent>
 				<TableContent>Holding chart</TableContent>
-				<TableContent>% of total</TableContent>
+				<TableContent>proposed %</TableContent>
 				<TableContent>total votes cast</TableContent>
 				<TableContent>your votes cast</TableContent>
 			</ChartLegendGrid>
