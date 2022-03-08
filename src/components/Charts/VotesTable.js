@@ -100,6 +100,7 @@ const convertToPercentage = num => {
 };
 
 const VoteTable = props => {
+	const totalVotesNum = removePrecision(props.totalVotes);
 	return (
 		<TokenomicsTable>
 			<ChartLegendGrid>
@@ -121,7 +122,9 @@ const VoteTable = props => {
 						</TokenCell>
 						<TokenCell>{'$' + roundedToTwo(removePrecision(props.realtimeprices[i]))}</TokenCell>
 						<TokenCell>[Holding chart]</TokenCell>
-						<TokenCell>{convertToPercentage(removePrecision(props.ratio[i])) + '%'}</TokenCell>
+						<TokenCell>
+							{roundedToTwo(convertToPercentage(removePrecision(props.votes[i] / totalVotesNum))) + '%'}
+						</TokenCell>
 						<TokenCell>{roundedToTwo(removePrecision(props.votes[i]))}</TokenCell>
 						<TokenCell>your votes cast</TokenCell>
 					</TokenRow>

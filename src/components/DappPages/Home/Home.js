@@ -402,6 +402,7 @@ const HomePage = () => {
 	const [burnSupply, setBurnSupply] = React.useState(0);
 	const [bountySupply, setBountySupply] = React.useState(0);
 	const [vaultSupply, setVaultSupply] = React.useState(0);
+	const [totalVotesCast, setTotalVotesCast] = React.useState(0);
 	const [VSLTokens, setVSLTokens] = React.useState([]);
 	const [balancedRatio, setBalancedRatio] = React.useState([]);
 	const [assetVotes, setAssetVotes] = React.useState([]);
@@ -427,6 +428,7 @@ const HomePage = () => {
 					const bountyAddr = contractMethods.bountyAddr;
 					const vaultAddr = contractMethods.vaultAddr;
 					const tSupp = await contractMethods.totalTokens();
+					const totalVotes = await contractMethods.totalVotesCast();
 					const walletAddresses = [account, burnAddr, bountyAddr, vaultAddr];
 
 					let balances = await Promise.all(
@@ -479,6 +481,7 @@ const HomePage = () => {
 					setAssetPrices(assetTotalPrices);
 					setVSLBalance(balances[0] / 10 ** 18);
 					settSupply(tSupp);
+					setTotalVotesCast(totalVotes);
 					setBurnSupply(balances[1]);
 					setBountySupply(balances[2]);
 					setVaultSupply(balances[3]);
@@ -495,6 +498,7 @@ const HomePage = () => {
 				console.log(err.message);
 
 				const getAndSetVesselContractData = async () => {
+					const totalVotes = await contractMethods.totalVotesCast();
 					let addresses = await Promise.all(
 						[...Array(20)].map((e, i) => {
 							return contractMethods.getCoinAddress(i);
@@ -530,6 +534,7 @@ const HomePage = () => {
 					setAssetVotes(assetTotalVotes);
 					setAssetPrices(assetTotalPrices);
 					setRealTimeAssetPrices(realTimeAssetPrices);
+					setTotalVotesCast(totalVotes);
 					setIsLoaded(true);
 				};
 				await getAndSetVesselContractData();
@@ -618,6 +623,7 @@ const HomePage = () => {
 								wrappertokens={VSLTokens}
 								ratio={balancedRatio}
 								realtimeprices={rtAssetPrices}
+								totalVotes={totalVotesCast}
 							/>
 						</DappCardWrapper>
 					)}
