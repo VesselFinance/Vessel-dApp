@@ -87,6 +87,18 @@ const TokenIcon = styled.img`
 	margin-bottom: 10px;
 `;
 
+const NegativeDif = styled.h1`
+	color: #fe7e8c;
+	font-size: 16px;
+	font-weight: 10px;
+`;
+
+const PositiveDif = styled.h1`
+	color: #09b7b3;
+	font-size: 16px;
+	font-weight: 10px;
+`;
+
 const removePrecision = num => {
 	return num / 10 ** 18;
 };
@@ -106,26 +118,37 @@ const VoteTable = props => {
 			<ChartLegendGrid>
 				<TableContent>Token</TableContent>
 				<TableContent>Price</TableContent>
-				<TableContent>Holding chart</TableContent>
-				<TableContent>proposed %</TableContent>
-				<TableContent>total votes cast</TableContent>
-				<TableContent>your votes cast</TableContent>
+				<TableContent>Difference</TableContent>
+				<TableContent>Proposed %</TableContent>
+				<TableContent>Total votes cast</TableContent>
+				<TableContent>Your votes cast</TableContent>
 			</ChartLegendGrid>
 			{[...Array(20)].map((e, i) => {
 				var tokenDataContractKey = props.wrappertokens[i];
-				console.log(tokenData[tokenDataContractKey].path);
+				var imageSource = '/tokenImgs/' + tokenData[tokenDataContractKey].path;
+				var RTP = '$' + roundedToTwo(removePrecision(props.realtimeprices[i]));
+				var newRatio = roundedToTwo(convertToPercentage(removePrecision(props.votes[i] / totalVotesNum)));
+				var newVotes = roundedToTwo(removePrecision(props.votes[i]));
+
+				var oldEpochRatio = roundedToTwo(removePrecision(props.ratio[i])) * 100;
+				var difference = newRatio - oldEpochRatio;
+
 				return (
 					<TokenRow key={i}>
 						<TokenCell>
-							<TokenIcon src={'/tokenImgs/' + tokenData[tokenDataContractKey].path}></TokenIcon>
+							<TokenIcon src={imageSource}></TokenIcon>
 							{tokenData[tokenDataContractKey].name}
 						</TokenCell>
-						<TokenCell>{'$' + roundedToTwo(removePrecision(props.realtimeprices[i]))}</TokenCell>
-						<TokenCell>[Holding chart]</TokenCell>
+						<TokenCell>{RTP}</TokenCell>
 						<TokenCell>
-							{roundedToTwo(convertToPercentage(removePrecision(props.votes[i] / totalVotesNum))) + '%'}
+							{difference < 0 ? (
+								<NegativeDif>{difference + '%'} </NegativeDif>
+							) : (
+								<PositiveDif>{difference + '%'}</PositiveDif>
+							)}
 						</TokenCell>
-						<TokenCell>{roundedToTwo(removePrecision(props.votes[i]))}</TokenCell>
+						<TokenCell>{newRatio + '%'}</TokenCell>
+						<TokenCell>{newVotes}</TokenCell>
 						<TokenCell>your votes cast</TokenCell>
 					</TokenRow>
 				);
