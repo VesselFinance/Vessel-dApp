@@ -170,15 +170,28 @@ const AssetCards = props => {
 		}
 	}
 
+	function shuffleColors(array) {
+		var m = array.length,
+			t,
+			i;
+		while (m > 0) {
+			i = Math.floor(Math.random() * m--);
+			t = array[m];
+			array[m] = array[i];
+			array[i] = t;
+		}
+		return array;
+	}
+
 	const GraphColors = [
 		['#FF5F6D', '#FFC371'],
 		['#E53EF4', '#FF5F6D'],
 		['#3E71F4', '#26F390'],
 		['#FFC371', '#26F390'],
-		['#FF5F6D', '#FFC371'],
-		['#E53EF4', '#FF5F6D'],
-		['#3E71F4', '#26F390'],
-		['#FFC371', '#26F390'],
+		['#FEAA72', '#ACC18C'],
+		['#7EC9F5', '#3957ED'],
+		['#A0B5EB', '#C9F0E4'],
+		['#EDAEF9', '#81B1FA'],
 	];
 
 	const sortedCards = (tokens, ratios, prices, RTPs, votes) => {
@@ -199,7 +212,6 @@ const AssetCards = props => {
 	};
 
 	var sortedAssets = sortedCards(props.wrappertokens, props.ratio, props.prices, props.realtimeprices, props.votes);
-
 	return (
 		<Carousel
 			showStatus={false}
@@ -209,6 +221,7 @@ const AssetCards = props => {
 			renderIndicator={false}
 		>
 			{[...Array(3)].map((e, i) => {
+				var Colours = shuffleColors(GraphColors);
 				return (
 					<BoxContentWrapper key={(i + 1).toString()}>
 						{[...Array(8)].map((e, j) => {
@@ -226,7 +239,7 @@ const AssetCards = props => {
 										<GaugeChart
 											id={(j + 8 * i).toString()}
 											nrOfLevels={25}
-											colors={GraphColors[j]}
+											colors={Colours[j]}
 											arcWidth={0.3}
 											percent={((n + 1) * tokenRatio) / (n * tokenRatio + 1)}
 											cornerRadius={0}
