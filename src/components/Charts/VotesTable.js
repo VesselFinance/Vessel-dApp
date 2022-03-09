@@ -129,7 +129,7 @@ const VoteTable = props => {
 				var RTP = '$' + roundedToTwo(removePrecision(props.realtimeprices[i]));
 				var newRatio = roundedToTwo(convertToPercentage(removePrecision(props.votes[i] / totalVotesNum)));
 				var newVotes = roundedToTwo(removePrecision(props.votes[i]));
-				var userTokenVotes = roundedToTwo(removePrecision(props.userVotes[i]));
+				var userTokenVotes = props.userVotes[i];
 				var oldEpochRatio = roundedToTwo(removePrecision(props.ratio[i])) * 100;
 				var difference = roundedToTwo(newRatio - oldEpochRatio);
 

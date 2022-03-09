@@ -425,10 +425,8 @@ const HomePage = () => {
 	const [balancedRatio, setBalancedRatio] = React.useState([]);
 	const [assetVotes, setAssetVotes] = React.useState([]);
 	const [assetPrices, setAssetPrices] = React.useState([]);
-	const [rtAssetPrices, setRealTimeAssetPrices] = React.useState([
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	]);
-	const [thisUserVotes, setUserVotes] = React.useState([]);
+	const [rtAssetPrices, setRealTimeAssetPrices] = React.useState([]);
+	const [thisUserVotes, setUserVotes] = React.useState(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 	const [canVote, setCanVote] = React.useState(true);
 	const [showModal, setShowModal] = React.useState(false);
 
@@ -581,7 +579,6 @@ const HomePage = () => {
 	};
 
 	const handleVotesSubmission = async submittedVotes => {
-		console.log('READY TO SUBMIT TO CONTRACT BABY');
 		try {
 			if (!window.ethereum || localStorage.getItem('account') === '') {
 				throw new Error('No crypto wallet found. Please install it.');
