@@ -3,26 +3,22 @@ import theme from '../../Theme/theme';
 
 const StyledButton = styled.button`
 	color: ${theme.color.text.primary};
+	background: linear-gradient(250deg, #428afa 0%, #00bea8 100%);
 	font-weight: bold;
-	border: 2px solid;
-	background-color: transparent;
-	border-color: ${theme.color.text.primary};
+	border: none;
 	border-radius: 12px;
-	padding: 8px 10px 8px 10px;
+	padding: 10px 10px 10px 10px;
 	margin-left: 0px;
-	margin-right: 15px;
+	margin-right: 10px;
 	transition: all 0.2s ease;
 	z-index: 9999;
 	position: relative;
-
 	&:hover {
 		cursor: pointer;
-		background: rgba(255, 255, 255, 0.2);
-		z-index: 9999;
 	}
 `;
 
-const InformationButton = ({ children, style, onClick }) => {
+const ActionButton = ({ children, style, onClick }) => {
 	return (
 		<>
 			<StyledButton style={style} onClick={onClick}>
@@ -31,4 +27,4 @@ const InformationButton = ({ children, style, onClick }) => {
 		</>
 	);
 };
-export default InformationButton;
+export default ActionButton;

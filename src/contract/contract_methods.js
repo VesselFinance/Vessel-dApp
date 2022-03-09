@@ -55,9 +55,9 @@ var balanceOf = address => {
 };
 var lastEpochVoteCast = address => c.lastEpochVoteCast(address).call();
 
-var getQuote = address => c._getQuote(address, BUSDaddr).call();
+var getQuote = address => c._getTokenPrice(address).call();
 
-var rebalanceEpoch = address => c._rebalanceEpoch().send({ from: address });
+var getUserVotes = (address, index) => c.getUserVotes(address, index).call({ from: address });
 
 export {
 	cABI,
@@ -68,6 +68,7 @@ export {
 	getCoinAddress,
 	getQuote,
 	getCoinVotes,
+	getUserVotes,
 	balanceOf,
 	nativecoin,
 	getBalancedRatio,
@@ -95,7 +96,6 @@ export {
 	stablecoin,
 	maxVotesAllowed,
 	decimals,
-	rebalanceEpoch,
 	burnAddr,
 	bountyAddr,
 	vaultAddr,

@@ -23,6 +23,7 @@ import { ethers } from 'ethers';
 import Web3 from 'web3';
 import { min } from 'd3';
 import Loader from '../../Loader/Loader';
+import VoteModal from '../../PopUps/VoteScreen';
 
 const PageWrapper = styled.div`
 	padding: 0 28px 64px 28px;
@@ -424,8 +425,12 @@ const HomePage = () => {
 	const [balancedRatio, setBalancedRatio] = React.useState([]);
 	const [assetVotes, setAssetVotes] = React.useState([]);
 	const [assetPrices, setAssetPrices] = React.useState([]);
-	const [rtAssetPrices, setRealTimeAssetPrices] = React.useState([]);
+	const [rtAssetPrices, setRealTimeAssetPrices] = React.useState([
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	]);
+	const [thisUserVotes, setUserVotes] = React.useState([]);
 	const [canVote, setCanVote] = React.useState(true);
+	const [showModal, setShowModal] = React.useState(false);
 
 	// get necessary data from Contract to display
 	React.useEffect(() => {
@@ -451,6 +456,12 @@ const HomePage = () => {
 					let balances = await Promise.all(
 						walletAddresses.map((e, i) => {
 							return contractMethods.balanceOf(walletAddresses[i]);
+						}),
+					);
+
+					let votesFromUser = await Promise.all(
+						[...Array(20)].map((e, i) => {
+							return contractMethods.getUserVotes(account, i);
 						}),
 					);
 
@@ -484,6 +495,8 @@ const HomePage = () => {
 						}),
 					);
 
+					console.log(votesFromUser);
+
 					const numerator = removePrecision(balances[0]);
 					const denominator =
 						removePrecision(tSupp) -
@@ -496,6 +509,7 @@ const HomePage = () => {
 					setBalancedRatio(ratios);
 					setAssetVotes(assetTotalVotes);
 					setAssetPrices(assetTotalPrices);
+					setUserVotes(votesFromUser);
 					setVSLBalance(balances[0] / 10 ** 18);
 					settSupply(tSupp);
 					setTotalVotesCast(totalVotes);
@@ -566,6 +580,38 @@ const HomePage = () => {
 		setShowUserInfo(!showUserInfo);
 	};
 
+	const handleVotesSubmission = async submittedVotes => {
+		console.log('READY TO SUBMIT TO CONTRACT BABY');
+		try {
+			if (!window.ethereum || localStorage.getItem('account') === '') {
+				throw new Error('No crypto wallet found. Please install it.');
+			}
+			const web3 = new Web3(window.ethereum);
+			web3.eth.setProvider(Web3.givenProvider);
+			const contract = new web3.eth.Contract(contractMethods.cABI);
+			const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+			const account = accounts[0];
+			const contractAddress = contractMethods.cAddr;
+
+			const transactionParameters = {
+				from: account,
+				to: contractAddress,
+				data: contract.methods.vote(submittedVotes).encodeABI(),
+				gasPrice: web3.utils.toHex(20000000000),
+				gasLimit: web3.utils.toHex(800000),
+			};
+
+			await window.ethereum.request({
+				method: 'eth_sendTransaction',
+				params: [transactionParameters],
+			});
+
+			// if wallet not connected, just pull contract data
+		} catch (err) {
+			console.log(err.message);
+		}
+	};
+
 	return !isLoaded ? (
 		<LoaderContainer>
 			<Loader />
@@ -629,7 +675,14 @@ const HomePage = () => {
 										doing so, you have the power to change how Vessel evolves.
 									</VoteDescriptionContainer>
 									{canVote ? (
-										<PrimaryButton>Vote now</PrimaryButton>
+										<PrimaryButton
+											onClick={() => {
+												setShowModal(true);
+												document.body.style.overflow = 'hidden';
+											}}
+										>
+											Vote now
+										</PrimaryButton>
 									) : (
 										<InformationButtonGreyed>Vote now</InformationButtonGreyed>
 									)}
@@ -663,6 +716,7 @@ const HomePage = () => {
 								ratio={balancedRatio}
 								realtimeprices={rtAssetPrices}
 								totalVotes={totalVotesCast}
+								userVotes={thisUserVotes}
 							/>
 						</DappCardWrapper>
 					)}
@@ -671,6 +725,18 @@ const HomePage = () => {
 						<BackgroundBlurRight src={blueGlow} alt="blue Glow" />
 					</SectionWrapper>
 				</PageWrapper>
+				<VoteModal
+					onClose={() => {
+						setShowModal(false);
+						document.body.style.overflow = 'unset';
+					}}
+					open={showModal}
+					wrappertokens={VSLTokens}
+					onSubmit={submittedVotes => {
+						console.log('SUBMITTED: ' + submittedVotes);
+						handleVotesSubmission(submittedVotes);
+					}}
+				/>
 			</AnimationOnScroll>
 			<Footer />
 		</>

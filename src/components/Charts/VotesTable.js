@@ -129,9 +129,9 @@ const VoteTable = props => {
 				var RTP = '$' + roundedToTwo(removePrecision(props.realtimeprices[i]));
 				var newRatio = roundedToTwo(convertToPercentage(removePrecision(props.votes[i] / totalVotesNum)));
 				var newVotes = roundedToTwo(removePrecision(props.votes[i]));
-
+				var userTokenVotes = roundedToTwo(removePrecision(props.userVotes[i]));
 				var oldEpochRatio = roundedToTwo(removePrecision(props.ratio[i])) * 100;
-				var difference = newRatio - oldEpochRatio;
+				var difference = roundedToTwo(newRatio - oldEpochRatio);
 
 				return (
 					<TokenRow key={i}>
@@ -149,7 +149,7 @@ const VoteTable = props => {
 						</TokenCell>
 						<TokenCell>{newRatio + '%'}</TokenCell>
 						<TokenCell>{newVotes}</TokenCell>
-						<TokenCell>your votes cast</TokenCell>
+						<TokenCell>{userTokenVotes}</TokenCell>
 					</TokenRow>
 				);
 			})}
