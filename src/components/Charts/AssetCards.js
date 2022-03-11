@@ -9,15 +9,15 @@ import { tokenData } from '../../Data/tokens';
 
 const BoxContentWrapper = styled.div`
 	display: inline-grid;
-	grid-template-rows: 250px 250px;
-	grid-template-columns: 160px 160px;
-	grid-column-gap: 8px;
+	grid-template-rows: 230px 230px;
+	grid-template-columns: 150px 150px;
+	grid-column-gap: 18px;
 	grid-row-gap: 20px;
 	justify-content: center;
 	@media ${bp.sm} {
 		display: inline-grid;
 		grid-template-rows: 250px 250px;
-		grid-template-columns: 250px 250px 250px 250px;
+		grid-template-columns: 250px 250px;
 		grid-column-gap: 18px;
 		grid-row-gap: 20px;
 		justify-content: flex-start;
@@ -98,21 +98,30 @@ const BoxSubdata = styled.div`
 	justify-content: space-between;
 	padding-bottom: 2px;
 	@media ${bp.sm} {
-		margin-top: 10px;
+		margin-top: 4px;
 		margin-bottom: 0px;
 	}
 `;
 const BoxSubdataTitle = styled.h3`
 	color: ${theme.color.text.primary};
 	margin-bottom: 4px;
-	text-align: flex-start;
+	text-align: left;
 	font-size: 10px;
 	font-weight: 200;
 	display: flex;
-	justify-content: space-between;
+
 	padding-bottom: 2px;
 	@media ${bp.sm} {
 		font-size: 12px;
+		max-width: 70px;
+	}
+	@media ${bp.smd} {
+		font-size: 12px;
+		max-width: 60px;
+	}
+	@media ${bp.md} {
+		font-size: 12px;
+		max-width: 100px;
 	}
 `;
 const BoxSubdataValue = styled.h3`
@@ -139,6 +148,24 @@ const roundedToTwo = num => {
 };
 
 const AssetCards = props => {
+	const [outer, setOuter] = React.useState(0);
+	const [inner, setInner] = React.useState(0);
+
+	useLayoutEffect(() => {
+		function updateSize() {
+			if (window.innerWidth > 900) {
+				setOuter(3);
+				setInner(8);
+			} else {
+				setOuter(5);
+				setInner(4);
+			}
+		}
+		window.addEventListener('resize', updateSize);
+		updateSize();
+		return () => window.removeEventListener('resize', updateSize);
+	}, []);
+
 	function useWindowSize() {
 		const [size, setSize] = useState([0, 0]);
 		useLayoutEffect(() => {
@@ -160,7 +187,7 @@ const AssetCards = props => {
 			return 1000;
 		} else if (900 < size[0] && size[0] < 1024) {
 			// smd breakpoint
-			return 440;
+			return 840;
 		} else if (768 < size[0] && size[0] < 900) {
 			// sm breakpoint
 			return 600;
@@ -212,6 +239,7 @@ const AssetCards = props => {
 	};
 
 	var sortedAssets = sortedCards(props.wrappertokens, props.ratio, props.prices, props.realtimeprices, props.votes);
+
 	return (
 		<Carousel
 			showStatus={false}
@@ -220,24 +248,23 @@ const AssetCards = props => {
 			swipeable={false}
 			renderIndicator={false}
 		>
-			{[...Array(3)].map((e, i) => {
+			{[...Array(outer)].map((e, i) => {
 				var Colours = shuffleColors(GraphColors);
 				return (
 					<BoxContentWrapper key={(i + 1).toString()}>
-						{[...Array(8)].map((e, j) => {
-							if (j + 8 * i > 19) {
-								console.log(j + 8 * i);
+						{[...Array(inner)].map((e, j) => {
+							if (j + inner * i > 19) {
 								return null;
 							} else {
-								var tokenDataContractKey = sortedAssets[j + 8 * i][0];
-								var tokenRatio = removePrecision(sortedAssets[j + 8 * i][1]);
+								var tokenDataContractKey = sortedAssets[j + inner * i][0];
+								var tokenRatio = removePrecision(sortedAssets[j + inner * i][1]);
 								var n = 3;
 								return (
-									<BoxContent key={(j + 8 * i).toString()}>
+									<BoxContent key={(j + inner * i).toString()}>
 										<BoxHeader>{tokenData[tokenDataContractKey].name}</BoxHeader>
 
 										<GaugeChart
-											id={(j + 8 * i).toString()}
+											id={(j + inner * i).toString()}
 											nrOfLevels={25}
 											colors={Colours[j]}
 											arcWidth={0.3}
@@ -248,15 +275,15 @@ const AssetCards = props => {
 											}
 										/>
 										<BoxSubdata>
-											<BoxSubdataTitle>Value at Last Epoch:</BoxSubdataTitle>
+											<BoxSubdataTitle>Locked Value:</BoxSubdataTitle>
 											<BoxSubdataValue>
-												{'$' + roundedToTwo(removePrecision(sortedAssets[j + 8 * i][2]))}
+												{'$' + roundedToTwo(removePrecision(sortedAssets[j + inner * i][2]))}
 											</BoxSubdataValue>
 										</BoxSubdata>
 										<BoxSubdata>
 											<BoxSubdataTitle>Realtime Price:</BoxSubdataTitle>
 											<BoxSubdataValue>
-												{'$' + roundedToTwo(removePrecision(sortedAssets[j + 8 * i][3]))}
+												{'$' + roundedToTwo(removePrecision(sortedAssets[j + inner * i][3]))}
 											</BoxSubdataValue>
 										</BoxSubdata>
 									</BoxContent>

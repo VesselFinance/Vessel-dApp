@@ -73,13 +73,16 @@ const DappCardWrapper = styled.div`
 const PageHeader = styled.div`
 	width: 85%;
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	justify-content: space-between;
 	padding-top: 70px;
 	margin: 0 auto;
 	align-items: space-between;
 	position: relative;
 	background-color: transparent;
+	@media ${bp.sm} {
+		flex-direction: row;
+	}
 `;
 
 const AssetAllocationContainer = styled.div`
@@ -146,24 +149,24 @@ const AboutSectionHeader = styled.h1`
 `;
 
 const AboutSectionSubHeader = styled.div`
-	width: 100%;
 	color: ${theme.color.text.primary};
 	margin-bottom: 0px;
 	text-align: flex-start;
 	justify-content: flex-start;
 	justify-text: flex-start;
 	font-size: 20px;
+	margin-right: 20px;
 	&:hover {
 		cursor: pointer;
 	}
 	@media ${bp.sm} {
+		width: 100%;
 		text-align: left;
 		font-size: 28px;
 	}
 `;
 
 const AboutSectionSubHeaderInactive = styled.div`
-	width: 100%;
 	color: ${theme.color.text.secondary};
 	margin-bottom: 0px;
 	text-align: flex-start;
@@ -256,14 +259,16 @@ const UserBoxContent = styled.div`
 	backdrop-filter: blur(10px);
 	border-radius: 16px;
 	margin-bottom: 20px;
+	justify-content: center;
 	color: ${theme.color.text.primary};
 	border: 0px solid rgba(255, 255, 255, 0.2);
-	width: 88vw;
+	width: 100%;
 	@media ${bp.sm} {
-		width: 90%;
+		width: 70%;
+		max-width: 70%;
 	}
 	@media ${bp.smd} {
-		width: 300px;
+		width: 350px;
 	}
 	@media ${bp.md} {
 		width: 400px;
@@ -302,7 +307,7 @@ const BoxHeader = styled.h1`
 	color: ${theme.color.text.primary};
 	margin-bottom: 16px;
 	text-align: flex-start;
-	font-size: 18px;
+	font-size: 16px;
 	display: flex;
 	justify-content: space-between;
 	padding-bottom: 4px;
@@ -323,7 +328,7 @@ const BoxSubHeader = styled.h1`
 	color: ${theme.color.text.primary};
 	margin-bottom: 16px;
 	text-align: flex-start;
-	font-size: 18px;
+	font-size: 14px;
 	display: flex;
 	justify-content: flex-start;
 	padding-bottom: 4px;
@@ -371,23 +376,27 @@ const TitleContainer = styled.div`
 	flex-direction: column;
 	justify-content: space-between;
 	align-items: space-between;
+	width: 40%;
 `;
 
 const SubheaderContainer = styled.div`
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between;
-	width: 470px;
+	justify-content: flex-left;
+	width: 300px;
 `;
 
 const VoteDescriptionContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	font-weight: 100px;
-	font-size: 16px;
+	font-size: 12px;
 	margin-bottom: 40px;
 	padding-left: 5px;
 	padding-right: 10px;
+	@media ${bp.sm} {
+		font-size: 16px;
+	}
 `;
 
 const BoxIcon = styled.img`
@@ -411,6 +420,7 @@ const roundedToTwo = num => {
 };
 
 const HomePage = () => {
+	const [WalletConnectedMode, setWalletConnectedMode] = React.useState(false);
 	const [viewAssetAllocation, setViewAssetAllocation] = React.useState(true);
 	const [viewVotes, setViewVotes] = React.useState(false);
 	const [isLoaded, setIsLoaded] = React.useState(false);
@@ -426,8 +436,7 @@ const HomePage = () => {
 	const [assetVotes, setAssetVotes] = React.useState([]);
 	const [assetPrices, setAssetPrices] = React.useState([]);
 	const [rtAssetPrices, setRealTimeAssetPrices] = React.useState([]);
-	const [thisUserVotes, setUserVotes] = React.useState(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-	const [canVote, setCanVote] = React.useState(true);
+	const [thisUserVotes, setUserVotes] = React.useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
 	const [showModal, setShowModal] = React.useState(false);
 
 	// get necessary data from Contract to display
@@ -438,6 +447,7 @@ const HomePage = () => {
 				if (!window.ethereum || localStorage.getItem('account') === '') {
 					throw new Error('No crypto wallet found. Please install it.');
 				}
+				setWalletConnectedMode(true);
 				const web3 = new Web3(window.ethereum);
 				web3.eth.setProvider(Web3.givenProvider);
 				const accounts = await window.ethereum.request({ method: 'eth_accounts' });
@@ -564,7 +574,6 @@ const HomePage = () => {
 					setAssetPrices(assetTotalPrices);
 					setRealTimeAssetPrices(realTimeAssetPrices);
 					setTotalVotesCast(totalVotes);
-					setIsLoaded(true);
 				};
 				await getAndSetVesselContractData();
 				setIsLoaded(true);
@@ -576,6 +585,15 @@ const HomePage = () => {
 	const [showUserInfo, setShowUserInfo] = React.useState(true);
 	const eyeClick = () => {
 		setShowUserInfo(!showUserInfo);
+	};
+
+	const voteEnabler = () => {
+		// if vote has been submitted, set user cannot vote
+		if (thisUserVotes.reduce((a, b) => a + b, 0) !== 0) {
+			return false;
+		} else {
+			return true;
+		}
 	};
 
 	const handleVotesSubmission = async submittedVotes => {
@@ -671,7 +689,7 @@ const HomePage = () => {
 										You must vote for the percentage allocation of all 20 tokens in the wrapper. In
 										doing so, you have the power to change how Vessel evolves.
 									</VoteDescriptionContainer>
-									{canVote ? (
+									{!voteEnabler() ? (
 										<PrimaryButton
 											onClick={() => {
 												setShowModal(true);
@@ -681,7 +699,7 @@ const HomePage = () => {
 											Vote now
 										</PrimaryButton>
 									) : (
-										<InformationButtonGreyed>Vote now</InformationButtonGreyed>
+										<InformationButtonGreyed>Your vote has been submitted</InformationButtonGreyed>
 									)}
 								</VoteContainer>
 							</UserBoxContent>

@@ -27,27 +27,45 @@ const ModalMain = styled.div`
 	backdrop-filter: blur(10px);
 	border-radius: 16px;
 	color: ${theme.color.text.primary};
-	width: 80%;
-	height: auto;
+	width: 85%;
+	height: 80%;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
+	@media ${bp.sm} {
+		height: 85%;
+	}
 `;
 
 const TokenomicsTable = styled.div`
 	display: grid;
-	grid-template-columns: 1fr;
-	width: 100vw;
+	grid-template-columns: 1fr 1fr;
+	width: 100%;
 	justify-content: center;
-	align-items: center;
-	margin-top: 50px;
+	margin-top: -20px;
 	padding-left: 30px;
 	padding-right: 30px;
+	height: 73%;
+	margin-bottom: 12px;
 	background: rgba(0, 0, 0, 0.5);
 	backdrop-filter: blur(10px);
 	border-radius: 16px;
 	border: 1px solid rgba(255, 255, 255, 0.5);
+	overflow-y: auto;
 	@media ${bp.sm} {
+		display: grid;
+		grid-template-columns: 0.5fr 2fr 0.5fr 2fr;
+		width: 100%;
+		justify-content: center;
+		margin-top: 0px;
+		margin-bottom: 20px;
+		background: rgba(0, 0, 0, 0.5);
+		backdrop-filter: blur(10px);
+		padding: 20px;
+		border-radius: 16px;
+		border: 1px solid rgba(255, 255, 255, 0.5);
+	}
+	@media ${bp.lg} {
 		display: grid;
 		grid-template-columns: 0.5fr 2fr 0.5fr 2fr 0.5fr 2fr;
 		width: 100%;
@@ -67,7 +85,7 @@ const BoxHeader = styled.h1`
 	color: ${theme.color.text.primary};
 	margin-bottom: 16px;
 	text-align: flex-start;
-	font-size: 18px;
+	font-size: 16px;
 	display: flex;
 	justify-content: space-between;
 	padding-bottom: 4px;
@@ -100,11 +118,19 @@ const TokenRow = styled.div`
 const TokenCell = styled.div`
 	display: flex;
 	flex-direction: row;
-	padding: 24px 24px 10px 24px;
+	padding: 24px 24px 10px 10px;
 	text-align: flex-start;
 	color: #ffffff;
+	font-size: 10px;
+	@media ${bp.xs} {
+		padding: 12px;
+		font-size: 14px;
+		padding: 24px 24px 10px 24px;
+	}
 	@media ${bp.sm} {
 		padding: 12px;
+		font-size: 14px;
+		padding: 24px 24px 10px 24px;
 	}
 `;
 
@@ -120,7 +146,7 @@ const BoxSubHeader = styled.h1`
 	color: ${theme.color.text.primary};
 	margin-bottom: 16px;
 	text-align: flex-start;
-	font-size: 18px;
+	font-size: 14px;
 	display: flex;
 	justify-content: flex-start;
 	padding-bottom: 4px;
@@ -141,10 +167,11 @@ const TotalAllocationValue = styled.div`
 	color: ${theme.color.text.primary};
 	margin-bottom: 16px;
 	text-align: flex-start;
-	font-size: 18px;
+	font-size: 14px;
 	display: flex;
 	justify-content: flex-start;
 	padding-bottom: 4px;
+	padding-right: 2px;
 
 	@media ${bp.md} {
 		color: ${theme.color.text.primary};
@@ -182,7 +209,7 @@ const VoteModal = props => {
 				<BoxHeader>Your allocation vote</BoxHeader>
 				<BoxSubHeader>
 					Total Allocation:
-					<TotalAllocationValue>{' ' + totalAllocation + '%'}</TotalAllocationValue>
+					<TotalAllocationValue>{'\u00A0' + totalAllocation + '%'}</TotalAllocationValue>
 				</BoxSubHeader>
 				<TokenomicsTable>
 					{[...Array(20)].map((e, i) => {

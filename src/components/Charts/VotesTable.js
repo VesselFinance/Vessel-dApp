@@ -14,6 +14,11 @@ const ChartLegendGrid = styled.div`
 	align-content: center;
 	border-radius: 16px;
 	border-bottom: 1px solid #ffffff;
+	font-size: 12px;
+	font-weight: 700;
+	@media ${bp.md} {
+		font-size: 16px;
+	}
 `;
 
 const TokenRow = styled.div`
@@ -27,6 +32,10 @@ const TokenRow = styled.div`
 	align-items: center;
 	align-content: center;
 	border-radius: 16px;
+	font-size: 12px;
+	@media ${bp.md} {
+		font-size: 16px;
+	}
 `;
 
 const TableContent = styled.div`
@@ -36,7 +45,7 @@ const TableContent = styled.div`
 	text-align: flex-start;
 	color: #ffffff;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-	@media ${bp.sm} {
+	@media ${bp.md} {
 		padding: 16px;
 	}
 `;
@@ -54,24 +63,28 @@ const TokenCell = styled.div`
 
 const TokenomicsTable = styled.div`
 	display: grid;
-	grid-template-columns: 2fr;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+	grid-auto-flow: row;
+	overflow-x: auto;
 	width: 88vw;
-	justify-content: center;
-	align-content: center;
+	justify-content: flex-start;
+	align-content: flex-start;
 	margin-top: 50px;
-	padding-left: 30px;
-	padding-right: 30px;
+	padding-left: 0px;
+	padding-right: 0px;
 	background: rgba(0, 0, 0, 0.5);
 	backdrop-filter: blur(10px);
 	border-radius: 16px;
 	border: 1px solid rgba(255, 255, 255, 0.5);
-	@media ${bp.sm} {
+	@media ${bp.md} {
 		display: grid;
 		grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
 		width: 100%;
 		justify-content: center;
 		align-content: center;
 		margin-top: 50px;
+		padding-left: 30px;
+		padding-right: 30px;
 		background: rgba(0, 0, 0, 0.5);
 		backdrop-filter: blur(10px);
 		border-radius: 16px;
@@ -89,14 +102,21 @@ const TokenIcon = styled.img`
 
 const NegativeDif = styled.h1`
 	color: #fe7e8c;
-	font-size: 16px;
+
 	font-weight: 10px;
+	font-size: 12px;
+	@media ${bp.md} {
+		font-size: 16px;
+	}
 `;
 
 const PositiveDif = styled.h1`
 	color: #09b7b3;
-	font-size: 16px;
 	font-weight: 10px;
+	font-size: 12px;
+	@media ${bp.md} {
+		font-size: 16px;
+	}
 `;
 
 const removePrecision = num => {

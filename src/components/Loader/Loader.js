@@ -34,27 +34,12 @@ const StyledRing = styled.div`
 	position: relative;
 	width: 80px;
 	height: 80px;
-	//transform-origin: 40px 40px;
+	margin-left: -20px;
 `;
 
 const StyledDiv = styled.div`
 	position: absolute;
 	animation: ${ldsHeart} 1.2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
-
-	&:after,
-	&:before {
-		content: ' ';
-		position: absolute;
-		background: ${theme.color.accent};
-	}
-
-	&:before {
-		left: -24px;
-	}
-
-	&:after {
-		top: -24px;
-	}
 `;
 
 const Spinner = () => {
