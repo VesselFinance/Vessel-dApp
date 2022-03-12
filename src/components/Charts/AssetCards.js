@@ -249,7 +249,6 @@ const AssetCards = props => {
 			renderIndicator={false}
 		>
 			{[...Array(outer)].map((e, i) => {
-				var Colours = shuffleColors(GraphColors);
 				return (
 					<BoxContentWrapper key={(i + 1).toString()}>
 						{[...Array(inner)].map((e, j) => {
@@ -266,7 +265,8 @@ const AssetCards = props => {
 										<GaugeChart
 											id={(j + inner * i).toString()}
 											nrOfLevels={25}
-											colors={Colours[j]}
+											colors={GraphColors[j]}
+											animate={false}
 											arcWidth={0.3}
 											percent={((n + 1) * tokenRatio) / (n * tokenRatio + 1)}
 											cornerRadius={0}
