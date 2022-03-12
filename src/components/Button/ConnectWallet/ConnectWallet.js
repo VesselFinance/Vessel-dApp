@@ -95,6 +95,8 @@ const ConnectButton = ({ style }) => {
 		const checkWalletInStorage = () => {
 			if (localStorage.getItem('account') !== '') {
 				connectWalletHandler();
+			} else {
+				setWalletIsActive(false);
 			}
 		};
 		checkWalletInStorage();
@@ -112,6 +114,7 @@ const ConnectButton = ({ style }) => {
 					accountChangedHandler(result[0]);
 					setWalletIsActive(true);
 					localStorage.setItem('account', result[0]);
+					window.dispatchEvent(new Event('storage'));
 					getAccountBalance(result[0]);
 				})
 				.catch(error => {
@@ -151,7 +154,7 @@ const ConnectButton = ({ style }) => {
 		setDefaultAccount(null);
 		setWalletIsActive(false);
 		localStorage.setItem('account', '');
-		localStorage.removeItem('acount');
+		window.dispatchEvent(new Event('storage'));
 	};
 
 	// toggle drop down box

@@ -159,8 +159,8 @@ const AboutSectionSubHeader = styled.div`
 	&:hover {
 		cursor: pointer;
 	}
-	@media ${bp.sm} {
-		width: 100%;
+	@media ${bp.md} {
+		margin-right: 20px;
 		text-align: left;
 		font-size: 28px;
 	}
@@ -173,10 +173,12 @@ const AboutSectionSubHeaderInactive = styled.div`
 	justify-content: flex-start;
 	justify-text: flex-start;
 	font-size: 20px;
+	margin-right: 20px;
 	&:hover {
 		cursor: pointer;
 	}
-	@media ${bp.sm} {
+	@media ${bp.md} {
+		margin-right: 20px;
 		text-align: left;
 		font-size: 28px;
 	}
@@ -384,6 +386,9 @@ const SubheaderContainer = styled.div`
 	flex-direction: row;
 	justify-content: flex-left;
 	width: 300px;
+	@media ${bp.md} {
+		width: 400px;
+	}
 `;
 
 const VoteDescriptionContainer = styled.div`
@@ -411,16 +416,9 @@ const LoaderContainer = styled.div`
 	left: 50vw;
 `;
 
-const removePrecision = num => {
-	return num / 10 ** 18;
-};
-
-const roundedToTwo = num => {
-	return num.toFixed(2);
-};
-
 const HomePage = () => {
-	const [WalletConnectedMode, setWalletConnectedMode] = React.useState(false);
+	const [walletConnectedMode, setWalletConnectedMode] = React.useState(false);
+	const [votedStatus, setVotedStatus] = React.useState('disconnected');
 	const [viewAssetAllocation, setViewAssetAllocation] = React.useState(true);
 	const [viewVotes, setViewVotes] = React.useState(false);
 	const [isLoaded, setIsLoaded] = React.useState(false);
@@ -439,163 +437,165 @@ const HomePage = () => {
 	const [thisUserVotes, setUserVotes] = React.useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
 	const [showModal, setShowModal] = React.useState(false);
 
-	// get necessary data from Contract to display
+	window.addEventListener('storage', () => {
+		// When local storage changes, dump the list to
+		// the console.
+		if (localStorage.getItem('account') === '') {
+			setWalletConnectedMode(false);
+			setUserVotes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+		} else if (localStorage.getItem('account') != '') {
+			setWalletConnectedMode(true);
+		}
+		setVoteStatus();
+	});
+
+	/*change availability of vote button based on account connection and account vote status*/
+	React.useEffect(() => {
+		setVoteStatus();
+	}, [thisUserVotes, walletConnectedMode]);
+
+	/* get necessary data from Contract to display */
 	React.useEffect(() => {
 		const getContractData = async () => {
 			// if wallet is connected, pull contract data and wallet data
 			try {
 				if (!window.ethereum || localStorage.getItem('account') === '') {
+					console.log('no account found');
 					throw new Error('No crypto wallet found. Please install it.');
 				}
-				setWalletConnectedMode(true);
 				const web3 = new Web3(window.ethereum);
 				web3.eth.setProvider(Web3.givenProvider);
 				const accounts = await window.ethereum.request({ method: 'eth_accounts' });
 
-				const getAndSetVesselContractData = async () => {
-					const account = accounts[0];
-					const burnAddr = contractMethods.burnAddr;
-					const bountyAddr = contractMethods.bountyAddr;
-					const vaultAddr = contractMethods.vaultAddr;
-					const tSupp = await contractMethods.totalTokens();
-					const totalVotes = await contractMethods.totalVotesCast();
-					const walletAddresses = [account, burnAddr, bountyAddr, vaultAddr];
-
-					let balances = await Promise.all(
-						walletAddresses.map((e, i) => {
-							return contractMethods.balanceOf(walletAddresses[i]);
-						}),
-					);
-
-					let votesFromUser = await Promise.all(
-						[...Array(20)].map((e, i) => {
-							return contractMethods.getUserVotes(account, i);
-						}),
-					);
-
-					let addresses = await Promise.all(
-						[...Array(20)].map((e, i) => {
-							return contractMethods.getCoinAddress(i);
-						}),
-					);
-
-					let ratios = await Promise.all(
-						[...Array(20)].map((e, i) => {
-							return contractMethods.getBalancedRatio(i);
-						}),
-					);
-
-					let assetTotalVotes = await Promise.all(
-						[...Array(20)].map((e, i) => {
-							return contractMethods.getCoinVotes(i);
-						}),
-					);
-
-					let assetTotalPrices = await Promise.all(
-						[...Array(20)].map((e, i) => {
-							return contractMethods.getLastEpochPrices(i);
-						}),
-					);
-
-					let realTimeAssetPrices = await Promise.all(
-						addresses.map((e, i) => {
-							return contractMethods.getQuote(addresses[i]);
-						}),
-					);
-
-					console.log(votesFromUser);
-
-					const numerator = removePrecision(balances[0]);
-					const denominator =
-						removePrecision(tSupp) -
-						(removePrecision(balances[1]) + removePrecision(balances[2]) + removePrecision(balances[3]));
-					const vShareCalculation = numerator / denominator;
-					const VSCorZero = vShareCalculation;
-					console.log(VSCorZero);
-
-					setVSLTokens(addresses);
-					setBalancedRatio(ratios);
-					setAssetVotes(assetTotalVotes);
-					setAssetPrices(assetTotalPrices);
-					setUserVotes(votesFromUser);
-					setVSLBalance(balances[0] / 10 ** 18);
-					settSupply(tSupp);
-					setTotalVotesCast(totalVotes);
-					setBurnSupply(balances[1]);
-					setBountySupply(balances[2]);
-					setVaultSupply(balances[3]);
-					setRealTimeAssetPrices(realTimeAssetPrices);
-
-					setVotingShare(Number(Math.min(0.1, VSCorZero)));
-				};
-
-				await getAndSetVesselContractData();
+				await getContractDataWithAccount(accounts);
+				setWalletConnectedMode(true);
 				setIsLoaded(true);
 
 				// if wallet not connected, just pull contract data
 			} catch (err) {
 				console.log(err.message);
 
-				const getAndSetVesselContractData = async () => {
-					const totalVotes = await contractMethods.totalVotesCast();
-					let addresses = await Promise.all(
-						[...Array(20)].map((e, i) => {
-							return contractMethods.getCoinAddress(i);
-						}),
-					);
-
-					let ratios = await Promise.all(
-						[...Array(20)].map((e, i) => {
-							return contractMethods.getBalancedRatio(i);
-						}),
-					);
-
-					let assetTotalVotes = await Promise.all(
-						[...Array(20)].map((e, i) => {
-							return contractMethods.getCoinVotes(i);
-						}),
-					);
-
-					let assetTotalPrices = await Promise.all(
-						[...Array(20)].map((e, i) => {
-							return contractMethods.getLastEpochPrices(i);
-						}),
-					);
-
-					let realTimeAssetPrices = await Promise.all(
-						addresses.map((e, i) => {
-							return contractMethods.getQuote(addresses[i]);
-						}),
-					);
-
-					setVSLTokens(addresses);
-					setBalancedRatio(ratios);
-					setAssetVotes(assetTotalVotes);
-					setAssetPrices(assetTotalPrices);
-					setRealTimeAssetPrices(realTimeAssetPrices);
-					setTotalVotesCast(totalVotes);
-				};
-				await getAndSetVesselContractData();
+				await getContractDataWithoutAccount();
 				setIsLoaded(true);
 			}
 		};
 		getContractData();
-	}, []);
+	}, [walletConnectedMode]);
 
-	const [showUserInfo, setShowUserInfo] = React.useState(true);
-	const eyeClick = () => {
-		setShowUserInfo(!showUserInfo);
-	};
-
-	const voteEnabler = () => {
-		// if vote has been submitted, set user cannot vote
-		if (thisUserVotes.reduce((a, b) => a + b, 0) !== 0) {
-			return false;
-		} else {
-			return true;
+	const setVoteStatus = () => {
+		if (walletConnectedMode && thisUserVotes.reduce((a, b) => a + b, 0) !== 0) {
+			setVotedStatus('voted');
+		} else if (!walletConnectedMode) {
+			setVotedStatus('disconnected');
+		} else if (walletConnectedMode && thisUserVotes.reduce((a, b) => a + b, 0) !== 0) {
+			setVotedStatus('canVote');
 		}
 	};
 
+	/*
+	this function sets the state values for all contract values that DO
+	depend on the user's wallet account being connected.
+	*/
+	const getContractDataWithAccount = async accounts => {
+		const account = accounts[0];
+		const burnAddr = contractMethods.burnAddr;
+		const bountyAddr = contractMethods.bountyAddr;
+		const vaultAddr = contractMethods.vaultAddr;
+		const tSupp = await contractMethods.totalTokens();
+		const totalVotes = await contractMethods.totalVotesCast();
+		const walletAddresses = [account, burnAddr, bountyAddr, vaultAddr];
+		let balances = await Promise.all(
+			walletAddresses.map((e, i) => {
+				return contractMethods.balanceOf(walletAddresses[i]);
+			}),
+		);
+		let votesFromUser = await Promise.all(
+			[...Array(20)].map((e, i) => {
+				return contractMethods.getUserVotes(account, i);
+			}),
+		);
+
+		let addresses = await Promise.all(
+			[...Array(20)].map((e, i) => {
+				return contractMethods.getCoinAddress(i);
+			}),
+		);
+		let ratios = await Promise.all(
+			[...Array(20)].map((e, i) => {
+				return contractMethods.getBalancedRatio(i);
+			}),
+		);
+		let assetTotalVotes = await Promise.all(
+			[...Array(20)].map((e, i) => {
+				return contractMethods.getCoinVotes(i);
+			}),
+		);
+		let assetTotalPrices = await Promise.all(
+			[...Array(20)].map((e, i) => {
+				return contractMethods.getLastEpochPrices(i);
+			}),
+		);
+		let realTimeAssetPrices = await Promise.all(
+			addresses.map((e, i) => {
+				return contractMethods.getQuote(addresses[i]);
+			}),
+		);
+
+		setVSLTokens(addresses);
+		setBalancedRatio(ratios);
+		setAssetVotes(assetTotalVotes);
+		setAssetPrices(assetTotalPrices);
+		setUserVotes(votesFromUser);
+		setVSLBalance(balances[0] / 10 ** 18);
+		settSupply(tSupp);
+		setTotalVotesCast(totalVotes);
+		setBurnSupply(balances[1]);
+		setBountySupply(balances[2]);
+		setVaultSupply(balances[3]);
+		setRealTimeAssetPrices(realTimeAssetPrices);
+	};
+
+	/*
+	this function sets the state values for all contract values that do NOT
+	depend on the user's wallet account being connected.
+	*/
+	const getContractDataWithoutAccount = async () => {
+		const totalVotes = await contractMethods.totalVotesCast();
+		let addresses = await Promise.all(
+			[...Array(20)].map((e, i) => {
+				return contractMethods.getCoinAddress(i);
+			}),
+		);
+		let ratios = await Promise.all(
+			[...Array(20)].map((e, i) => {
+				return contractMethods.getBalancedRatio(i);
+			}),
+		);
+		let assetTotalVotes = await Promise.all(
+			[...Array(20)].map((e, i) => {
+				return contractMethods.getCoinVotes(i);
+			}),
+		);
+		let assetTotalPrices = await Promise.all(
+			[...Array(20)].map((e, i) => {
+				return contractMethods.getLastEpochPrices(i);
+			}),
+		);
+		let realTimeAssetPrices = await Promise.all(
+			addresses.map((e, i) => {
+				return contractMethods.getQuote(addresses[i]);
+			}),
+		);
+		setVSLTokens(addresses);
+		setBalancedRatio(ratios);
+		setAssetVotes(assetTotalVotes);
+		setAssetPrices(assetTotalPrices);
+		setRealTimeAssetPrices(realTimeAssetPrices);
+		setTotalVotesCast(totalVotes);
+	};
+
+	/* handle the contract send transaction when the user submits their vote allocation for the 
+	current epoch. */
 	const handleVotesSubmission = async submittedVotes => {
 		try {
 			if (!window.ethereum || localStorage.getItem('account') === '') {
@@ -689,7 +689,7 @@ const HomePage = () => {
 										You must vote for the percentage allocation of all 20 tokens in the wrapper. In
 										doing so, you have the power to change how Vessel evolves.
 									</VoteDescriptionContainer>
-									{!voteEnabler() ? (
+									{votedStatus === 'canVote' ? (
 										<PrimaryButton
 											onClick={() => {
 												setShowModal(true);
@@ -698,9 +698,11 @@ const HomePage = () => {
 										>
 											Vote now
 										</PrimaryButton>
-									) : (
+									) : votedStatus === 'disconnected' ? (
+										<InformationButtonGreyed>connect wallet to vote</InformationButtonGreyed>
+									) : votedStatus === 'voted' ? (
 										<InformationButtonGreyed>Your vote has been submitted</InformationButtonGreyed>
-									)}
+									) : null}
 								</VoteContainer>
 							</UserBoxContent>
 						</UserAndGraphContainer>
