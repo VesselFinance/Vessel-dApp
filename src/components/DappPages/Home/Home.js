@@ -420,6 +420,7 @@ const HomePage = () => {
 	const [walletConnectedMode, setWalletConnectedMode] = React.useState(false);
 	const [votedStatus, setVotedStatus] = React.useState('disconnected');
 	const [viewAssetAllocation, setViewAssetAllocation] = React.useState(true);
+	const [recievedContractData, setRecievedContractData] = React.useState(false);
 	const [viewVotes, setViewVotes] = React.useState(false);
 	const [isLoaded, setIsLoaded] = React.useState(false);
 	const [VSLBalance, setVSLBalance] = React.useState(0);
@@ -467,6 +468,10 @@ const HomePage = () => {
 				web3.eth.setProvider(Web3.givenProvider);
 				const accounts = await window.ethereum.request({ method: 'eth_accounts' });
 
+				if (recievedContractData === false) {
+					await getContractDataWithoutAccount();
+					setRecievedContractData(true);
+				}
 				await getContractDataWithAccount(accounts);
 				setWalletConnectedMode(true);
 				setIsLoaded(true);
@@ -474,7 +479,6 @@ const HomePage = () => {
 				// if wallet not connected, just pull contract data
 			} catch (err) {
 				console.log(err.message);
-
 				await getContractDataWithoutAccount();
 				setIsLoaded(true);
 			}
@@ -498,61 +502,20 @@ const HomePage = () => {
 	*/
 	const getContractDataWithAccount = async accounts => {
 		const account = accounts[0];
-		const burnAddr = contractMethods.burnAddr;
-		const bountyAddr = contractMethods.bountyAddr;
-		const vaultAddr = contractMethods.vaultAddr;
-		const tSupp = await contractMethods.totalTokens();
-		const totalVotes = await contractMethods.totalVotesCast();
-		const walletAddresses = [account, burnAddr, bountyAddr, vaultAddr];
-		let balances = await Promise.all(
-			walletAddresses.map((e, i) => {
-				return contractMethods.balanceOf(walletAddresses[i]);
-			}),
-		);
-		let votesFromUser = await Promise.all(
-			[...Array(20)].map((e, i) => {
-				return contractMethods.getUserVotes(account, i);
-			}),
-		);
 
-		let addresses = await Promise.all(
-			[...Array(20)].map((e, i) => {
-				return contractMethods.getCoinAddress(i);
-			}),
-		);
-		let ratios = await Promise.all(
-			[...Array(20)].map((e, i) => {
-				return contractMethods.getBalancedRatio(i);
-			}),
-		);
-		let assetTotalVotes = await Promise.all(
-			[...Array(20)].map((e, i) => {
-				return contractMethods.getCoinVotes(i);
-			}),
-		);
-		let assetTotalPrices = await Promise.all(
-			[...Array(20)].map((e, i) => {
-				return contractMethods.getLastEpochPrices(i);
-			}),
-		);
-		let realTimeAssetPrices = await Promise.all(
-			addresses.map((e, i) => {
-				return contractMethods.getQuote(addresses[i]);
-			}),
-		);
+		let accountContractData = await Promise.all([
+			// votes from user
+			Promise.all(
+				[...Array(20)].map((e, i) => {
+					return contractMethods.getUserVotes(account, i);
+				}),
+			),
+			// account balance
+			contractMethods.balanceOf(account),
+		]);
 
-		setVSLTokens(addresses);
-		setBalancedRatio(ratios);
-		setAssetVotes(assetTotalVotes);
-		setAssetPrices(assetTotalPrices);
-		setUserVotes(votesFromUser);
-		setVSLBalance(balances[0] / 10 ** 18);
-		settSupply(tSupp);
-		setTotalVotesCast(totalVotes);
-		setBurnSupply(balances[1]);
-		setBountySupply(balances[2]);
-		setVaultSupply(balances[3]);
-		setRealTimeAssetPrices(realTimeAssetPrices);
+		setUserVotes(accountContractData[0]);
+		setVSLBalance(accountContractData[1] / 10 ** 18);
 	};
 
 	/*
@@ -560,38 +523,47 @@ const HomePage = () => {
 	depend on the user's wallet account being connected.
 	*/
 	const getContractDataWithoutAccount = async () => {
-		const totalVotes = await contractMethods.totalVotesCast();
-		let addresses = await Promise.all(
-			[...Array(20)].map((e, i) => {
-				return contractMethods.getCoinAddress(i);
+		const allContractData = await Promise.all([
+			// addresses
+			Promise.all(
+				[...Array(20)].map((e, i) => {
+					return contractMethods.getCoinAddress(i);
+				}),
+			),
+			//ratios
+			Promise.all(
+				[...Array(20)].map((e, i) => {
+					return contractMethods.getBalancedRatio(i);
+				}),
+			),
+			//assetTotalVotes
+			Promise.all(
+				[...Array(20)].map((e, i) => {
+					return contractMethods.getCoinVotes(i);
+				}),
+			),
+			// assetTotalPrices
+			Promise.all(
+				[...Array(20)].map((e, i) => {
+					return contractMethods.getLastEpochPrices(i);
+				}),
+			),
+			//total votes
+			contractMethods.totalVotesCast(),
+		]);
+
+		let RTP = await Promise.all(
+			allContractData[0].map((e, i) => {
+				return contractMethods.getQuote(allContractData[0][i]);
 			}),
 		);
-		let ratios = await Promise.all(
-			[...Array(20)].map((e, i) => {
-				return contractMethods.getBalancedRatio(i);
-			}),
-		);
-		let assetTotalVotes = await Promise.all(
-			[...Array(20)].map((e, i) => {
-				return contractMethods.getCoinVotes(i);
-			}),
-		);
-		let assetTotalPrices = await Promise.all(
-			[...Array(20)].map((e, i) => {
-				return contractMethods.getLastEpochPrices(i);
-			}),
-		);
-		let realTimeAssetPrices = await Promise.all(
-			addresses.map((e, i) => {
-				return contractMethods.getQuote(addresses[i]);
-			}),
-		);
-		setVSLTokens(addresses);
-		setBalancedRatio(ratios);
-		setAssetVotes(assetTotalVotes);
-		setAssetPrices(assetTotalPrices);
-		setRealTimeAssetPrices(realTimeAssetPrices);
-		setTotalVotesCast(totalVotes);
+
+		setVSLTokens(allContractData[0]);
+		setBalancedRatio(allContractData[1]);
+		setAssetVotes(allContractData[2]);
+		setAssetPrices(allContractData[3]);
+		setTotalVotesCast(allContractData[4]);
+		setRealTimeAssetPrices(RTP);
 	};
 
 	/* handle the contract send transaction when the user submits their vote allocation for the 
