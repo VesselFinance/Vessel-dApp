@@ -423,7 +423,6 @@ const HomePage = () => {
 	const [recievedContractData, setRecievedContractData] = React.useState(false);
 	const [viewVotes, setViewVotes] = React.useState(false);
 	const [isLoaded, setIsLoaded] = React.useState(false);
-	const [VSLBalance, setVSLBalance] = React.useState(0);
 	const [votingShare, setVotingShare] = React.useState(0);
 	const [tSupply, settSupply] = React.useState(0);
 	const [burnSupply, setBurnSupply] = React.useState(0);
@@ -510,12 +509,9 @@ const HomePage = () => {
 					return contractMethods.getUserVotes(account, i);
 				}),
 			),
-			// account balance
-			contractMethods.balanceOf(account),
 		]);
 
 		setUserVotes(accountContractData[0]);
-		setVSLBalance(accountContractData[1] / 10 ** 18);
 	};
 
 	/*

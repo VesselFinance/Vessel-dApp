@@ -363,7 +363,7 @@ const HomePage = () => {
 				const contractBal = await contractMethods.balanceOf(contractMethods.bountyAddr);
 				setBountyValue(contractBal / 10 ** 18 > 1000000 ? 1000000 : contractBal / 10 ** 18);
 			};
-			await getAndSetVesselContractData();
+			getAndSetVesselContractData();
 			setIsLoaded(true);
 		};
 
@@ -468,9 +468,7 @@ const HomePage = () => {
 						<AssetAllocationContainer>
 							<UserAndGraphContainer>
 								<UserBoxContent>
-									<BoxHeader>
-										Reset
-									</BoxHeader>
+									<BoxHeader>Reset</BoxHeader>
 									<UserBoxDataContainer>
 										<Countdown
 											autoStart={true}
@@ -481,9 +479,7 @@ const HomePage = () => {
 									</UserBoxDataContainer>
 								</UserBoxContent>
 								<UserBoxContent>
-									<BoxHeader>
-										Collect Bounty
-									</BoxHeader>
+									<BoxHeader>Collect Bounty</BoxHeader>
 									<UserBoxDataContainer>
 										<UserBoxDataBox>
 											<UserBoxDataCurrentRewardBigNum>
