@@ -437,6 +437,8 @@ const HomePage = () => {
 	const [thisUserVotes, setUserVotes] = React.useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
 	const [showModal, setShowModal] = React.useState(false);
 
+	/* listen to event emitted from change in local storage, set Wallet Connect Mode for 
+	appropriate component rerender */
 	window.addEventListener('storage', () => {
 		// When local storage changes, dump the list to
 		// the console.
@@ -471,7 +473,7 @@ const HomePage = () => {
 					await getContractDataWithoutAccount();
 					setRecievedContractData(true);
 				}
-				await getContractDataWithAccount(accounts);
+				await getContractAccountData(accounts);
 				setWalletConnectedMode(true);
 				setIsLoaded(true);
 
@@ -499,7 +501,7 @@ const HomePage = () => {
 	this function sets the state values for all contract values that DO
 	depend on the user's wallet account being connected.
 	*/
-	const getContractDataWithAccount = async accounts => {
+	const getContractAccountData = async accounts => {
 		const account = accounts[0];
 
 		let accountContractData = await Promise.all([
