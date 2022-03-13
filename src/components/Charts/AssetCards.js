@@ -9,11 +9,19 @@ import { tokenData } from '../../Data/tokens';
 
 const BoxContentWrapper = styled.div`
 	display: inline-grid;
-	grid-template-rows: 230px 230px;
-	grid-template-columns: 150px 150px;
+	grid-template-rows: 240px 240px;
+	grid-template-columns: 40vw 40vw;
 	grid-column-gap: 18px;
 	grid-row-gap: 20px;
 	justify-content: center;
+	@media ${bp.xs} {
+		display: inline-grid;
+		grid-template-rows: 250px 250px;
+		grid-template-columns: 200px 200px;
+		grid-column-gap: 18px;
+		grid-row-gap: 20px;
+		justify-content: flex-start;
+	}
 	@media ${bp.sm} {
 		display: inline-grid;
 		grid-template-rows: 250px 250px;
@@ -105,23 +113,28 @@ const BoxSubdata = styled.div`
 const BoxSubdataTitle = styled.h3`
 	color: ${theme.color.text.primary};
 	margin-bottom: 4px;
+	margin-top: -5px;
 	text-align: left;
 	font-size: 10px;
-	font-weight: 200;
+	font-weight: 700;
+	max-width: 60px;
 	display: flex;
 
 	padding-bottom: 2px;
 	@media ${bp.sm} {
 		font-size: 12px;
-		max-width: 70px;
+		max-width: 200px;
+		margin-top: -5px;
 	}
 	@media ${bp.smd} {
 		font-size: 12px;
-		max-width: 60px;
+		max-width: 100px;
+		margin-top: 0px;
 	}
 	@media ${bp.md} {
 		font-size: 12px;
 		max-width: 100px;
+		margin-top: 0px;
 	}
 `;
 const BoxSubdataValue = styled.h3`
@@ -130,7 +143,7 @@ const BoxSubdataValue = styled.h3`
 	text-align: flex-start;
 	font-size: 10px;
 	display: flex;
-	font-weight: 300;
+	font-weight: 500;
 	font-family: 'IBMPlexMono-Light';
 	justify-content: space-between;
 	padding-bottom: 2px;
