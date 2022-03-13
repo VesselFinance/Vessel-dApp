@@ -24,6 +24,7 @@ import Web3 from 'web3';
 import { min } from 'd3';
 import Loader from '../../Loader/Loader';
 import VoteModal from '../../PopUps/VoteScreen';
+import SkeletonHome from '../../skeletonLoads/skeletonHome';
 
 const PageWrapper = styled.div`
 	padding: 0 28px 64px 28px;
@@ -504,7 +505,7 @@ const HomePage = () => {
 	const getContractAccountData = async accounts => {
 		const account = accounts[0];
 
-		let accountContractData = await Promise.all([
+		const accountContractData = await Promise.all([
 			// votes from user
 			Promise.all(
 				[...Array(20)].map((e, i) => {
@@ -550,7 +551,7 @@ const HomePage = () => {
 			contractMethods.totalVotesCast(),
 		]);
 
-		let RTP = await Promise.all(
+		const RTP = await Promise.all(
 			allContractData[0].map((e, i) => {
 				return contractMethods.getQuote(allContractData[0][i]);
 			}),
@@ -598,133 +599,129 @@ const HomePage = () => {
 	};
 
 	return !isLoaded ? (
-		<LoaderContainer>
-			<Loader />
-		</LoaderContainer>
+		<SkeletonHome />
 	) : (
 		<>
-			<AnimationOnScroll animateIn="animate__fadeIn" animateOnce={true}>
-				<PageWrapper>
-					<PageHeader>
-						<TitleContainer>
-							<AboutSectionHeader>Voting</AboutSectionHeader>
-							{viewAssetAllocation ? (
-								<SubheaderContainer>
-									<AboutSectionSubHeader
+			<PageWrapper>
+				<PageHeader>
+					<TitleContainer>
+						<AboutSectionHeader>Voting</AboutSectionHeader>
+						{viewAssetAllocation ? (
+							<SubheaderContainer>
+								<AboutSectionSubHeader
+									onClick={() => {
+										setViewAssetAllocation(true);
+										setViewVotes(false);
+									}}
+								>
+									Asset Allocation
+								</AboutSectionSubHeader>
+
+								<AboutSectionSubHeaderInactive
+									onClick={() => {
+										setViewAssetAllocation(false);
+										setViewVotes(true);
+									}}
+								>
+									Votes
+								</AboutSectionSubHeaderInactive>
+							</SubheaderContainer>
+						) : (
+							<SubheaderContainer>
+								<AboutSectionSubHeaderInactive
+									onClick={() => {
+										setViewAssetAllocation(true);
+										setViewVotes(false);
+									}}
+								>
+									Asset Allocation
+								</AboutSectionSubHeaderInactive>
+
+								<AboutSectionSubHeader
+									onClick={() => {
+										setViewAssetAllocation(false);
+										setViewVotes(true);
+									}}
+								>
+									Votes
+								</AboutSectionSubHeader>
+							</SubheaderContainer>
+						)}
+					</TitleContainer>
+					<UserAndGraphContainer>
+						<UserBoxContent>
+							<BoxHeader>Voting</BoxHeader>
+							<VoteContainer>
+								<BoxSubHeader>How Does voting work?</BoxSubHeader>
+								<VoteDescriptionContainer>
+									You must vote for the percentage allocation of all 20 tokens in the wrapper. In
+									doing so, you have the power to change how Vessel evolves.
+								</VoteDescriptionContainer>
+								{votedStatus === 'canVote' ? (
+									<PrimaryButton
 										onClick={() => {
-											setViewAssetAllocation(true);
-											setViewVotes(false);
+											setShowModal(true);
+											document.body.style.overflow = 'hidden';
 										}}
 									>
-										Asset Allocation
-									</AboutSectionSubHeader>
+										Vote now
+									</PrimaryButton>
+								) : votedStatus === 'disconnected' ? (
+									<InformationButtonGreyed>connect wallet to vote</InformationButtonGreyed>
+								) : votedStatus === 'voted' ? (
+									<InformationButtonGreyed>Your vote has been submitted</InformationButtonGreyed>
+								) : null}
+							</VoteContainer>
+						</UserBoxContent>
+					</UserAndGraphContainer>
+				</PageHeader>
 
-									<AboutSectionSubHeaderInactive
-										onClick={() => {
-											setViewAssetAllocation(false);
-											setViewVotes(true);
-										}}
-									>
-										Votes
-									</AboutSectionSubHeaderInactive>
-								</SubheaderContainer>
-							) : (
-								<SubheaderContainer>
-									<AboutSectionSubHeaderInactive
-										onClick={() => {
-											setViewAssetAllocation(true);
-											setViewVotes(false);
-										}}
-									>
-										Asset Allocation
-									</AboutSectionSubHeaderInactive>
+				<BackgroundBlurLeft src={greenGlow} alt="blue Glow" />
 
-									<AboutSectionSubHeader
-										onClick={() => {
-											setViewAssetAllocation(false);
-											setViewVotes(true);
-										}}
-									>
-										Votes
-									</AboutSectionSubHeader>
-								</SubheaderContainer>
-							)}
-						</TitleContainer>
-						<UserAndGraphContainer>
-							<UserBoxContent>
-								<BoxHeader>Voting</BoxHeader>
-								<VoteContainer>
-									<BoxSubHeader>How Does voting work?</BoxSubHeader>
-									<VoteDescriptionContainer>
-										You must vote for the percentage allocation of all 20 tokens in the wrapper. In
-										doing so, you have the power to change how Vessel evolves.
-									</VoteDescriptionContainer>
-									{votedStatus === 'canVote' ? (
-										<PrimaryButton
-											onClick={() => {
-												setShowModal(true);
-												document.body.style.overflow = 'hidden';
-											}}
-										>
-											Vote now
-										</PrimaryButton>
-									) : votedStatus === 'disconnected' ? (
-										<InformationButtonGreyed>connect wallet to vote</InformationButtonGreyed>
-									) : votedStatus === 'voted' ? (
-										<InformationButtonGreyed>Your vote has been submitted</InformationButtonGreyed>
-									) : null}
-								</VoteContainer>
-							</UserBoxContent>
-						</UserAndGraphContainer>
-					</PageHeader>
-
-					<BackgroundBlurLeft src={greenGlow} alt="blue Glow" />
-
-					{viewAssetAllocation && !viewVotes ? (
-						<DappCardWrapper>
-							<AssetAllocationContainer>
-								<AssetCardsContainer>
-									<AssetCards
-										prices={assetPrices}
-										votes={assetVotes}
-										wrappertokens={VSLTokens}
-										ratio={balancedRatio}
-										realtimeprices={rtAssetPrices}
-									/>
-								</AssetCardsContainer>
-							</AssetAllocationContainer>
-						</DappCardWrapper>
-					) : (
-						<DappCardWrapper>
-							<VotesTable
-								prices={assetPrices}
-								votes={assetVotes}
-								wrappertokens={VSLTokens}
-								ratio={balancedRatio}
-								realtimeprices={rtAssetPrices}
-								totalVotes={totalVotesCast}
-								userVotes={thisUserVotes}
-							/>
-						</DappCardWrapper>
-					)}
-					<BackgroundBlurLeft src={darkBlueGlow} alt="blue Glow" />
-					<SectionWrapper>
-						<BackgroundBlurRight src={blueGlow} alt="blue Glow" />
-					</SectionWrapper>
-				</PageWrapper>
-				<VoteModal
-					onClose={() => {
-						setShowModal(false);
-						document.body.style.overflow = 'unset';
-					}}
-					open={showModal}
-					wrappertokens={VSLTokens}
-					onSubmit={submittedVotes => {
-						console.log('SUBMITTED: ' + submittedVotes);
-						handleVotesSubmission(submittedVotes);
-					}}
-				/>
-			</AnimationOnScroll>
+				{viewAssetAllocation && !viewVotes ? (
+					<DappCardWrapper>
+						<AssetAllocationContainer>
+							<AssetCardsContainer>
+								<AssetCards
+									prices={assetPrices}
+									votes={assetVotes}
+									wrappertokens={VSLTokens}
+									ratio={balancedRatio}
+									realtimeprices={rtAssetPrices}
+								/>
+							</AssetCardsContainer>
+						</AssetAllocationContainer>
+					</DappCardWrapper>
+				) : (
+					<DappCardWrapper>
+						<VotesTable
+							prices={assetPrices}
+							votes={assetVotes}
+							wrappertokens={VSLTokens}
+							ratio={balancedRatio}
+							realtimeprices={rtAssetPrices}
+							totalVotes={totalVotesCast}
+							userVotes={thisUserVotes}
+						/>
+					</DappCardWrapper>
+				)}
+				<BackgroundBlurLeft src={darkBlueGlow} alt="blue Glow" />
+				<SectionWrapper>
+					<BackgroundBlurRight src={blueGlow} alt="blue Glow" />
+				</SectionWrapper>
+			</PageWrapper>
+			<VoteModal
+				onClose={() => {
+					setShowModal(false);
+					document.body.style.overflow = 'unset';
+				}}
+				open={showModal}
+				wrappertokens={VSLTokens}
+				onSubmit={submittedVotes => {
+					console.log('SUBMITTED: ' + submittedVotes);
+					handleVotesSubmission(submittedVotes);
+				}}
+			/>
 			<Footer />
 		</>
 	);

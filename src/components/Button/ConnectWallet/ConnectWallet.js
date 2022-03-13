@@ -184,9 +184,11 @@ const ConnectButton = ({ style }) => {
 	}
 
 	// listen for account changes
-	window.ethereum.on('accountsChanged', accountChangedHandler);
+	if (window.ethereum) {
+		window.ethereum.on('accountsChanged', accountChangedHandler);
 
-	window.ethereum.on('chainChanged', chainChangedHandler);
+		window.ethereum.on('chainChanged', chainChangedHandler);
+	}
 
 	const wrapperRef = useRef(null);
 	useOutsideAlerter(wrapperRef);

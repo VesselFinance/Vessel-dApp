@@ -31,6 +31,7 @@
 		"react-donut": "^1.1.4",
 		"react-gauge-chart": "^0.4.0",
 		"react-native-chart-kit": "^6.11.0",
+		"react-placeholder": "^4.1.0",
 		"react-responsive-carousel": "^3.2.22",
 		"react-router-dom": "^5.2.0",
 		"react-scripts": "4.0.3",
