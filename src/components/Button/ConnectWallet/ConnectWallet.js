@@ -93,7 +93,7 @@ const ConnectButton = ({ style }) => {
 
 	useEffect(() => {
 		const checkWalletInStorage = () => {
-			if (localStorage.getItem('account') !== '') {
+			if (localStorage.getItem('account') !== '' && localStorage.getItem('account') !== null) {
 				connectWalletHandler();
 			} else {
 				setWalletIsActive(false);
