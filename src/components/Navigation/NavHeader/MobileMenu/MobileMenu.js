@@ -2,6 +2,7 @@ import NavItemMobile from '../NavItemMobile/NavItemMobile';
 import theme from '../../../Theme/theme';
 import styled from 'styled-components';
 import PrimaryButton from '../../../Button/Primary/PrimaryButton';
+import ConnectButton from '../../../Button/ConnectWallet/ConnectWallet';
 import 'react-slidedown/lib/slidedown.css';
 
 const StyledNav = styled.nav`
@@ -85,7 +86,7 @@ const MobileMenu = ({ toggleMobileMenu }) => {
 				<XBar2 />
 			</HamburgerButton>
 			<NavItemMobile link="/" toggle={toggleMobileMenu} exact={true}>
-				DAO
+				Vote
 			</NavItemMobile>
 			<Divider />
 			<NavItemMobile link="/Epoch" toggle={toggleMobileMenu} exact={true}>
@@ -93,7 +94,7 @@ const MobileMenu = ({ toggleMobileMenu }) => {
 			</NavItemMobile>
 			<Divider />
 			<ButtonContainer>
-				<PrimaryButton>Launch dApp</PrimaryButton>
+				<ConnectButton />
 			</ButtonContainer>
 		</StyledNav>
 	);
