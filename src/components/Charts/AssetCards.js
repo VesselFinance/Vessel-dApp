@@ -128,7 +128,7 @@ const BoxSubdataTitle = styled.h3`
 	}
 	@media ${bp.smd} {
 		font-size: 12px;
-		max-width: 100px;
+		max-width: 60px;
 		margin-top: 0px;
 	}
 	@media ${bp.md} {
