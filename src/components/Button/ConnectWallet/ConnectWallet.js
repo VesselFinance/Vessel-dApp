@@ -6,11 +6,13 @@ import React, { useEffect, useState, useRef } from 'react';
 import web3 from 'web3';
 import { ethers } from 'ethers';
 import exitIcon from '../../../assets/svgs/exit.svg';
+import boatSmall from '../../../assets/images/boat_small.png';
+import * as contractMethods from '../../../contract/contract_methods';
 
 const StyledButton = styled.button`
 	background: linear-gradient(250deg, #428afa 0%, #00bea8 100%);
 	border-radius: 12px;
-	padding: 13px;
+	padding: 12px;
 	transition: all 0.2s ease;
 	color: ${theme.color.text.primary};
 	font-weight: bold;
@@ -20,9 +22,29 @@ const StyledButton = styled.button`
 	}
 `;
 
+const BalanceButton = styled.button`
+	background: rgba(30, 55, 52, 0.62);
+	border-radius: 12px;
+	padding: 12px;
+	margin-right: 20px;
+	transition: all 0.2s ease;
+	color: ${theme.color.text.primary};
+	font-weight: bold;
+	align-items: left;
+	align-text: left;
+	border: none;
+`;
+
 const ButtonContainer = styled.div`
 	position: relative;
 	display: inline-block;
+	background-color: transparent;
+	border: 0px;
+`;
+
+const AccountButtons = styled.div`
+	position: relative;
+	display: flex;
 	background-color: transparent;
 	border: 0px;
 `;
@@ -84,6 +106,11 @@ const BoxIcon = styled.img`
 	filter: invert(1);
 `;
 
+const BalanceIcon = styled.img`
+	width: 15px;
+	margin-right: 6px;
+`;
+
 const ConnectButton = ({ style }) => {
 	const [walletIsActive, setWalletIsActive] = useState(false);
 	const [errorMessage, setErrorMessage] = useState(null);
@@ -133,15 +160,13 @@ const ConnectButton = ({ style }) => {
 	};
 
 	// get balance of wallet account
-	const getAccountBalance = account => {
-		window.ethereum
-			.request({ method: 'eth_getBalance', params: [account, 'latest'] })
-			.then(balance => {
-				setUserBalance(ethers.utils.formatEther(balance));
-			})
-			.catch(error => {
-				setErrorMessage(error.message);
-			});
+	const getAccountBalance = async account => {
+		const balance = await contractMethods.balanceOf(account);
+		const sanitisedBalance = roundedToTwo(removePrecision(balance));
+		console.log(defaultAccount);
+		console.log(balance);
+		console.log(sanitisedBalance);
+		setUserBalance(sanitisedBalance);
 	};
 
 	const chainChangedHandler = () => {
@@ -190,6 +215,14 @@ const ConnectButton = ({ style }) => {
 		window.ethereum.on('chainChanged', chainChangedHandler);
 	}
 
+	const removePrecision = num => {
+		return num / 10 ** 18;
+	};
+
+	const roundedToTwo = num => {
+		return num.toFixed(2);
+	};
+
 	const wrapperRef = useRef(null);
 	useOutsideAlerter(wrapperRef);
 
@@ -197,9 +230,15 @@ const ConnectButton = ({ style }) => {
 		<>
 			{walletIsActive ? (
 				<ButtonContainer>
-					<StyledButton style={style} onClick={() => handleDisconnectDropdown()}>
-						{defaultAccount.slice(0, 6) + '...' + defaultAccount.slice(-4)}
-					</StyledButton>
+					<AccountButtons>
+						<BalanceButton>
+							<BalanceIcon src={boatSmall} />
+							{userBalance}
+						</BalanceButton>
+						<StyledButton style={style} onClick={() => handleDisconnectDropdown()}>
+							{defaultAccount.slice(0, 6) + '...' + defaultAccount.slice(-4)}
+						</StyledButton>
+					</AccountButtons>
 					{dropdownOpen ? (
 						<Dropdown ref={wrapperRef}>
 							<DropdownUl>
@@ -217,9 +256,11 @@ const ConnectButton = ({ style }) => {
 					) : null}
 				</ButtonContainer>
 			) : (
-				<StyledButton style={style} onClick={() => connectWalletHandler()}>
-					{'Connect Wallet'} {'❯'}
-				</StyledButton>
+				<div>
+					<StyledButton style={style} onClick={() => connectWalletHandler()}>
+						{'Connect Wallet'} {'❯'}
+					</StyledButton>
+				</div>
 			)}
 		</>
 	);

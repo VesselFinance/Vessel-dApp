@@ -7,22 +7,13 @@ import greenGlow from '../../../assets/images/GREEN_round.svg';
 import darkBlueGlow from '../../../assets/images/PURPLE_round.svg';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requires a loader
 import AssetCards from '../../Charts/AssetCards';
-import AllocationChart from '../../Charts/AllocationChart';
 import VotesTable from '../../Charts/VotesTable';
-import EyeIcon from '../../../assets/svgs/personalEye.svg';
-import NoEyeIcon from '../../../assets/svgs/noeyeicon.svg';
-import InformationButton from '../../Button/InformationButton/InformationButton';
 import InformationButtonGreyed from '../../Button/InformationButton/InformationButtonGreyed';
 import PrimaryButton from '../../Button/Primary/PrimaryButton';
 import 'animate.css/animate.min.css';
-import { AnimationOnScroll } from 'react-animation-on-scroll';
 import * as contractMethods from '../../../contract/contract_methods';
-import Blur from 'react-css-blur';
 import React from 'react';
-import { ethers } from 'ethers';
 import Web3 from 'web3';
-import { min } from 'd3';
-import Loader from '../../Loader/Loader';
 import VoteModal from '../../PopUps/VoteScreen';
 import SkeletonHome from '../../skeletonLoads/skeletonHome';
 
