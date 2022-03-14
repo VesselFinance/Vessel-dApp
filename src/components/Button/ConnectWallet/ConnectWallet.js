@@ -23,7 +23,7 @@ const StyledButton = styled.button`
 `;
 
 const BalanceButton = styled.button`
-	background: rgba(30, 55, 52, 0.62);
+	background: rgba(30, 55, 82, 0.62);
 	border-radius: 12px;
 	padding: 12px;
 	margin-right: 20px;
