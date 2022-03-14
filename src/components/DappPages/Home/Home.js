@@ -67,7 +67,7 @@ const PageHeader = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	padding-top: 70px;
+	padding-top: 40px;
 	margin: 0 auto;
 	align-items: space-between;
 	position: relative;
@@ -256,7 +256,7 @@ const UserBoxContent = styled.div`
 	justify-content: center;
 	color: ${theme.color.text.primary};
 	border: 0px solid rgba(255, 255, 255, 0.2);
-	width: 100%;
+	width: 110%;
 	@media ${bp.sm} {
 		width: 70%;
 		max-width: 70%;

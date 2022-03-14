@@ -51,13 +51,13 @@ const DappCardWrapper = styled.div`
 `;
 
 const PageHeader = styled.div`
-	border-radius: 15px;
-	width: 80%;
+	width: 85%;
 	display: flex;
-	margin-bottom: -40px;
 	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+	justify-content: space-between;
+	padding-top: 40px;
+	margin: 0 auto;
+	align-items: space-between;
 	position: relative;
 	background-color: transparent;
 `;
@@ -246,12 +246,20 @@ const UserBoxDataSubtitle = styled.div`
 	just
 `;
 
+const UserBoxDataContainerTimer = styled.div`
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	height: 25.5vh;
+`;
+
 const UserBoxDataContainer = styled.div`
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
-	height: 34vh;
+	height: 22vh;
 `;
 
 const BoxHeader = styled.h1`
@@ -286,6 +294,7 @@ const UserBoxCountdownContent = styled.div`
 	margin-top: 20px;
 	justify-content: center;
 	align-items: center;
+	font-size: 12px;
 	color: ${theme.color.text.secondary};
 	width: 90%;
 	@media ${bp.sm} {
@@ -454,12 +463,10 @@ const HomePage = () => {
 			<AnimationOnScroll animateIn="animate__fadeIn" animateOnce={true}>
 				<PageWrapper>
 					<PageHeader>
-						<AboutWrapperTextRight>
-							<AboutSectionHeader>Epoch</AboutSectionHeader>
-							<AboutSectionSubHeader>
-								Every 7 days the epoch is reset, triggering a rebalance of the synthetic wrapper.
-							</AboutSectionSubHeader>
-						</AboutWrapperTextRight>
+						<AboutSectionHeader>Epoch</AboutSectionHeader>
+						<AboutSectionSubHeader>
+							Every 7 days the epoch is reset, triggering a rebalance of the synthetic wrapper.
+						</AboutSectionSubHeader>
 					</PageHeader>
 
 					<BackgroundBlurLeft src={darkBlueGlow} alt="blue Glow" />
@@ -469,14 +476,14 @@ const HomePage = () => {
 							<UserAndGraphContainer>
 								<UserBoxContent>
 									<BoxHeader>Reset</BoxHeader>
-									<UserBoxDataContainer>
+									<UserBoxDataContainerTimer>
 										<Countdown
 											autoStart={true}
 											date={Date.now() + parseInt(timeToNextEpoch)}
 											renderer={countDownRenderer}
 											key={Date.now()}
 										/>
-									</UserBoxDataContainer>
+									</UserBoxDataContainerTimer>
 								</UserBoxContent>
 								<UserBoxContent>
 									<BoxHeader>Collect Bounty</BoxHeader>
@@ -506,16 +513,16 @@ const HomePage = () => {
 											</UserBoxDataSubtitle>
 										</UserBoxDataBox>
 									</UserBoxDataContainer>
+									{bountyLockStatus === false ? (
+										<InformationButton onClick={HandleTriggerRebalance()}>
+											Reset Epoch & Collect
+										</InformationButton>
+									) : (
+										<InformationButtonGreyed>Reset Epoch & Collect</InformationButtonGreyed>
+									)}
 								</UserBoxContent>
 							</UserAndGraphContainer>
 						</AssetAllocationContainer>
-						{bountyLockStatus === false ? (
-							<InformationButton onClick={HandleTriggerRebalance()}>
-								Reset Epoch & Collect
-							</InformationButton>
-						) : (
-							<InformationButtonGreyed>Reset Epoch & Collect</InformationButtonGreyed>
-						)}
 
 						<BackgroundBlurRight src={pinkGlow} alt="blue Glow" />
 					</DappCardWrapper>
