@@ -135,6 +135,33 @@ const ConnectButton = ({ style }) => {
 		if (window.ethereum && window.ethereum.isMetaMask) {
 			console.log('MetaMask Here!');
 
+			/* PLEASE CHANGE CHAIN DETAILED WHEN DEPLOYING TO LIVENET*/
+			try {
+				// check if the chain to connect to is installed
+				window.ethereum.request({
+					method: 'wallet_switchEthereumChain',
+					params: [{ chainId: '0x61' }], // chainId must be in hexadecimal numbers
+				});
+			} catch (error) {
+				// This error code indicates that the chain has not been added to MetaMask
+				// if it is not, then install it into the user MetaMask
+				if (error.code === 4902) {
+					try {
+						window.ethereum.request({
+							method: 'wallet_addEthereumChain',
+							params: [
+								{
+									chainId: '0x61',
+									rpcUrl: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
+								},
+							],
+						});
+					} catch (addError) {
+						console.error(addError);
+					}
+				}
+				console.error(error);
+			}
 			window.ethereum
 				.request({ method: 'eth_requestAccounts' })
 				.then(result => {
