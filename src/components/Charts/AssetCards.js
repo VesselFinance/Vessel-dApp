@@ -170,7 +170,7 @@ const AssetCards = props => {
 			if (window.innerWidth > 900) {
 				setOuter(3);
 				setInner(8);
-				setPFontSize('16px');
+				setPFontSize('18px');
 			} else {
 				setOuter(5);
 				setInner(4);
