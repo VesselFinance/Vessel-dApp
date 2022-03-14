@@ -18,6 +18,7 @@ import React from 'react';
 import { ethers } from 'ethers';
 import Web3 from 'web3';
 import Loader from '../../Loader/Loader';
+import SkeletonEpoch from '../../skeletonLoads/skeletonEpoch';
 
 const PageWrapper = styled.div`
 	padding: 0 28px 64px 28px;
@@ -455,79 +456,73 @@ const HomePage = () => {
 	};
 
 	return !isLoaded ? (
-		<LoaderContainer>
-			<Loader />
-		</LoaderContainer>
+		<SkeletonEpoch />
 	) : (
 		<>
-			<AnimationOnScroll animateIn="animate__fadeIn" animateOnce={true}>
-				<PageWrapper>
-					<PageHeader>
-						<AboutSectionHeader>Epoch</AboutSectionHeader>
-						<AboutSectionSubHeader>
-							Every 7 days the epoch is reset, triggering a rebalance of the synthetic wrapper.
-						</AboutSectionSubHeader>
-					</PageHeader>
+			<PageWrapper>
+				<PageHeader>
+					<AboutSectionHeader>Epoch</AboutSectionHeader>
+					<AboutSectionSubHeader>
+						Every 7 days the epoch is reset, triggering a rebalance of the synthetic wrapper.
+					</AboutSectionSubHeader>
+				</PageHeader>
 
-					<BackgroundBlurLeft src={darkBlueGlow} alt="blue Glow" />
+				<BackgroundBlurLeft src={darkBlueGlow} alt="blue Glow" />
 
-					<DappCardWrapper>
-						<AssetAllocationContainer>
-							<UserAndGraphContainer>
-								<UserBoxContent>
-									<BoxHeader>Reset</BoxHeader>
-									<UserBoxDataContainerTimer>
-										<Countdown
-											autoStart={true}
-											date={Date.now() + parseInt(timeToNextEpoch)}
-											renderer={countDownRenderer}
-											key={Date.now()}
-										/>
-									</UserBoxDataContainerTimer>
-								</UserBoxContent>
-								<UserBoxContent>
-									<BoxHeader>Collect Bounty</BoxHeader>
-									<UserBoxDataContainer>
-										<UserBoxDataBox>
-											<UserBoxDataCurrentRewardBigNum>
-												{bountyValue}
-											</UserBoxDataCurrentRewardBigNum>
-											<UserBoxDataSubtitle> $VSL reward</UserBoxDataSubtitle>
-										</UserBoxDataBox>
-										<UserBoxDataBox>
-											<UserBoxDataBigNum>
-												{' '}
-												{bountyLockStatus === false ? (
-													<BountyLockIcon src={unlockIcon} />
-												) : (
-													<BountyLockIcon src={lockIcon} />
-												)}
-											</UserBoxDataBigNum>
-											<UserBoxDataSubtitle>
-												status: &nbsp;
-												{bountyLockStatus === false ? (
-													<ClaimStatusUnlocked>unlocked</ClaimStatusUnlocked>
-												) : (
-													<ClaimStatusLocked>locked</ClaimStatusLocked>
-												)}
-											</UserBoxDataSubtitle>
-										</UserBoxDataBox>
-									</UserBoxDataContainer>
-									{bountyLockStatus === false ? (
-										<InformationButton onClick={HandleTriggerRebalance()}>
-											Reset Epoch & Collect
-										</InformationButton>
-									) : (
-										<InformationButtonGreyed>Reset Epoch & Collect</InformationButtonGreyed>
-									)}
-								</UserBoxContent>
-							</UserAndGraphContainer>
-						</AssetAllocationContainer>
+				<DappCardWrapper>
+					<AssetAllocationContainer>
+						<UserAndGraphContainer>
+							<UserBoxContent>
+								<BoxHeader>Reset</BoxHeader>
+								<UserBoxDataContainerTimer>
+									<Countdown
+										autoStart={true}
+										date={Date.now() + parseInt(timeToNextEpoch)}
+										renderer={countDownRenderer}
+										key={Date.now()}
+									/>
+								</UserBoxDataContainerTimer>
+							</UserBoxContent>
+							<UserBoxContent>
+								<BoxHeader>Collect Bounty</BoxHeader>
+								<UserBoxDataContainer>
+									<UserBoxDataBox>
+										<UserBoxDataCurrentRewardBigNum>{bountyValue}</UserBoxDataCurrentRewardBigNum>
+										<UserBoxDataSubtitle> $VSL reward</UserBoxDataSubtitle>
+									</UserBoxDataBox>
+									<UserBoxDataBox>
+										<UserBoxDataBigNum>
+											{' '}
+											{bountyLockStatus === false ? (
+												<BountyLockIcon src={unlockIcon} />
+											) : (
+												<BountyLockIcon src={lockIcon} />
+											)}
+										</UserBoxDataBigNum>
+										<UserBoxDataSubtitle>
+											status: &nbsp;
+											{bountyLockStatus === false ? (
+												<ClaimStatusUnlocked>unlocked</ClaimStatusUnlocked>
+											) : (
+												<ClaimStatusLocked>locked</ClaimStatusLocked>
+											)}
+										</UserBoxDataSubtitle>
+									</UserBoxDataBox>
+								</UserBoxDataContainer>
+								{bountyLockStatus === false ? (
+									<InformationButton onClick={HandleTriggerRebalance()}>
+										Reset Epoch & Collect
+									</InformationButton>
+								) : (
+									<InformationButtonGreyed>Reset Epoch & Collect</InformationButtonGreyed>
+								)}
+							</UserBoxContent>
+						</UserAndGraphContainer>
+					</AssetAllocationContainer>
 
-						<BackgroundBlurRight src={pinkGlow} alt="blue Glow" />
-					</DappCardWrapper>
-				</PageWrapper>
-			</AnimationOnScroll>
+					<BackgroundBlurRight src={pinkGlow} alt="blue Glow" />
+				</DappCardWrapper>
+			</PageWrapper>
 			<Footer />
 		</>
 	);
