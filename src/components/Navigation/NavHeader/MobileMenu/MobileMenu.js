@@ -1,4 +1,5 @@
 import NavItemMobile from '../NavItemMobile/NavItemMobile';
+import ExternalNavItemMobile from '../NavItemMobile/ExternalNavItemMobile';
 import theme from '../../../Theme/theme';
 import styled from 'styled-components';
 import PrimaryButton from '../../../Button/Primary/PrimaryButton';
@@ -92,6 +93,24 @@ const MobileMenu = ({ toggleMobileMenu }) => {
 			<NavItemMobile link="/Epoch" toggle={toggleMobileMenu} exact={true}>
 				Epoch
 			</NavItemMobile>
+			<Divider />
+			<ExternalNavItemMobile
+				href="https://vessel.finance/about"
+				target="_blank"
+				toggle={toggleMobileMenu}
+				exact={true}
+			>
+				About
+			</ExternalNavItemMobile>
+			<Divider />
+			<ExternalNavItemMobile
+				href="https://vessel.finance/documentation"
+				target="_blank"
+				toggle={toggleMobileMenu}
+				exact={true}
+			>
+				Documentation
+			</ExternalNavItemMobile>
 			<Divider />
 			<ButtonContainer>
 				<ConnectButton />
