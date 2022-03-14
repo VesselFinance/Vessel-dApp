@@ -68,7 +68,7 @@ const BoxContent = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
-	padding: 24px;
+	padding: 18px;
 	background: rgba(0, 0, 0, 0.5);
 	backdrop-filter: blur(10px);
 	border-radius: 16px;
@@ -163,15 +163,18 @@ const roundedToTwo = num => {
 const AssetCards = props => {
 	const [outer, setOuter] = React.useState(0);
 	const [inner, setInner] = React.useState(0);
+	const [pFontSize, setPFontSize] = React.useState('0px');
 
 	useLayoutEffect(() => {
 		function updateSize() {
 			if (window.innerWidth > 900) {
 				setOuter(3);
 				setInner(8);
+				setPFontSize('16px');
 			} else {
 				setOuter(5);
 				setInner(4);
+				setPFontSize('14px');
 			}
 		}
 		window.addEventListener('resize', updateSize);
@@ -206,7 +209,7 @@ const AssetCards = props => {
 			return 600;
 		} else {
 			// mobile breakpoint
-			return size[0] - 20;
+			return size[0] - 10;
 		}
 	}
 
@@ -224,14 +227,14 @@ const AssetCards = props => {
 	}
 
 	const GraphColors = [
-		['#FF5F6D', '#FFC371'],
-		['#E53EF4', '#FF5F6D'],
-		['#3E71F4', '#26F390'],
-		['#FFC371', '#26F390'],
-		['#FEAA72', '#ACC18C'],
-		['#7EC9F5', '#3957ED'],
-		['#A0B5EB', '#C9F0E4'],
-		['#EDAEF9', '#81B1FA'],
+		['#FF5F6D', '#FFC37122'],
+		['#E53EF4', '#FF5F6D22'],
+		['#26F390', '#3E71F422'],
+		['#FFC371', '#26F39022'],
+		['#FEAA72', '#ACC18C22'],
+		['#7EC9F5', '#3957ED22'],
+		['#A0B5EB', '#C9F0E422'],
+		['#EDAEF9', '#81B1FA22'],
 	];
 
 	const sortedCards = (tokens, ratios, prices, RTPs, votes) => {
@@ -270,31 +273,52 @@ const AssetCards = props => {
 							} else {
 								var tokenDataContractKey = sortedAssets[j + inner * i][0];
 								var tokenRatio = removePrecision(sortedAssets[j + inner * i][1]);
-								var n = 3;
+								var n = 4;
+								var tokenPercentMagnified = ((n + 1) * tokenRatio) / (n * tokenRatio + 1);
 								return (
 									<BoxContent key={(j + inner * i).toString()}>
 										<BoxHeader>{tokenData[tokenDataContractKey].name}</BoxHeader>
-
 										<GaugeChart
+											style={{ fontWeight: '200' }}
+											fontSize={pFontSize}
 											id={(j + inner * i).toString()}
-											nrOfLevels={25}
 											colors={GraphColors[j]}
-											animate={false}
 											arcWidth={0.3}
-											percent={((n + 1) * tokenRatio) / (n * tokenRatio + 1)}
+											needleBaseColor={'#00000000'}
+											needleColor={'#00000000'}
+											arcsLength={
+												tokenRatio > 0.03
+													? [
+															tokenPercentMagnified / 5,
+															tokenPercentMagnified / 5,
+															tokenPercentMagnified / 5,
+															tokenPercentMagnified / 5,
+															tokenPercentMagnified / 5,
+															1 - tokenPercentMagnified,
+													  ]
+													: [
+															0.01 + tokenPercentMagnified / 3,
+															0.01 + tokenPercentMagnified / 3,
+															0.01 + tokenPercentMagnified / 3,
+
+															1 - tokenPercentMagnified,
+													  ]
+											}
+											percent={tokenPercentMagnified}
 											cornerRadius={0}
 											formatTextValue={value =>
 												Math.ceil(((n * tokenRatio + 1) * value) / (n + 1)) + '%'
 											}
 										/>
+
 										<BoxSubdata>
-											<BoxSubdataTitle>Locked Value:</BoxSubdataTitle>
+											<BoxSubdataTitle>Locked Value</BoxSubdataTitle>
 											<BoxSubdataValue>
 												{'$' + roundedToTwo(removePrecision(sortedAssets[j + inner * i][2]))}
 											</BoxSubdataValue>
 										</BoxSubdata>
 										<BoxSubdata>
-											<BoxSubdataTitle>Realtime Price:</BoxSubdataTitle>
+											<BoxSubdataTitle>Realtime Price</BoxSubdataTitle>
 											<BoxSubdataValue>
 												{'$' + roundedToTwo(removePrecision(sortedAssets[j + inner * i][3]))}
 											</BoxSubdataValue>
