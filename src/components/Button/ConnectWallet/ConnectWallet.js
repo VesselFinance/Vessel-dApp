@@ -1,10 +1,6 @@
 import styled from 'styled-components';
 import theme from '../../Theme/theme';
-import { useWeb3React } from '@web3-react/core';
-import { injected } from '../../../contract/Connectors';
 import React, { useEffect, useState, useRef } from 'react';
-import web3 from 'web3';
-import { ethers } from 'ethers';
 import exitIcon from '../../../assets/svgs/exit.svg';
 import boatSmall from '../../../assets/images/boat_small.png';
 import * as contractMethods from '../../../contract/contract_methods';
@@ -127,7 +123,7 @@ const ConnectButton = ({ style }) => {
 			}
 		};
 		checkWalletInStorage();
-	}, []);
+	});
 
 	// handler for connecting wallet
 	const connectWalletHandler = () => {
@@ -173,6 +169,7 @@ const ConnectButton = ({ style }) => {
 				})
 				.catch(error => {
 					setErrorMessage(error.message);
+					console.log(errorMessage);
 				});
 		} else {
 			console.log('Need to install MetaMask');

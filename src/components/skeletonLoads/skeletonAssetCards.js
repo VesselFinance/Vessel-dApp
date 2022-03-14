@@ -1,10 +1,7 @@
 import { Carousel } from 'react-responsive-carousel';
-import GaugeChart from 'react-gauge-chart';
 import theme from '../Theme/theme';
 import bp from '../Theme/breakpoints';
-import Blur from 'react-css-blur';
 import React, { useLayoutEffect, useState } from 'react';
-import { tokenData } from '../../Data/tokens';
 import styled, { keyframes, css } from 'styled-components';
 
 const BoxContentWrapper = styled.div`
@@ -155,16 +152,13 @@ const PlaceHolderDataContainer = styled.div`
 `;
 
 const AssetCards = props => {
-	const [outer, setOuter] = React.useState(0);
 	const [inner, setInner] = React.useState(0);
 
 	useLayoutEffect(() => {
 		function updateSize() {
 			if (window.innerWidth > 900) {
-				setOuter(3);
 				setInner(8);
 			} else {
-				setOuter(5);
 				setInner(4);
 			}
 		}

@@ -1,5 +1,4 @@
 import styled, { keyframes } from 'styled-components';
-import theme from '../Theme/theme';
 import boatIcon from '../../assets/images/boat.png';
 
 const ldsHeart = keyframes`

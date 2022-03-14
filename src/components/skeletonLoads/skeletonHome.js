@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import theme from '../Theme/theme';
-
 import bp from '../Theme/breakpoints';
 import Footer from '../Navigation/Footer/Footer';
 import blueGlow from '../../assets/images/BLUE_round.svg';
@@ -8,9 +7,7 @@ import greenGlow from '../../assets/images/GREEN_round.svg';
 import darkBlueGlow from '../../assets/images/PURPLE_round.svg';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requires a loader
 import SkeletonAssetCards from '../skeletonLoads/skeletonAssetCards';
-
 import InformationButtonGreyed from '../Button/InformationButton/InformationButtonGreyed';
-
 import 'animate.css/animate.min.css';
 import { AnimationOnScroll } from 'react-animation-on-scroll';
 
@@ -175,17 +172,6 @@ const AboutSectionSubHeaderInactive = styled.div`
 	}
 `;
 
-const AboutWrapperTextRight = styled.div`
-	padding-top: 50px;
-	padding-bottom: 50px;
-	position: relative;
-	@media ${bp.sm} {
-		width: 90%;
-		display: flex;
-		justify-content: space-between;
-	}
-`;
-
 const AssetCardsContainer = styled.div`
 	padding-top: 50px;
 	padding-bottom: 10px;
@@ -271,31 +257,6 @@ const UserBoxContent = styled.div`
 	}
 `;
 
-const UserBoxDataBox = styled.div`
-	display: flex;
-	padding: 14px;
-	flex-direction: column;
-	align-items: center;
-	background: rgba(155, 155, 155, 0.2);
-	backdrop-filter: blur(10px);
-	border-radius: 16px;
-	margin: 5px;
-	font-size: 14px;
-`;
-
-const UserBoxDataBigNum = styled.h1`
-	font-size: 20px;
-	color: ${props => (props.first ? '#00AADE' : '#00C1BC')};
-	@media ${bp.md} {
-		font-size: 30px;
-	}
-`;
-
-const UserBoxDataContainer = styled.div`
-	display: flex;
-	flex-direction: row;
-`;
-
 const BoxHeader = styled.h1`
 	color: ${theme.color.text.primary};
 	margin-bottom: 16px;
@@ -338,27 +299,6 @@ const BoxSubHeader = styled.h1`
 	}
 `;
 
-const ChartWrapper = styled.div`
-	height: 130px;
-	width: 500px;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	font-color: #000000;
-	@media ${bp.md} {
-		height: 140px;
-		width: 500px;
-	}
-	@media ${bp.lg} {
-		height: 190px;
-		width: 500px;
-	}
-	@media ${bp.xl} {
-		height: 225px;
-		width: 500px;
-	}
-`;
-
 const VoteContainer = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -393,18 +333,6 @@ const VoteDescriptionContainer = styled.div`
 	@media ${bp.sm} {
 		font-size: 16px;
 	}
-`;
-
-const BoxIcon = styled.img`
-	width: 20px;
-	filter: invert(1);
-	cursor: pointer;
-`;
-
-const LoaderContainer = styled.div`
-	position: absolute;
-	top: 50vh;
-	left: 50vw;
 `;
 
 const HomePage = () => {

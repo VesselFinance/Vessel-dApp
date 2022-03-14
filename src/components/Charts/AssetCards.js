@@ -3,7 +3,6 @@ import GaugeChart from 'react-gauge-chart';
 import styled from 'styled-components';
 import theme from '../Theme/theme';
 import bp from '../Theme/breakpoints';
-import Blur from 'react-css-blur';
 import React, { useLayoutEffect, useState } from 'react';
 import { tokenData } from '../../Data/tokens';
 
@@ -211,19 +210,6 @@ const AssetCards = props => {
 			// mobile breakpoint
 			return size[0] - 10;
 		}
-	}
-
-	function shuffleColors(array) {
-		var m = array.length,
-			t,
-			i;
-		while (m > 0) {
-			i = Math.floor(Math.random() * m--);
-			t = array[m];
-			array[m] = array[i];
-			array[i] = t;
-		}
-		return array;
 	}
 
 	const GraphColors = [

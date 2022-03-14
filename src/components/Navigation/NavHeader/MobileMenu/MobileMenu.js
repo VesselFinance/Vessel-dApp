@@ -2,7 +2,6 @@ import NavItemMobile from '../NavItemMobile/NavItemMobile';
 import ExternalNavItemMobile from '../NavItemMobile/ExternalNavItemMobile';
 import theme from '../../../Theme/theme';
 import styled from 'styled-components';
-import PrimaryButton from '../../../Button/Primary/PrimaryButton';
 import ConnectButton from '../../../Button/ConnectWallet/ConnectWallet';
 import 'react-slidedown/lib/slidedown.css';
 

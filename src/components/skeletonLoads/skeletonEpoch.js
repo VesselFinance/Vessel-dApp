@@ -8,10 +8,7 @@ import InformationButtonGreyed from '../Button/InformationButton/InformationButt
 import Countdown from 'react-countdown';
 import 'animate.css/animate.min.css';
 import { AnimationOnScroll } from 'react-animation-on-scroll';
-import unlockIcon from '../../assets/svgs/bountylock.svg';
 import React from 'react';
-import { ethers } from 'ethers';
-import Web3 from 'web3';
 import styled, { keyframes, css } from 'styled-components';
 
 const PageWrapper = styled.div`
@@ -117,19 +114,6 @@ const AboutSectionSubHeader = styled.div`
 	}
 `;
 
-const AboutWrapperTextRight = styled.div`
-	padding-top: 50px;
-	padding-bottom: 50px;
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	@media ${bp.sm} {
-		width: 90%;
-		display: flex;
-		justify-content: space-between;
-	}
-`;
-
 const BackgroundBlurLeft = styled.img`
 	left: -30%;
 	opacity: 30%;
@@ -206,37 +190,6 @@ const UserBoxDataBox = styled.div`
 	font-size: 14px;
 `;
 
-const UserBoxDataBigNum = styled.div`
-	font-size: 20px;
-	color: #ffffff;
-	height: 100%;
-	text-align: center;
-	display: flex;
-	@media ${bp.md} {
-		font-size: 30px;
-		color: #ffffff;
-	}
-`;
-
-const UserBoxDataCurrentRewardBigNum = styled.h1`
-	font-size: 22px;
-	color: #ffffff;
-	text-align: center;
-	height: 100%;
-	@media ${bp.sm} {
-		font-size: 22px;
-		color: #ffffff;
-	}
-	@media ${bp.md} {
-		font-size: 22px;
-		color: #ffffff;
-	}
-	@media ${bp.lg} {
-		font-size: 26px;
-		color: #ffffff;
-	}
-`;
-
 const UserBoxDataSubtitle = styled.div`
 	display: flex;
 	display-direction: row;
@@ -280,11 +233,6 @@ const BoxHeader = styled.h1`
 	}
 `;
 
-const BoxIcon = styled.img`
-	width: 20px;
-	filter: invert(1);
-`;
-
 const UserBoxCountdownContent = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -313,30 +261,11 @@ const CountdownContainer = styled.div`
 	flex-direction: row;
 `;
 
-const ClaimStatusLocked = styled.h1`
-	font-size: 14px;
-	color: #fe5e6c;
-	font-weight: 100;
-`;
-
 const ClaimStatusUnlocked = styled.div`
 	width: 40px;
 	font-size: 14px;
 	color: #53f4d2;
 	font-weight: 100;
-`;
-
-const BountyLockIcon = styled.img`
-	width: 30px;
-	filter: invert(1);
-	display: flex;
-	margin-bottom: 10px;
-`;
-
-const LoaderContainer = styled.div`
-	position: absolute;
-	top: 50vh;
-	left: 50vw;
 `;
 
 const keyframesFullView = keyframes`

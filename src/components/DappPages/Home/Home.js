@@ -176,17 +176,6 @@ const AboutSectionSubHeaderInactive = styled.div`
 	}
 `;
 
-const AboutWrapperTextRight = styled.div`
-	padding-top: 50px;
-	padding-bottom: 50px;
-	position: relative;
-	@media ${bp.sm} {
-		width: 90%;
-		display: flex;
-		justify-content: space-between;
-	}
-`;
-
 const AssetCardsContainer = styled.div`
 	padding-top: 50px;
 	padding-bottom: 10px;
@@ -272,31 +261,6 @@ const UserBoxContent = styled.div`
 	}
 `;
 
-const UserBoxDataBox = styled.div`
-	display: flex;
-	padding: 14px;
-	flex-direction: column;
-	align-items: center;
-	background: rgba(155, 155, 155, 0.2);
-	backdrop-filter: blur(10px);
-	border-radius: 16px;
-	margin: 5px;
-	font-size: 14px;
-`;
-
-const UserBoxDataBigNum = styled.h1`
-	font-size: 20px;
-	color: ${props => (props.first ? '#00AADE' : '#00C1BC')};
-	@media ${bp.md} {
-		font-size: 30px;
-	}
-`;
-
-const UserBoxDataContainer = styled.div`
-	display: flex;
-	flex-direction: row;
-`;
-
 const BoxHeader = styled.h1`
 	color: ${theme.color.text.primary};
 	margin-bottom: 16px;
@@ -339,27 +303,6 @@ const BoxSubHeader = styled.h1`
 	}
 `;
 
-const ChartWrapper = styled.div`
-	height: 130px;
-	width: 500px;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	font-color: #000000;
-	@media ${bp.md} {
-		height: 140px;
-		width: 500px;
-	}
-	@media ${bp.lg} {
-		height: 190px;
-		width: 500px;
-	}
-	@media ${bp.xl} {
-		height: 225px;
-		width: 500px;
-	}
-`;
-
 const VoteContainer = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -396,18 +339,6 @@ const VoteDescriptionContainer = styled.div`
 	}
 `;
 
-const BoxIcon = styled.img`
-	width: 20px;
-	filter: invert(1);
-	cursor: pointer;
-`;
-
-const LoaderContainer = styled.div`
-	position: absolute;
-	top: 50vh;
-	left: 50vw;
-`;
-
 const HomePage = () => {
 	const [walletConnectedMode, setWalletConnectedMode] = React.useState(false);
 	const [votedStatus, setVotedStatus] = React.useState('disconnected');
@@ -415,11 +346,6 @@ const HomePage = () => {
 	const [recievedContractData, setRecievedContractData] = React.useState(false);
 	const [viewVotes, setViewVotes] = React.useState(false);
 	const [isLoaded, setIsLoaded] = React.useState(false);
-	const [votingShare, setVotingShare] = React.useState(0);
-	const [tSupply, settSupply] = React.useState(0);
-	const [burnSupply, setBurnSupply] = React.useState(0);
-	const [bountySupply, setBountySupply] = React.useState(0);
-	const [vaultSupply, setVaultSupply] = React.useState(0);
 	const [totalVotesCast, setTotalVotesCast] = React.useState(0);
 	const [VSLTokens, setVSLTokens] = React.useState([]);
 	const [balancedRatio, setBalancedRatio] = React.useState([]);
@@ -437,7 +363,7 @@ const HomePage = () => {
 		if (localStorage.getItem('account') === '') {
 			setWalletConnectedMode(false);
 			setUserVotes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-		} else if (localStorage.getItem('account') != '') {
+		} else if (localStorage.getItem('account') !== '') {
 			setWalletConnectedMode(true);
 		}
 		setVoteStatus();
