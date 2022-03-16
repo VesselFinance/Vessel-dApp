@@ -635,7 +635,6 @@ const HomePage = () => {
 				open={showModal}
 				wrappertokens={VSLTokens}
 				onSubmit={submittedVotes => {
-					console.log('SUBMITTED: ' + submittedVotes);
 					handleVotesSubmission(submittedVotes);
 				}}
 			/>

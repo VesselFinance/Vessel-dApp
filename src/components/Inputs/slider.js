@@ -15,7 +15,6 @@ const AllocationSlider = props => {
 	const [value, setValue] = React.useState(0);
 
 	const onSliderChange = val => {
-		console.log(val);
 		props.onUpdate(Number(-(value - val)), val);
 
 		setValue(val);

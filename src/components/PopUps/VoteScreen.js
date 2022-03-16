@@ -196,7 +196,6 @@ const VoteModal = props => {
 		var tempUpdateVotes = newUserVotes;
 		tempUpdateVotes[index] = (vote * 10 ** 16).toString();
 		setNewUserVotes(tempUpdateVotes);
-		console.log(tempUpdateVotes);
 	};
 
 	if (!props.open) {

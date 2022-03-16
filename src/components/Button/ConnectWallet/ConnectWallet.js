@@ -187,9 +187,6 @@ const ConnectButton = ({ style }) => {
 	const getAccountBalance = async account => {
 		const balance = await contractMethods.balanceOf(account);
 		const sanitisedBalance = roundedToTwo(removePrecision(balance));
-		console.log(defaultAccount);
-		console.log(balance);
-		console.log(sanitisedBalance);
 		setUserBalance(sanitisedBalance);
 	};
 

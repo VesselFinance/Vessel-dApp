@@ -376,7 +376,6 @@ const HomePage = () => {
 				method: 'eth_sendTransaction',
 				params: [transactionParameters],
 			});
-			console.log(account);
 
 			setBountyLockStatus(true);
 		} catch (err) {

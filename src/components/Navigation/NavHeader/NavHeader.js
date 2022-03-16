@@ -51,7 +51,6 @@ const NavHeader = () => {
 
 	const toggleMobileMenu = () => {
 		setMobileMenuShown(prevState => !prevState);
-		console.log(mobileMenuShown);
 	};
 
 	const handleScroll = () => {
