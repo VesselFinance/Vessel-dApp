@@ -1,6 +1,11 @@
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
+	entry: {
+		pageOne: './src/components/DappPages/Home',
+		pageTwo: './src/components/DappPages/Epoch'
+	},
+
 	mode: 'development',
 	resolve: {
 		extensions: ['.js', '.jsx'],
