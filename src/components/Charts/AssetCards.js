@@ -268,6 +268,8 @@ const AssetCards = props => {
 								);
 								tokenRatioArcArray.push(1 - tokenPercentMagnified);
 
+								var zeroArcArray = [0.001, 1 - 0.001];
+
 								return (
 									<BoxContent key={(j + inner * i).toString()}>
 										<BoxHeader>{tokenData[tokenDataContractKey].name}</BoxHeader>
@@ -279,11 +281,11 @@ const AssetCards = props => {
 											arcWidth={0.3}
 											needleBaseColor={'#00000000'}
 											needleColor={'#00000000'}
-											arcsLength={tokenRatioArcArray}
+											arcsLength={tokenRatio > 0.04 ? tokenRatioArcArray : zeroArcArray}
 											percent={tokenPercentMagnified}
 											cornerRadius={0}
 											formatTextValue={value =>
-												Math.ceil(((n * tokenRatio + 1) * value) / (n + 1)) + '%'
+												Math.round(((n * tokenRatio + 1) * value) / (n + 1)) + '%'
 											}
 										/>
 
