@@ -6,6 +6,7 @@ import pinkGlow from '../../../assets/images/PINK_round.svg';
 import darkBlueGlow from '../../../assets/images/PURPLE_round.svg';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requires a loader
 import InformationButton from '../../Button/InformationButton/InformationButton';
+import PrimaryButton from '../../Button/Primary/PrimaryButton';
 import InformationButtonGreyed from '../../Button/InformationButton/InformationButtonGreyed';
 import Countdown from 'react-countdown';
 import 'animate.css/animate.min.css';
@@ -330,7 +331,7 @@ const HomePage = () => {
 				var ethTime = await contractMethods.lastEpochRebalance();
 				var jsTime = Date.now() / 1000;
 				const timeToGoInSeconds = parseInt(ethTime) + 86400 * 7 - parseInt(jsTime);
-				if (ethTime + 86400 * 7 - jsTime > 0) {
+				if (timeToGoInSeconds > 0) {
 					setBountyLockStatus(true);
 					setTimeToNextEpoch(timeToGoInSeconds * 1000);
 				} else {
@@ -368,8 +369,6 @@ const HomePage = () => {
 				from: account,
 				to: contractAddress,
 				data: contract.methods._rebalanceEpoch().encodeABI(),
-				gasPrice: web3.utils.toHex(20000000000),
-				gasLimit: web3.utils.toHex(800000),
 			};
 
 			await window.ethereum.request({
@@ -386,7 +385,6 @@ const HomePage = () => {
 	const Completionist = () => <span>Epoch can be reset now.</span>;
 	const countDownRenderer = ({ days, hours, minutes, seconds, completed }) => {
 		if (completed) {
-			// Render a completed state
 			return <Completionist />;
 		} else {
 			// Render a countdown
@@ -477,9 +475,13 @@ const HomePage = () => {
 										</UserBoxDataBox>
 									</UserBoxDataContainer>
 									{bountyLockStatus === false ? (
-										<InformationButton onClick={HandleTriggerRebalance()}>
+										<PrimaryButton
+											onClick={() => {
+												HandleTriggerRebalance();
+											}}
+										>
 											Reset Epoch & Collect
-										</InformationButton>
+										</PrimaryButton>
 									) : (
 										<InformationButtonGreyed>Reset Epoch & Collect</InformationButtonGreyed>
 									)}
