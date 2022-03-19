@@ -161,10 +161,11 @@ const ConnectButton = ({ style }) => {
 				.request({ method: 'eth_requestAccounts' })
 				.then(result => {
 					accountChangedHandler(result[0]);
-					setWalletIsActive(true);
 					localStorage.setItem('account', result[0]);
 					window.dispatchEvent(new Event('storage'));
 					getAccountBalance(result[0]);
+					setWalletIsActive(true);
+					console.log('wallet connected');
 				})
 				.catch(error => {
 					setErrorMessage(error.message);
@@ -280,8 +281,8 @@ const ConnectButton = ({ style }) => {
 					<StyledButton
 						style={style}
 						onClick={() => {
-							connectWalletHandler();
 							setDropdownOpen(false);
+							connectWalletHandler();
 						}}
 					>
 						{'Connect Wallet'} {'❯'}

@@ -406,11 +406,11 @@ const HomePage = () => {
 	}, [walletConnectedMode]);
 
 	const setVoteStatus = () => {
-		if (walletConnectedMode && thisUserVotes.reduce((a, b) => a + b, 0) !== 0) {
+		if (walletConnectedMode && thisUserVotes.reduce((a, b) => Number(a) + Number(b), 0) !== 0) {
 			setVotedStatus('voted');
 		} else if (!walletConnectedMode) {
 			setVotedStatus('disconnected');
-		} else if (walletConnectedMode && thisUserVotes.reduce((a, b) => a + b, 0) !== 0) {
+		} else if (walletConnectedMode && thisUserVotes.reduce((a, b) => Number(a) + Number(b), 0) == 0) {
 			setVotedStatus('canVote');
 		}
 	};
