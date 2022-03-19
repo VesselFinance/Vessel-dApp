@@ -261,6 +261,13 @@ const AssetCards = props => {
 								var tokenRatio = removePrecision(sortedAssets[j + inner * i][1]);
 								var n = 4;
 								var tokenPercentMagnified = ((n + 1) * tokenRatio) / (n * tokenRatio + 1);
+								var wholePercent = Math.round(tokenRatio * 100);
+
+								var tokenRatioArcArray = [...Array(wholePercent).keys()].map(
+									i => tokenPercentMagnified / wholePercent,
+								);
+								tokenRatioArcArray.push(1 - tokenPercentMagnified);
+
 								return (
 									<BoxContent key={(j + inner * i).toString()}>
 										<BoxHeader>{tokenData[tokenDataContractKey].name}</BoxHeader>
@@ -272,24 +279,7 @@ const AssetCards = props => {
 											arcWidth={0.3}
 											needleBaseColor={'#00000000'}
 											needleColor={'#00000000'}
-											arcsLength={
-												tokenRatio > 0.03
-													? [
-															tokenPercentMagnified / 5,
-															tokenPercentMagnified / 5,
-															tokenPercentMagnified / 5,
-															tokenPercentMagnified / 5,
-															tokenPercentMagnified / 5,
-															1 - tokenPercentMagnified,
-													  ]
-													: [
-															0.01 + tokenPercentMagnified / 3,
-															0.01 + tokenPercentMagnified / 3,
-															0.01 + tokenPercentMagnified / 3,
-
-															1 - tokenPercentMagnified,
-													  ]
-											}
+											arcsLength={tokenRatioArcArray}
 											percent={tokenPercentMagnified}
 											cornerRadius={0}
 											formatTextValue={value =>
