@@ -26,6 +26,8 @@ module.exports = {
 	],
 	devServer: {
 		historyApiFallback: true,
+		contentBase: './',
+   		hot: true,
 	},
 	externals: {
 		// global app config object
