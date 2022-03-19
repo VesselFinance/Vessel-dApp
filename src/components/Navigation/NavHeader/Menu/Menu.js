@@ -4,6 +4,7 @@ import ConnectButton from '../../../Button/ConnectWallet/ConnectWallet';
 import SecondaryButton from '../../../Button/Secondary/SecondaryButton';
 import NavItem from '../NavItem/NavItem';
 import ExternalNavItem from '../NavItem/ExternalNavItem';
+import * as middleware_setup from '../../../../contract/middleware_setup';
 
 const MenuNav = styled.nav`
 	font-weight: bold;
@@ -17,6 +18,8 @@ const MenuNav = styled.nav`
 	}
 `;
 
+const buyVSLLink = 'https://pancake.kiemtienonline360.com/#/swap?outputCurrency=' + middleware_setup.contractAddress;
+
 const Menu = () => {
 	return (
 		<MenuNav>
@@ -29,7 +32,14 @@ const Menu = () => {
 				Documentation
 			</ExternalNavItem>
 			<ConnectButton />
-			<SecondaryButton>Buy $VSL</SecondaryButton>
+			<SecondaryButton
+				onClick={e => {
+					e.preventDefault();
+					window.open(buyVSLLink, '_blank');
+				}}
+			>
+				Buy $VSL
+			</SecondaryButton>
 		</MenuNav>
 	);
 };

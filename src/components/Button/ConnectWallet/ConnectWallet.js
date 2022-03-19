@@ -127,7 +127,6 @@ const ConnectButton = ({ style }) => {
 
 	// handler for connecting wallet
 	const connectWalletHandler = () => {
-		setDropdownOpen(false);
 		if (window.ethereum && window.ethereum.isMetaMask) {
 			console.log('MetaMask Here!');
 
@@ -278,7 +277,13 @@ const ConnectButton = ({ style }) => {
 				</ButtonContainer>
 			) : (
 				<div>
-					<StyledButton style={style} onClick={() => connectWalletHandler()}>
+					<StyledButton
+						style={style}
+						onClick={() => {
+							connectWalletHandler();
+							setDropdownOpen(false);
+						}}
+					>
 						{'Connect Wallet'} {'❯'}
 					</StyledButton>
 				</div>
