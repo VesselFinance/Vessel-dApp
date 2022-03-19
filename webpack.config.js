@@ -3,13 +3,13 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
 	entry: {
 		pageOne: './src/components/DappPages/Home',
-		pageTwo: './src/components/DappPages/Epoch'
+		pageTwo: './src/components/DappPages/Epoch',
 	},
 	output: {
-       path: path.join(__dirname, '/bundle'),
-       filename: 'index_bundle.js',
-       publicPath: '/'
-  	},
+		path: path.join(__dirname, '/bundle'),
+		filename: 'index_bundle.js',
+		publicPath: '/',
+	},
 
 	mode: 'development',
 	resolve: {
@@ -27,7 +27,6 @@ module.exports = {
 		new HtmlWebpackPlugin({
 			template: './src/index.html',
 		}),
-		@babel/preset-react
 	],
 	devServer: {
 		historyApiFallback: true,
