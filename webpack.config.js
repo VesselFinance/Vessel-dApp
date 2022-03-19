@@ -5,6 +5,11 @@ module.exports = {
 		pageOne: './src/components/DappPages/Home',
 		pageTwo: './src/components/DappPages/Epoch'
 	},
+	output: {
+       path: path.join(__dirname, '/bundle'),
+       filename: 'index_bundle.js',
+       publicPath: '/'
+  	},
 
 	mode: 'development',
 	resolve: {
@@ -26,8 +31,6 @@ module.exports = {
 	],
 	devServer: {
 		historyApiFallback: true,
-		contentBase: './',
-   		hot: true,
 	},
 	externals: {
 		// global app config object
