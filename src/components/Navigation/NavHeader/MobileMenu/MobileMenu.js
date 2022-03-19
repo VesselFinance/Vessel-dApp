@@ -94,7 +94,7 @@ const MobileMenu = ({ toggleMobileMenu }) => {
 			</NavItemMobile>
 			<Divider />
 			<ExternalNavItemMobile
-				href="https://vessel.finance/about"
+				href="https://vessel.finance/#/About"
 				target="_blank"
 				toggle={toggleMobileMenu}
 				exact={true}
@@ -103,7 +103,7 @@ const MobileMenu = ({ toggleMobileMenu }) => {
 			</ExternalNavItemMobile>
 			<Divider />
 			<ExternalNavItemMobile
-				href="https://vessel.finance/documentation"
+				href="https://vessel.finance/#/Documentation"
 				target="_blank"
 				toggle={toggleMobileMenu}
 				exact={true}
