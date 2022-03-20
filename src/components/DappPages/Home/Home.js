@@ -406,7 +406,7 @@ const HomePage = () => {
 			}
 		};
 		getContractData();
-	}, [walletConnectedMode, thisUserVotes]);
+	}, [walletConnectedMode]);
 
 	const setVoteStatus = () => {
 		if (walletConnectedMode && lastEpochVoteCast === epochNumber) {
