@@ -41,23 +41,54 @@ const TokenRow = styled.div`
 const TableContent = styled.div`
 	display: flex;
 	flex-direction: row;
-	padding: 24px 24px 10px 24px;
-	text-align: flex-start;
+	padding: 24px 20px 10px 10px;
+	text-align: flex-end;
+	justify-content: flex-end;
+	white-space: nowrap;
 	color: #ffffff;
+	margin-bottom: 15px;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.5);
 	@media ${bp.md} {
-		padding: 16px;
+		padding: 24px 20px 10px 10px;
+	}
+`;
+
+const TableContentText = styled.div`
+	display: flex;
+	flex-direction: row;
+	padding: 24px 20px 10px 10px;
+	text-align: flex-start;
+	justify-content: flex-start;
+	color: #ffffff;
+	margin-bottom: 15px;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+	@media ${bp.md} {
+		padding: 24px 20px 10px 10px;
 	}
 `;
 
 const TokenCell = styled.div`
 	display: flex;
 	flex-direction: row;
-	padding: 24px 24px 10px 24px;
-	text-align: flex-start;
+	padding: 24px 20px 10px 10px;
+	text-align: flex-end;
+	justify-content: flex-end;
+	font-family: 'IBMPlexMono-Regular';
 	color: #ffffff;
 	@media ${bp.sm} {
-		padding: 12px;
+		padding: 24px 20px 10px 10px;
+	}
+`;
+
+const TokenCellText = styled.div`
+	display: flex;
+	flex-direction: row;
+	padding: 24px 40px 10px 10px;
+	text-align: flex-start;
+	justify-content: flex-start;
+	color: #ffffff;
+	@media ${bp.sm} {
+		padding: 24px 40px 10px 10px;
 	}
 `;
 
@@ -102,7 +133,7 @@ const TokenIcon = styled.img`
 
 const NegativeDif = styled.h1`
 	color: #fe7e8c;
-
+	font-family: 'IBMPlexMono-Regular';
 	font-weight: 10px;
 	font-size: 12px;
 	@media ${bp.md} {
@@ -113,6 +144,7 @@ const NegativeDif = styled.h1`
 const PositiveDif = styled.h1`
 	color: #09b7b3;
 	font-weight: 10px;
+	font-family: 'IBMPlexMono-Regular';
 	font-size: 12px;
 	@media ${bp.md} {
 		font-size: 16px;
@@ -136,10 +168,10 @@ const VoteTable = props => {
 	return (
 		<TokenomicsTable>
 			<ChartLegendGrid>
-				<TableContent>Token</TableContent>
+				<TableContentText>Token</TableContentText>
 				<TableContent>Price</TableContent>
-				<TableContent>Difference</TableContent>
-				<TableContent>Proposed %</TableContent>
+				<TableContent>Price action</TableContent>
+				<TableContent>Proposed weight</TableContent>
 				<TableContent>Total votes cast</TableContent>
 				<TableContent>Your votes cast</TableContent>
 			</ChartLegendGrid>
@@ -151,14 +183,16 @@ const VoteTable = props => {
 				var newVotes = roundedToTwo(removePrecision(props.votes[i]));
 				var userTokenVotes = roundedToTwo(removePrecision(props.userVotes[i]));
 				var oldEpochRatio = roundedToTwo(removePrecision(props.ratio[i])) * 100;
-				var difference = roundedToTwo(newRatio - oldEpochRatio);
+				var newPrice = roundedToTwo(removePrecision(props.realtimeprices[i]));
+				var oldPrice = roundedToTwo(removePrecision(props.prices[i]));
+				var difference = roundedToTwo(((newPrice - oldPrice) / oldPrice) * 100);
 
 				return (
 					<TokenRow key={i}>
-						<TokenCell>
+						<TokenCellText>
 							<TokenIcon src={imageSource}></TokenIcon>
 							{tokenData[tokenDataContractKey].name}
-						</TokenCell>
+						</TokenCellText>
 						<TokenCell>{RTP}</TokenCell>
 						<TokenCell>
 							{difference < 0 ? (

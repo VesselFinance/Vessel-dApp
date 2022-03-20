@@ -17,7 +17,7 @@ const HamburgerButton = styled.button`
 		opacity: 70%;
 	}
 
-	@media ${bp.sm} {
+	@media ${bp.md} {
 		display: none;
 	}
 `;

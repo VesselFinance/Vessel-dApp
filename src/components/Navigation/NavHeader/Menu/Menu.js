@@ -10,7 +10,7 @@ const MenuNav = styled.nav`
 	font-weight: bold;
 	display: none;
 
-	@media ${bp.sm} {
+	@media ${bp.md} {
 		display: flex;
 		flex-direction: row;
 		justify-content: space-around;

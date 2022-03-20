@@ -48,7 +48,7 @@ const AccountButtons = styled.div`
 const Dropdown = styled.div`
 	position: absolute;
 	top: 100%;
-	left: 0;
+	right: 0;
 	width: fit-content;
 	margin-top: 10px;
 	z-index: 2;

@@ -31,7 +31,7 @@ const BoxContentWrapper = styled.div`
 	}
 	@media ${bp.smd} {
 		display: inline-grid;
-		grid-template-rows: 220px 220px;
+		grid-template-rows: 230px 230px;
 		grid-template-columns: 175px 175px 175px 175px;
 		grid-column-gap: 18px;
 		grid-row-gap: 20px;
@@ -39,7 +39,7 @@ const BoxContentWrapper = styled.div`
 	}
 	@media ${bp.md} {
 		display: inline-grid;
-		grid-template-rows: 240px 240px;
+		grid-template-rows: 230px 230px;
 		grid-template-columns: 200px 200px 200px 200px;
 		grid-column-gap: 22px;
 		grid-row-gap: 22px;
@@ -271,13 +271,15 @@ const AssetCards = props => {
 							} else {
 								var tokenDataContractKey = sortedAssets[j + inner * i][0];
 								var tokenRatio = removePrecision(sortedAssets[j + inner * i][1]);
-								var n = 4;
+								var n = 0.1;
 								var tokenPercentMagnified = ((n + 1) * tokenRatio) / (n * tokenRatio + 1);
 								var wholePercent = Math.round(tokenRatio * 100);
+								var roundedTokenMag = Math.round(tokenPercentMagnified);
 
-								var tokenRatioArcArray = [...Array(wholePercent).keys()].map(
-									i => tokenPercentMagnified / wholePercent,
+								var tokenRatioArcArray = [...Array(Math.round(wholePercent)).keys()].map(
+									i => tokenPercentMagnified,
 								);
+
 								tokenRatioArcArray.push(1 - tokenPercentMagnified);
 
 								var zeroArcArray = [0.001, 1 - 0.001];
