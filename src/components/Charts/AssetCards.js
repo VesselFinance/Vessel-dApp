@@ -90,7 +90,7 @@ const BoxHeader = styled.h1`
 	text-align: flex-start;
 	font-size: 14px;
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-start;
 	padding-bottom: 4px;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 `;
@@ -151,12 +151,24 @@ const BoxSubdataValue = styled.h3`
 	}
 `;
 
+const TokenIcon = styled.img`
+	max-width: 20px;
+	height: 20px;
+	display: flex;
+	margin-right: 10px;
+	margin-bottom: 10px;
+`;
+
 const removePrecision = num => {
 	return num / 10 ** 18;
 };
 
 const roundedToTwo = num => {
 	return num.toFixed(2);
+};
+
+const roundedToOne = num => {
+	return num.toFixed(1);
 };
 
 const AssetCards = props => {
@@ -269,10 +281,14 @@ const AssetCards = props => {
 								tokenRatioArcArray.push(1 - tokenPercentMagnified);
 
 								var zeroArcArray = [0.001, 1 - 0.001];
-
+								var imageSource = '/tokenImgs/' + tokenData[tokenDataContractKey].path;
 								return (
 									<BoxContent key={(j + inner * i).toString()}>
-										<BoxHeader>{tokenData[tokenDataContractKey].name}</BoxHeader>
+										<BoxHeader>
+											{' '}
+											<TokenIcon src={imageSource}></TokenIcon>
+											{tokenData[tokenDataContractKey].name}
+										</BoxHeader>
 										<GaugeChart
 											style={{ fontWeight: '200' }}
 											fontSize={pFontSize}
@@ -285,7 +301,7 @@ const AssetCards = props => {
 											percent={tokenPercentMagnified}
 											cornerRadius={0}
 											formatTextValue={value =>
-												Math.round(((n * tokenRatio + 1) * value) / (n + 1)) + '%'
+												roundedToOne(((n * tokenRatio + 1) * value) / (n + 1)) + '%'
 											}
 										/>
 

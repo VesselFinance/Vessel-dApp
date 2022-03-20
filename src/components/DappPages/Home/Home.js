@@ -354,6 +354,9 @@ const HomePage = () => {
 	const [rtAssetPrices, setRealTimeAssetPrices] = React.useState([]);
 	const [thisUserVotes, setUserVotes] = React.useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
 	const [showModal, setShowModal] = React.useState(false);
+	const [epochNumber, setEpochNumber] = React.useState(0);
+	const [lastEpochVoteCast, setLastEpochVotesCast] = React.useState(0);
+	const [userBalance, setUserBalance] = React.useState(0);
 
 	/* listen to event emitted from change in local storage, set Wallet Connect Mode for 
 	appropriate component rerender */
@@ -403,15 +406,17 @@ const HomePage = () => {
 			}
 		};
 		getContractData();
-	}, [walletConnectedMode]);
+	}, [walletConnectedMode, thisUserVotes]);
 
 	const setVoteStatus = () => {
-		if (walletConnectedMode && thisUserVotes.reduce((a, b) => Number(a) + Number(b), 0) !== 0) {
+		if (walletConnectedMode && lastEpochVoteCast === epochNumber) {
 			setVotedStatus('voted');
 		} else if (!walletConnectedMode) {
 			setVotedStatus('disconnected');
-		} else if (walletConnectedMode && thisUserVotes.reduce((a, b) => Number(a) + Number(b), 0) == 0) {
+		} else if (walletConnectedMode && lastEpochVoteCast < epochNumber && Number(userBalance) >= 1) {
 			setVotedStatus('canVote');
+		} else if (walletConnectedMode && Number(userBalance) < 1) {
+			setVotedStatus('minBalance');
 		}
 	};
 
@@ -429,9 +434,15 @@ const HomePage = () => {
 					return contractMethods.getUserVotes(account, i);
 				}),
 			),
+			contractMethods.lastEpochVoteCast(account),
+			contractMethods.epochNumber(),
+			contractMethods.balanceOf(account),
 		]);
 
 		setUserVotes(accountContractData[0]);
+		setLastEpochVotesCast(accountContractData[1]);
+		setEpochNumber(accountContractData[2]);
+		setUserBalance(accountContractData[3] / 10 ** 18);
 	};
 
 	/*
@@ -587,6 +598,8 @@ const HomePage = () => {
 									<InformationButtonGreyed>connect wallet to vote</InformationButtonGreyed>
 								) : votedStatus === 'voted' ? (
 									<InformationButtonGreyed>Your vote has been submitted</InformationButtonGreyed>
+								) : votedStatus === 'minBalance' ? (
+									<InformationButtonGreyed>Need at least 1 $VSL to vote</InformationButtonGreyed>
 								) : null}
 							</VoteContainer>
 						</UserBoxContent>

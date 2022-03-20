@@ -18,7 +18,7 @@ var Contract = require('web3-eth-contract');
 Contract.setProvider(RPC);
 
 //replace contract address as needed...
-var contractAddress = '0x16DF065c5FceE6BCc66837780D8e6f2798E0ca2B';
+var contractAddress = '0x575779755f50805d24ed0e65c5cc3a8adc81513e';
 var contract = new Contract(ABI, contractAddress);
 
 export { Web3, RPC, web3, temp_account, ABI, Contract, contractAddress, contract };
