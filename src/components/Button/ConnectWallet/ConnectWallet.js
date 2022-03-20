@@ -23,6 +23,7 @@ const BalanceButton = styled.button`
 	border-radius: 12px;
 	padding: 12px;
 	margin-right: 20px;
+	font-family: 'IBMPlexMono-Light';
 	transition: all 0.2s ease;
 	color: ${theme.color.text.primary};
 	font-weight: bold;
