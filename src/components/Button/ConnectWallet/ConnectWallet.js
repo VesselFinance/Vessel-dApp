@@ -124,7 +124,7 @@ const ConnectButton = ({ style }) => {
 			}
 		};
 		checkWalletInStorage();
-	});
+	}, []);
 
 	// handler for connecting wallet
 	const connectWalletHandler = () => {
@@ -136,7 +136,7 @@ const ConnectButton = ({ style }) => {
 				// check if the chain to connect to is installed
 				window.ethereum.request({
 					method: 'wallet_switchEthereumChain',
-					params: [{ chainId: '0x61' }], // chainId must be in hexadecimal numbers
+					params: [{ chainId: contractMethods.cChainID }], // chainId must be in hexadecimal numbers
 				});
 			} catch (error) {
 				// This error code indicates that the chain has not been added to MetaMask
@@ -147,8 +147,8 @@ const ConnectButton = ({ style }) => {
 							method: 'wallet_addEthereumChain',
 							params: [
 								{
-									chainId: '0x61',
-									rpcUrl: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
+									chainId: contractMethods.cChainID,
+									rpcUrl: contractMethods.cRPC,
 								},
 							],
 						});

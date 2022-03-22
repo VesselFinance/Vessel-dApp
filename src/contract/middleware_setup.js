@@ -4,6 +4,8 @@ var Web3 = require('web3');
 //select RPC of network
 var RPC = 'https://data-seed-prebsc-1-s1.binance.org:8545';
 
+var chainID = '0x61';
+
 //our Web3 instance to interact with Vessel.sol
 var web3 = new Web3(RPC);
 
@@ -21,4 +23,4 @@ Contract.setProvider(RPC);
 var contractAddress = '0x575779755f50805d24ed0e65c5cc3a8adc81513e';
 var contract = new Contract(ABI, contractAddress);
 
-export { Web3, RPC, web3, temp_account, ABI, Contract, contractAddress, contract };
+export { Web3, RPC, chainID, web3, temp_account, ABI, Contract, contractAddress, contract };

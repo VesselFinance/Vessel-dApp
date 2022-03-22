@@ -2,8 +2,9 @@ import * as middleware_setup from './middleware_setup';
 
 var c = middleware_setup.contract.methods;
 var cABI = middleware_setup.ABI;
-
+var cRPC = middleware_setup.RPC;
 var cAddr = middleware_setup.contractAddress;
+var cChainID = middleware_setup.chainID;
 
 var bountyAddr = '0x0000000000000000000000000000000000000002';
 var vaultAddr = '0x0000000000000000000000000000000000000001';
@@ -60,6 +61,8 @@ var getUserVotes = (address, index) => c.getUserVotes(address, index).call({ fro
 export {
 	cABI,
 	cAddr,
+	cRPC,
+	cChainID,
 	totalTokens,
 	rTotal,
 	totalFees,

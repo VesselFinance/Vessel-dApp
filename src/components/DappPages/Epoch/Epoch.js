@@ -316,7 +316,7 @@ const BountyLockIcon = styled.img`
 	margin-bottom: 10px;
 `;
 
-const HomePage = () => {
+const EpochPage = () => {
 	const [isLoaded, setIsLoaded] = React.useState(false);
 	const [timeToNextEpoch, setTimeToNextEpoch] = React.useState(0);
 	const [bountyValue, setBountyValue] = React.useState(0);
@@ -330,7 +330,8 @@ const HomePage = () => {
 				// get lastEpochBalance time for calculating time to next epoch rebalance.
 				var ethTime = await contractMethods.lastEpochRebalance();
 				var jsTime = Date.now() / 1000;
-				const timeToGoInSeconds = parseInt(ethTime) + 86400 * 7 - parseInt(jsTime);
+				var lengthOfEpoch = await contractMethods.epochLength();
+				const timeToGoInSeconds = parseInt(ethTime) + parseInt(lengthOfEpoch) - parseInt(jsTime);
 				if (timeToGoInSeconds > 0) {
 					setBountyLockStatus(true);
 					setTimeToNextEpoch(timeToGoInSeconds * 1000);
@@ -498,4 +499,4 @@ const HomePage = () => {
 	);
 };
 
-export default HomePage;
+export default EpochPage;

@@ -170,16 +170,18 @@ const VoteTable = props => {
 			<ChartLegendGrid>
 				<TableContentText>Token</TableContentText>
 				<TableContent>Price</TableContent>
-				<TableContent>Price action</TableContent>
-				<TableContent>Proposed weight</TableContent>
-				<TableContent>Total votes cast</TableContent>
-				<TableContent>Your votes cast</TableContent>
+				<TableContent>Price Action</TableContent>
+				<TableContent>Proposed Weight</TableContent>
+				<TableContent>Total Votes Cast</TableContent>
+				<TableContent>Your Votes Cast</TableContent>
 			</ChartLegendGrid>
 			{[...Array(20)].map((e, i) => {
 				var tokenDataContractKey = props.wrappertokens[i];
 				var imageSource = '/tokenImgs/' + tokenData[tokenDataContractKey].path;
 				var RTP = '$' + roundedToTwo(removePrecision(props.realtimeprices[i]));
-				var newRatio = roundedToTwo(convertToPercentage(removePrecision(props.votes[i] / totalVotesNum)));
+				var newRatio = Number(
+					roundedToTwo(convertToPercentage(removePrecision(props.votes[i] / totalVotesNum))),
+				);
 				var newVotes = roundedToTwo(removePrecision(props.votes[i]));
 				var userTokenVotes = roundedToTwo(removePrecision(props.userVotes[i]));
 				var oldEpochRatio = roundedToTwo(removePrecision(props.ratio[i])) * 100;
@@ -197,9 +199,11 @@ const VoteTable = props => {
 						<TokenCell>
 							{difference < 0 ? (
 								<NegativeDif>{difference + '%'} </NegativeDif>
-							) : (
+							) : difference > 0 ? (
 								<PositiveDif>{difference + '%'}</PositiveDif>
-							)}
+							) : difference <= 0 && difference >= 0 ? (
+								difference + '%'
+							) : null}
 						</TokenCell>
 						<TokenCell>{newRatio + '%'}</TokenCell>
 						<TokenCell>{newVotes}</TokenCell>

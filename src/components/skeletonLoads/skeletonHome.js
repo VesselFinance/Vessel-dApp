@@ -360,7 +360,7 @@ const HomePage = () => {
 										doing so, you have the power to change how Vessel evolves.
 									</VoteDescriptionContainer>
 
-									<InformationButtonGreyed>connect wallet to vote</InformationButtonGreyed>
+									<InformationButtonGreyed>loading...</InformationButtonGreyed>
 								</VoteContainer>
 							</UserBoxContent>
 						</UserAndGraphContainer>

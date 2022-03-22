@@ -271,14 +271,13 @@ const AssetCards = props => {
 							} else {
 								var tokenDataContractKey = sortedAssets[j + inner * i][0];
 								var tokenRatio = removePrecision(sortedAssets[j + inner * i][1]);
-								var n = 0.1;
+								var n = 3;
+								var arcCountConst = 2;
 								var tokenPercentMagnified = ((n + 1) * tokenRatio) / (n * tokenRatio + 1);
 								var wholePercent = Math.round(tokenRatio * 100);
-								var roundedTokenMag = Math.round(tokenPercentMagnified);
-
-								var tokenRatioArcArray = [...Array(Math.round(wholePercent)).keys()].map(
-									i => tokenPercentMagnified,
-								);
+								var tokenRatioArcArray = [
+									...Array(Math.round(wholePercent / arcCountConst)).keys(),
+								].map(i => tokenPercentMagnified / (wholePercent / arcCountConst));
 
 								tokenRatioArcArray.push(1 - tokenPercentMagnified);
 
@@ -287,7 +286,6 @@ const AssetCards = props => {
 								return (
 									<BoxContent key={(j + inner * i).toString()}>
 										<BoxHeader>
-											{' '}
 											<TokenIcon src={imageSource}></TokenIcon>
 											{tokenData[tokenDataContractKey].name}
 										</BoxHeader>

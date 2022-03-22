@@ -67,9 +67,9 @@ const NavHeader = () => {
 	return (
 		<NavHeaderDiv scrollY={scrollY}>
 			<HeaderContentWrapper>
-				<Link to="/">
+				<a href="https://vessel.finance/#/">
 					<LogoImg src={Logo} alt="Logo" />
-				</Link>
+				</a>
 				<Menu />
 				<Hamburger toggleMobileMenu={toggleMobileMenu} />
 				{mobileMenuShown ? (

@@ -363,10 +363,10 @@ const HomePage = () => {
 	window.addEventListener('storage', () => {
 		// When local storage changes, dump the list to
 		// the console.
-		if (localStorage.getItem('account') === '') {
+		if (localStorage.getItem('account') === '' || localStorage.getItem('account') === null) {
 			setWalletConnectedMode(false);
 			setUserVotes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-		} else if (localStorage.getItem('account') !== '') {
+		} else if (localStorage.getItem('account') !== '' || localStorage.getItem('account') !== null) {
 			setWalletConnectedMode(true);
 		}
 		setVoteStatus();
@@ -409,14 +409,14 @@ const HomePage = () => {
 	}, [walletConnectedMode]);
 
 	const setVoteStatus = () => {
-		if (walletConnectedMode && lastEpochVoteCast === epochNumber) {
-			setVotedStatus('voted');
-		} else if (!walletConnectedMode) {
+		if (!walletConnectedMode) {
 			setVotedStatus('disconnected');
 		} else if (walletConnectedMode && lastEpochVoteCast < epochNumber && Number(userBalance) >= 1) {
 			setVotedStatus('canVote');
 		} else if (walletConnectedMode && Number(userBalance) < 1) {
 			setVotedStatus('minBalance');
+		} else if (walletConnectedMode && lastEpochVoteCast === epochNumber) {
+			setVotedStatus('voted');
 		}
 	};
 
@@ -426,7 +426,6 @@ const HomePage = () => {
 	*/
 	const getContractAccountData = async accounts => {
 		const account = accounts[0];
-
 		const accountContractData = await Promise.all([
 			// votes from user
 			Promise.all(
@@ -434,12 +433,20 @@ const HomePage = () => {
 					return contractMethods.getUserVotes(account, i);
 				}),
 			),
+			// last epoch votes
 			contractMethods.lastEpochVoteCast(account),
+			// number of current epoch
 			contractMethods.epochNumber(),
+			// balance of user's wallet
 			contractMethods.balanceOf(account),
 		]);
 
-		setUserVotes(accountContractData[0]);
+		// if lastEpochVoteCast === epoch number, show votes, otherwise initialise votes displayed as 0's.
+		if (accountContractData[1] === accountContractData[2]) {
+			setUserVotes(accountContractData[0]);
+		} else {
+			setUserVotes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+		}
 		setLastEpochVotesCast(accountContractData[1]);
 		setEpochNumber(accountContractData[2]);
 		setUserBalance(accountContractData[3] / 10 ** 18);
@@ -511,14 +518,14 @@ const HomePage = () => {
 				from: account,
 				to: contractAddress,
 				data: contract.methods.vote(submittedVotes).encodeABI(),
-				gasPrice: web3.utils.toHex(20000000000),
-				gasLimit: web3.utils.toHex(800000),
 			};
 
 			await window.ethereum.request({
 				method: 'eth_sendTransaction',
 				params: [transactionParameters],
 			});
+			// get contract data to activate state trigger updates
+			getContractAccountData();
 
 			// if wallet not connected, just pull contract data
 		} catch (err) {
