@@ -17,7 +17,6 @@ const StyledButton = styled.button`
 	position: relative;
 
 	&:hover {
-		cursor: pointer;
 		background: rgba(255, 255, 255, 0.2);
 		z-index: 9999;
 	}

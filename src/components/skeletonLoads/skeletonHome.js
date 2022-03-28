@@ -356,8 +356,8 @@ const HomePage = () => {
 								<VoteContainer>
 									<BoxSubHeader>How Does voting work?</BoxSubHeader>
 									<VoteDescriptionContainer>
-										You must vote for the percentage allocation of all 20 tokens in the wrapper. In
-										doing so, you have the power to change how Vessel evolves.
+										Users must vote on the percentage allocation of tokens in the fund. In doing so,
+										users decide how Vessel evolves.
 									</VoteDescriptionContainer>
 
 									<InformationButtonGreyed>loading...</InformationButtonGreyed>

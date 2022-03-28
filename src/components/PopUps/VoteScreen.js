@@ -7,6 +7,10 @@ import bp from '../Theme/breakpoints';
 import { tokenData } from '../../Data/tokens';
 import Slider from '../Inputs/slider';
 import InformationButton from '../Button/InformationButton/InformationButton';
+import PlusIcon from '../../assets/images/plus.png';
+import DeleteIcon from '../../assets/images/x.png';
+import UncheckedIcon from '../../assets/images/uncheckedbox.png';
+import CheckedIcon from '../../assets/images/checkedbox.png';
 
 const Modal = styled.div`
 	display: block;
@@ -17,95 +21,66 @@ const Modal = styled.div`
 	background: rgba(0, 0, 0, 0.6);
 	overflow: hidden;
 	position: absolute;
-	z-index: 9999;
+	z-index: 999;
 `;
 
 const ModalMain = styled.div`
 	position: fixed;
 	padding: 24px;
-	background: rgba(30, 45, 52, 0.9);
-	backdrop-filter: blur(10px);
+	background: rgba(30, 45, 52, 1);
 	border-radius: 16px;
 	color: ${theme.color.text.primary};
-	width: 85%;
-	height: 80%;
+	width: 80%;
+	height: 70vh;
 	top: 50%;
 	left: 50%;
-	transform: translate(-50%, -50%);
+	transform: translate(calc(-50% - 0.4px), calc(-50% - 0.4px));
 	@media ${bp.sm} {
-		height: 85%;
+		width: 55%;
+		height: 60vh;
 	}
 `;
 
 const TokenomicsTable = styled.div`
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: 1fr 2fr 1fr;
+	grid-auto-rows: 50px;
 	width: 100%;
 	justify-content: center;
 	margin-top: -20px;
 	padding-left: 30px;
 	padding-right: 30px;
-	height: 73%;
-	margin-bottom: 12px;
+	height: 75%;
+	margin-bottom: 20px;
 	background: rgba(0, 0, 0, 0.5);
-	backdrop-filter: blur(10px);
 	border-radius: 16px;
 	border: 1px solid rgba(255, 255, 255, 0.5);
 	overflow-y: auto;
-	@media ${bp.sm} {
-		display: grid;
-		grid-template-columns: 0.5fr 2fr 0.5fr 2fr;
-		width: 100%;
-		justify-content: center;
-		margin-top: 0px;
-		margin-bottom: 20px;
-		background: rgba(0, 0, 0, 0.5);
-		backdrop-filter: blur(10px);
-		padding: 20px;
-		border-radius: 16px;
-		border: 1px solid rgba(255, 255, 255, 0.5);
-	}
-	@media ${bp.lg} {
-		display: grid;
-		grid-template-columns: 0.5fr 2fr 0.5fr 2fr 0.5fr 2fr;
-		width: 100%;
-		justify-content: center;
-		align-content: center;
-		margin-top: 0px;
-		margin-bottom: 20px;
-		background: rgba(0, 0, 0, 0.5);
-		backdrop-filter: blur(10px);
-		padding: 20px;
-		border-radius: 16px;
-		border: 1px solid rgba(255, 255, 255, 0.5);
-	}
 `;
 
 const BoxHeader = styled.h1`
 	color: ${theme.color.text.primary};
-	margin-bottom: 16px;
+	margin-bottom: 40px;
 	text-align: flex-start;
 	font-size: 16px;
 	display: flex;
 	justify-content: space-between;
 	padding-bottom: 4px;
-	border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+
 	@media ${bp.md} {
 		color: ${theme.color.text.primary};
-		margin-bottom: 16px;
+		margin-bottom: 40px;
 		text-align: flex-start;
 		font-size: 24px;
 		display: flex;
 		justify-content: space-between;
 		padding-bottom: 4px;
-		border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 	}
 `;
 
 const TokenRow = styled.div`
 	display: contents;
 	grid-column-gap: 40px;
-	grid-row-gap: 80px;
 	height: 50px;
 	margin-top: 10px;
 	margin-bottom: 10px;
@@ -142,60 +117,188 @@ const TokenIcon = styled.img`
 	margin-bottom: 10px;
 `;
 
-const BoxSubHeader = styled.h1`
-	color: ${theme.color.text.primary};
-	margin-bottom: 16px;
-	text-align: flex-start;
-	font-size: 14px;
+const ActionIcon = styled.img`
+	width: 20px;
+	height: 20px;
 	display: flex;
-	justify-content: flex-start;
-	padding-bottom: 4px;
-
-	@media ${bp.md} {
-		color: ${theme.color.text.primary};
-		margin-bottom: 16px;
-		text-align: flex-start;
-		font-size: 16px;
-		font-weight: 700;
-		display: flex;
-		justify-content: flex-start;
-		padding-bottom: 4px;
+	margin-right: 20px;
+	margin-bottom: 10px;
+	filter: invert(1);
+	&:hover {
+		cursor: pointer;
 	}
 `;
 
-const TotalAllocationValue = styled.div`
-	color: ${theme.color.text.primary};
-	margin-bottom: 16px;
-	text-align: flex-start;
-	font-size: 14px;
-	display: flex;
-	justify-content: flex-start;
-	padding-bottom: 4px;
-	padding-right: 2px;
+const Selector = styled.div`
+	position: relative;
+	transform: translate(calc(-50% - 0.4px), calc(-50% - 0.4px));
+	width: 100%;
+	justify-content: center;
+	margin-top: -20px;
+	padding-top: 20px;
+	padding-left: 30px;
+	padding-right: 30px;
+	height: 75%;
+	margin-bottom: 20px;
+	border-radius: 16px;
+	border: 1px solid rgba(255, 255, 255, 0.5);
+	background: rgba(0, 0, 0, 0.5);
+	overflow: scroll;
+	transform: translateZ(0);
+`;
 
-	@media ${bp.md} {
-		color: ${theme.color.text.primary};
-		margin-bottom: 16px;
-		text-align: flex-start;
-		font-size: 16px;
-		font-weight: 700;
-		display: flex;
-		justify-content: flex-start;
-		padding-bottom: 4px;
-	}
+const EmptyList = styled.div`
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	transform: translate(calc(-50% - 0.4px), calc(-50% - 0.4px));
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+	margin-top: -20px;
+	padding-top: 20px;
+	padding-left: 30px;
+	padding-right: 30px;
+	height: 75%;
+	margin-bottom: 20px;
+	border-radius: 16px;
+	border: 1px solid rgba(255, 255, 255, 0.5);
+	background: rgba(0, 0, 0, 0.5);
+	overflow: scroll;
+	transform: translateZ(0);
+`;
+
+const EmptyListMessage = styled.div`
+	color: ${theme.color.text.secondary};
+	font-size: 14px;
+	margin: 0 auto;
+	opacity: 0.5;
+`;
+
+const SelectorUl = styled.ul`
+	list-style: none;
+	padding-left: 20px;
+	padding-right: 20px;
+	margin: 0;
+	width: fit-content;
+	height: 50px;
+	transform: translateZ(0);
+`;
+
+const SelectorListItem = styled.li`
+	padding: 8px 2px;
+	color: #ffffff;
+	border-radius: 12px;
+	width: fit-content;
+	text-align: center;
+	display: flex;
+	transform: translateZ(0);
+`;
+
+const VoteActionButtons = styled.div`
+	display: flex;
+	width: 100%;
+	flex-direction: row;
+	justify-content: space-between;
 `;
 
 const VoteModal = props => {
-	const [totalAllocation, setTotalAllocation] = React.useState(0);
-	const [newUserVotes, setNewUserVotes] = React.useState([
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	]);
+	const [totalAllocation, setTotalAllocation] = React.useState(
+		props.supportCurrent.reduce((a, b) => Number(a) + Number(b), 0) / 10 ** 16,
+	);
+	const [initTotalAllocation] = React.useState(props.supportCurrent.reduce((a, b) => Number(a) + Number(b), 0));
+	const [tokenIndexesToAvoidInReallocation, setTokenIndexesToAvoidInReallocation] = React.useState([]);
+	const [newUserVotes, setNewUserVotes] = React.useState(props.supportCurrent);
+	const [adjustedUserVotes, setAdjustedUserVotes] = React.useState(props.supportCurrent);
+	const [tokenSelectorOpen, settokenSelectorOpen] = React.useState(false);
+	const [tokensToVoteOn, setTokensToVoteOn] = React.useState([]);
+	const [tokensSelectedStatus, setTokenSelectedStatus] = React.useState(Array(20).fill(0));
+	const [totalDiff, setTotalDiff] = React.useState(0);
 
+	React.useEffect(() => {
+		const initialTokensSelectedStatus = Array(20).fill(0);
+		setTokensToVoteOn(tokensToVoteOn => [...tokensToVoteOn.splice(0, tokensToVoteOn.length)]);
+		setTokenIndexesToAvoidInReallocation(tokenIndexesToAvoidInReallocation => [
+			...tokenIndexesToAvoidInReallocation.splice(0, tokenIndexesToAvoidInReallocation.length),
+		]);
+		setTokenSelectedStatus(initialTokensSelectedStatus);
+		setTotalAllocation(props.supportCurrent.reduce((a, b) => Number(a) + Number(b), 0) / 10 ** 16);
+		setNewUserVotes(newUservotes => [...props.supportCurrent]);
+		setAdjustedUserVotes(adjustedUserVotes => [...props.supportCurrent]);
+	}, [props.open]);
+
+	// whenever one of the sliders are moved on the vote screen, update the votes array
 	const onUpdate = (dif, vote, index) => {
-		setTotalAllocation(Number(totalAllocation + dif));
+		setTotalAllocation(BigInt(Number(totalAllocation) + dif));
 		var tempUpdateVotes = newUserVotes;
 		tempUpdateVotes[index] = (vote * 10 ** 16).toString();
 		setNewUserVotes(tempUpdateVotes);
+		setTotalDiff(totalDiff + dif);
+		handleWeightReallocation();
+	};
+
+	// token array for selector.
+	const votableTokens = (tokens, currents) => {
+		var tokensArr = [];
+		for (var i = 0; i < tokens.length; i++) {
+			tokensArr.push([tokens[i], Number(currents[i])]);
+		}
+		return tokensArr;
+	};
+	const votableTokensList = votableTokens(props.wrappertokens, props.supportCurrent);
+
+	// toggle selector
+	const handleTokenSelector = () => {
+		settokenSelectorOpen(!tokenSelectorOpen);
+	};
+
+	const handleWeightReallocation = () => {
+		// apply reallocation to applicable tokens, ensuring that reallocation maintains weight validity
+		const ReallocatedUserVotes = newUserVotes.map(function (item, index) {
+			// the proportion of 100% that the currently selected tokens hold before weight modification
+			const x1 = props.supportCurrent
+				.filter((item, index) => tokenIndexesToAvoidInReallocation.includes(index))
+				.reduce((a, b) => Number(a) + Number(b), 0);
+
+			// the proportion of 100% that the currently selected tokens now hold after weight modification
+			const y1 = newUserVotes
+				.filter((item, index) => tokenIndexesToAvoidInReallocation.includes(index))
+				.reduce((a, b) => Number(a) + Number(b), 0);
+
+			// the proportion of 100% that the non-selected tokens hold before weight modification
+			const x2 = (10 ** 18 - x1) / 10 ** 18;
+
+			// the proportion of 100% that the non-selected tokens now hold after weight modification
+			const y2 = (10 ** 18 - y1) / 10 ** 18;
+
+			const wi = Number(item) / 10 ** 18;
+
+			const newAllocation = BigInt((y2 / (x2 / wi)) * 10 ** 18);
+
+			// the new weight of the token after auto-reallocation.
+			return !tokenIndexesToAvoidInReallocation.includes(index) ? newAllocation.toString() : item.toString();
+		});
+
+		setAdjustedUserVotes(ReallocatedUserVotes);
+		setTotalAllocation(ReallocatedUserVotes.reduce((a, b) => BigInt(a) + BigInt(b), 0));
+	};
+
+	const handleErrorCorrectionAndSubmitVote = () => {
+		const ExpectedTotal = BigInt(10 ** 18);
+		const ErroredAllocation = adjustedUserVotes.reduce((a, b) => BigInt(a) + BigInt(b), 0);
+		const difference = BigInt(ErroredAllocation - ExpectedTotal);
+		const StrToNumVotes = adjustedUserVotes.map(item => {
+			return Number(item);
+		});
+
+		// find the minimum non-zero value index to update
+		var minTokenWeightIndex = StrToNumVotes.indexOf(Math.min.apply(Math, adjustedUserVotes.filter(Number)));
+
+		const submitVote = adjustedUserVotes.map((item, index) => {
+			return index === minTokenWeightIndex ? String(BigInt(item) - difference) : String(item);
+		});
+
+		props.onSubmit(submitVote);
 	};
 
 	if (!props.open) {
@@ -205,53 +308,190 @@ const VoteModal = props => {
 	return (
 		<Modal>
 			<ModalMain id="modal">
-				<BoxHeader>Your allocation vote</BoxHeader>
-				<BoxSubHeader>
-					Total Allocation:
-					<TotalAllocationValue>{'\u00A0' + totalAllocation + '%'}</TotalAllocationValue>
-				</BoxSubHeader>
-				<TokenomicsTable>
-					{[...Array(20)].map((e, i) => {
-						var tokenDataContractKey = props.wrappertokens[i];
-						var imageSource = '/tokenImgs/' + tokenData[tokenDataContractKey].path;
-						return (
-							<TokenRow key={i}>
-								<TokenCell>
-									<TokenIcon src={imageSource}></TokenIcon>
-									{tokenData[tokenDataContractKey].name}
-								</TokenCell>
-								<TokenCell>
-									<Slider
-										onUpdate={(val, vote) => {
-											onUpdate(val, vote, i);
-										}}
-									/>
-								</TokenCell>
-							</TokenRow>
-						);
-					})}
-				</TokenomicsTable>
-				<InformationButton
-					onClick={() => {
-						props.onClose();
-						setTotalAllocation(0);
-					}}
-				>
-					Cancel
-				</InformationButton>
-				{totalAllocation === 100 ? (
-					<ActionButton
-						onClick={() => {
-							props.onSubmit(newUserVotes);
-							props.onClose();
-							setTotalAllocation(0);
-						}}
-					>
-						Submit Vote
-					</ActionButton>
+				{tokenSelectorOpen === true ? (
+					<BoxHeader>Select tokens:</BoxHeader>
 				) : (
-					<InformationButtonGreyed>Submit Vote</InformationButtonGreyed>
+					<BoxHeader>Your vote: </BoxHeader>
 				)}
+
+				{tokenSelectorOpen === true ? (
+					/* DROP DOWN TOKEN SELECTOR */
+					<Selector>
+						{votableTokensList.map((e, i) => {
+							var tokenDataContractKey = votableTokensList[i][0];
+							var imageSource = '/tokenImgs/' + tokenData[tokenDataContractKey].path;
+							return (
+								<SelectorUl key={i}>
+									<SelectorListItem
+										onClick={() => {
+											if (tokensSelectedStatus[i] === 0) {
+												// add token to TokensToVoteOn list
+												setTokensToVoteOn(tokensToVoteOn => [
+													...tokensToVoteOn,
+													[votableTokensList[i][0], votableTokensList[i][1], i],
+												]);
+
+												// add token to the avoid-adjustment list
+												setTokenIndexesToAvoidInReallocation(
+													tokenIndexesToAvoidInReallocation => [
+														...tokenIndexesToAvoidInReallocation,
+														i,
+													],
+												);
+												// select token
+												setTokenSelectedStatus(tokensSelectedStatus => {
+													return tokensSelectedStatus.map((item, j) => {
+														return j === i ? 1 : item;
+													});
+												});
+											} else {
+												// remove token from TokensToVoteOn list
+												setTokensToVoteOn(tokensToVoteOn =>
+													tokensToVoteOn.filter(item => item[2] !== i),
+												);
+
+												// remove token from the avoid-adjustment list
+												setTokenIndexesToAvoidInReallocation(
+													tokenIndexesToAvoidInReallocation =>
+														tokenIndexesToAvoidInReallocation.filter(item => item !== i),
+												);
+												// deselect token
+												setTokenSelectedStatus(tokensSelectedStatus => {
+													return tokensSelectedStatus.map((item, j) => {
+														return j === i ? 0 : item;
+													});
+												});
+											}
+										}}
+									>
+										{tokensSelectedStatus[i] === 0 ? (
+											<ActionIcon src={UncheckedIcon}></ActionIcon>
+										) : (
+											<ActionIcon src={CheckedIcon}></ActionIcon>
+										)}
+
+										<TokenIcon src={imageSource}></TokenIcon>
+										{tokenData[votableTokensList[i][0]].name}
+									</SelectorListItem>
+								</SelectorUl>
+							);
+						})}
+					</Selector>
+				) : tokenSelectorOpen === false && tokensToVoteOn.length !== 0 ? (
+					<TokenomicsTable>
+						{/* CURRENTLY SELECTED VOTABLE TOKENS */}
+						{[...Array(tokensToVoteOn.length)].map((e, i) => {
+							var tokenDataContractKey = tokensToVoteOn[i][0];
+							var imageSource = '/tokenImgs/' + tokenData[tokenDataContractKey].path;
+							return (
+								<TokenRow key={i}>
+									<TokenCell>
+										<TokenIcon src={imageSource}></TokenIcon>
+										{tokenData[tokenDataContractKey].name}
+									</TokenCell>
+									<TokenCell>
+										<Slider
+											max={100 / tokensToVoteOn.length}
+											defaultVal={tokensToVoteOn[i][1] / 10 ** 16}
+											onUpdate={(val, vote) => {
+												onUpdate(tokensToVoteOn[i][1] + val, vote, tokensToVoteOn[i][2]);
+											}}
+										/>
+									</TokenCell>
+									<TokenCell>
+										<ActionIcon
+											src={DeleteIcon}
+											onClick={() => {
+												// remove token from tokenstovoteon list
+												setTokensToVoteOn(tokensToVoteOn => [
+													...tokensToVoteOn.slice(0, i),
+													...tokensToVoteOn.slice(i + 1, tokensToVoteOn.length),
+												]);
+												// remove token from the avoid-adjustment list
+												setTokenIndexesToAvoidInReallocation(
+													tokenIndexesToAvoidInReallocation =>
+														tokenIndexesToAvoidInReallocation.filter(
+															item => item !== tokensToVoteOn[i][2],
+														),
+												);
+												// deselect token
+												setTokenSelectedStatus(tokensSelectedStatus => {
+													return tokensSelectedStatus.map((item, j) => {
+														return j === tokensToVoteOn[i][2] ? 0 : item;
+													});
+												});
+											}}
+										/>
+									</TokenCell>
+								</TokenRow>
+							);
+						})}
+					</TokenomicsTable>
+				) : (
+					<EmptyList>
+						<EmptyListMessage>Select one or more tokens to get started</EmptyListMessage>
+					</EmptyList>
+				)}
+
+				{/* modal submission and cancel buttons*/}
+				<VoteActionButtons>
+					<div>
+						<InformationButton
+							// cancel vote
+							onClick={() => {
+								setTokensToVoteOn(tokensToVoteOn => [
+									...tokensToVoteOn.splice(0, tokensToVoteOn.length),
+								]);
+								props.onClose();
+								if (tokenSelectorOpen === true) {
+									handleTokenSelector();
+								}
+							}}
+						>
+							Cancel
+						</InformationButton>
+
+						{/* switch between selector screen and vote screen */}
+						{tokenSelectorOpen === true ? (
+							<ActionButton
+								onClick={() => {
+									handleTokenSelector();
+								}}
+							>
+								Confirm
+							</ActionButton>
+						) : (
+							<ActionButton
+								onClick={() => {
+									handleTokenSelector();
+								}}
+							>
+								Select Tokens
+							</ActionButton>
+						)}
+					</div>
+
+					{/* send off vote to smart contract */}
+					{tokensSelectedStatus.reduce((a, b) => Number(a) + Number(b), 0) === 0 ? (
+						<InformationButtonGreyed>Submit Vote</InformationButtonGreyed>
+					) : (
+						<ActionButton
+							onClick={() => {
+								if (tokenSelectorOpen === true) {
+									handleTokenSelector();
+								}
+								handleErrorCorrectionAndSubmitVote();
+								props.onClose();
+								setTokenSelectedStatus(Array(20).fill(0));
+								setTotalAllocation(
+									props.supportCurrent.reduce((a, b) => Number(a) + Number(b), 0) / 10 ** 16,
+								);
+							}}
+						>
+							Submit Vote
+						</ActionButton>
+					)}
+				</VoteActionButtons>
 			</ModalMain>
 		</Modal>
 	);

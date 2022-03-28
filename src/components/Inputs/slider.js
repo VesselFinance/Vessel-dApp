@@ -8,17 +8,32 @@ const LabelStyle = styled.div`
 	display: inline-block;
 `;
 
+const roundedToTwo = num => {
+	return num.toFixed(1);
+};
+
 const AllocationSlider = props => {
-	const min = 0;
-	const max = 100;
+	const min = 5;
+	const max = props.max;
 	const step = 5;
-	const [value, setValue] = React.useState(0);
+	const [value, setValue] = React.useState(roundedToTwo(props.defaultVal));
 
 	const onSliderChange = val => {
 		props.onUpdate(Number(-(value - val)), val);
 
-		setValue(val);
+		setValue(roundedToTwo(val));
 	};
+
+	React.useState(() => {
+		if (props.defaultVal > props.max) {
+			const val = Number(props.max);
+			onSliderChange(val);
+		}
+		if (props.defaultVal < min) {
+			const val = Number(min);
+			onSliderChange(val);
+		}
+	}, []);
 
 	return (
 		<LabelStyle>

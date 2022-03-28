@@ -88,7 +88,7 @@ const TokenCellText = styled.div`
 	justify-content: flex-start;
 	color: #ffffff;
 	@media ${bp.sm} {
-		padding: 24px 40px 10px 10px;
+		padding: 24px 40px 10px 15px;
 	}
 `;
 
@@ -182,6 +182,8 @@ const VoteTable = props => {
 				var newRatio = Number(
 					roundedToTwo(convertToPercentage(removePrecision(props.votes[i] / totalVotesNum))),
 				);
+				newRatio = newRatio || 0;
+
 				var newVotes = roundedToTwo(removePrecision(props.votes[i]));
 				var userTokenVotes = roundedToTwo(removePrecision(props.userVotes[i]));
 				var oldEpochRatio = roundedToTwo(removePrecision(props.ratio[i])) * 100;

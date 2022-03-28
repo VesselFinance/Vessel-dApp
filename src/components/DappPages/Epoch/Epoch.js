@@ -369,6 +369,8 @@ const EpochPage = () => {
 			const transactionParameters = {
 				from: account,
 				to: contractAddress,
+				gasPrice: web3.eth.gasPrice,
+				gasLimit: (await web3.eth.getBlock('latest')).gasLimit,
 				data: contract.methods._rebalanceEpoch().encodeABI(),
 			};
 

@@ -286,6 +286,7 @@ const BoxSubHeader = styled.h1`
 	color: ${theme.color.text.primary};
 	margin-bottom: 16px;
 	text-align: flex-start;
+	margin-left: 5px;
 	font-size: 14px;
 	display: flex;
 	justify-content: flex-start;
@@ -396,14 +397,13 @@ const HomePage = () => {
 				}
 				await getContractAccountData(accounts);
 				setWalletConnectedMode(true);
-				setIsLoaded(true);
 
 				// if wallet not connected, just pull contract data
 			} catch (err) {
 				console.log(err.message);
 				await getContractDataWithoutAccount();
-				setIsLoaded(true);
 			}
+			setIsLoaded(true);
 		};
 		getContractData();
 	}, [walletConnectedMode]);
@@ -517,6 +517,8 @@ const HomePage = () => {
 			const transactionParameters = {
 				from: account,
 				to: contractAddress,
+				gasPrice: web3.eth.gasPrice,
+				gasLimit: (await web3.eth.getBlock('latest')).gasLimit,
 				data: contract.methods.vote(submittedVotes).encodeABI(),
 			};
 
@@ -589,8 +591,8 @@ const HomePage = () => {
 							<VoteContainer>
 								<BoxSubHeader>How Does voting work?</BoxSubHeader>
 								<VoteDescriptionContainer>
-									You must vote for the percentage allocation of all 20 tokens in the wrapper. In
-									doing so, you have the power to change how Vessel evolves.
+									Users must vote on the percentage allocation of tokens in the fund. In doing so,
+									users decide how Vessel evolves.
 								</VoteDescriptionContainer>
 								{votedStatus === 'canVote' ? (
 									<PrimaryButton
@@ -657,6 +659,7 @@ const HomePage = () => {
 				onSubmit={submittedVotes => {
 					handleVotesSubmission(submittedVotes);
 				}}
+				supportCurrent={balancedRatio}
 			/>
 			<Footer />
 		</>
