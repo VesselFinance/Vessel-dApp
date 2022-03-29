@@ -4,6 +4,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import exitIcon from '../../../assets/svgs/exit.svg';
 import boatSmall from '../../../assets/images/boat_small.png';
 import * as contractMethods from '../../../contract/contract_methods';
+import bp from '../../Theme/breakpoints';
 
 const StyledButton = styled.button`
 	background: linear-gradient(250deg, #428afa 0%, #00bea8 100%);
@@ -13,8 +14,12 @@ const StyledButton = styled.button`
 	color: ${theme.color.text.primary};
 	font-weight: bold;
 	border: none;
+	margin-bottom: 20px;
 	&:hover {
 		cursor: pointer;
+	}
+	@media ${bp.md} {
+		margin-bottom: 0px;
 	}
 `;
 
@@ -22,14 +27,15 @@ const BalanceButton = styled.button`
 	background: rgba(30, 55, 82, 0.62);
 	border-radius: 12px;
 	padding: 12px;
-	margin-right: 20px;
+	margin-right: 0px;
 	font-family: 'IBMPlexMono-Light';
 	transition: all 0.2s ease;
 	color: ${theme.color.text.primary};
 	font-weight: bold;
-	align-items: left;
-	align-text: left;
 	border: none;
+	@media ${bp.md} {
+		margin-right: 20px;
+	}
 `;
 
 const ButtonContainer = styled.div`
@@ -42,19 +48,35 @@ const ButtonContainer = styled.div`
 const AccountButtons = styled.div`
 	position: relative;
 	display: flex;
+	flex-direction: column-reverse;
 	background-color: transparent;
 	border: 0px;
+
+	@media ${bp.md} {
+		flex-direction: row;
+	}
 `;
 
 const Dropdown = styled.div`
 	position: absolute;
-	top: 100%;
-	right: 0;
+	top: 0;
+	right: 100%;
 	width: fit-content;
 	margin-top: 10px;
 	z-index: 2;
 	border-radius: 20px;
+	box-shadow: rgba(0, 0, 0, 0.75) 10px 15px 15px;
 	background: transparent;
+	@media ${bp.md} {
+		position: absolute;
+		top: 100%;
+		right: 0;
+		width: fit-content;
+		margin-top: 10px;
+		z-index: 2;
+		border-radius: 20px;
+		background: transparent;
+	}
 `;
 
 const DropdownUl = styled.ul`
@@ -128,6 +150,7 @@ const ConnectButton = ({ style }) => {
 
 	// handler for connecting wallet
 	const connectWalletHandler = () => {
+		console.log('hello from conect wallet handler');
 		if (window.ethereum && window.ethereum.isMetaMask) {
 			console.log('MetaMask Here!');
 
@@ -164,6 +187,7 @@ const ConnectButton = ({ style }) => {
 					accountChangedHandler(result[0]);
 					localStorage.setItem('account', result[0]);
 					window.dispatchEvent(new Event('storage'));
+					console.log('event dispatched');
 					getAccountBalance(result[0]);
 					setWalletIsActive(true);
 					console.log('wallet connected');

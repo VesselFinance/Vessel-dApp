@@ -4,21 +4,26 @@ import theme from '../../../Theme/theme';
 import styled from 'styled-components';
 import ConnectButton from '../../../Button/ConnectWallet/ConnectWallet';
 import 'react-slidedown/lib/slidedown.css';
+import bp from '../../../Theme/breakpoints';
 
 const StyledNav = styled.nav`
 	background: ${theme.color.background.secondary};
 	position: fixed;
 	padding-bottom: 5px;
-	top: 0;
-	left: 0;
-	width: 100vw;
+	top: 10px;
+	right: 10px;
+	width: 200px;
 	z-index: 100;
 	display: canvas;
 	flex-direction: column;
 	align-items: center;
-	padding-top: 8%;
-	border-bottom-right-radius: 20px;
-	border-bottom-left-radius: 20px;
+	padding-top: 40px;
+	border-radius: 20px;
+	border: 1px solid #ffffff66;
+	box-shadow: rgba(0, 0, 0, 0.65) -10px 15px 15px;
+	@media ${bp.md} {
+		display: none;
+	}
 `;
 
 const Divider = styled.hr`

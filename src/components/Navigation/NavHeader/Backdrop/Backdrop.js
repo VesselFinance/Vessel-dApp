@@ -9,9 +9,9 @@ const StyledBackdrop = styled.div`
 	height: 100vh;
 	z-index: 10;
 
-	background: rgba(0, 0, 0, 0.5);
-	backdrop-filter: blur(10px);
-	-webkit-backdrop-filter: blur(6px);
+	background: rgba(0, 0, 0, 0);
+	backdrop-filter: blur(0px);
+	-webkit-backdrop-filter: blur(0px);
 	@media ${bp.sm} {
 		display: none;
 	}

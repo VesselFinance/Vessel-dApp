@@ -361,21 +361,23 @@ const HomePage = () => {
 
 	/* listen to event emitted from change in local storage, set Wallet Connect Mode for 
 	appropriate component rerender */
-	window.addEventListener('storage', () => {
+	window.addEventListener('storage', function getFromStorage() {
 		// When local storage changes, dump the list to
 		// the console.
+		console.log('hello from event listener');
 		if (localStorage.getItem('account') === '' || localStorage.getItem('account') === null) {
 			setWalletConnectedMode(false);
 			setUserVotes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
 		} else if (localStorage.getItem('account') !== '' || localStorage.getItem('account') !== null) {
 			setWalletConnectedMode(true);
 		}
-		setVoteStatus();
+		setVoteStatusOfUser();
+		window.removeEventListener('storage', getFromStorage);
 	});
 
 	/*change availability of vote button based on account connection and account vote status*/
 	React.useEffect(() => {
-		setVoteStatus();
+		setVoteStatusOfUser();
 	}, [thisUserVotes, walletConnectedMode]);
 
 	/* get necessary data from Contract to display */
@@ -408,7 +410,7 @@ const HomePage = () => {
 		getContractData();
 	}, [walletConnectedMode]);
 
-	const setVoteStatus = () => {
+	const setVoteStatusOfUser = () => {
 		if (!walletConnectedMode) {
 			setVotedStatus('disconnected');
 		} else if (walletConnectedMode && lastEpochVoteCast < epochNumber && Number(userBalance) >= 1) {

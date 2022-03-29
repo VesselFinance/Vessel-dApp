@@ -273,6 +273,13 @@ const AssetCards = props => {
 								var tokenRatio = removePrecision(sortedAssets[j + inner * i][1]);
 								var n = 3;
 								var arcCountConst = 2;
+								tokenRatio > 0.4
+									? (arcCountConst = 4)
+									: tokenRatio > 0.3
+									? (arcCountConst = 4)
+									: tokenRatio > 0.15
+									? (arcCountConst = 2.5)
+									: (arcCountConst = 2.2);
 								var tokenPercentMagnified = ((n + 1) * tokenRatio) / (n * tokenRatio + 1);
 								var wholePercent = Math.round(tokenRatio * 100);
 								var tokenRatioArcArray = [
