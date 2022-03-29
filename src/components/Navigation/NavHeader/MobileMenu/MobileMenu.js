@@ -19,7 +19,7 @@ const StyledNav = styled.nav`
 	align-items: center;
 	padding-top: 40px;
 	border-radius: 20px;
-	border: 1px solid #ffffff66;
+	border: 1px solid #ffffff33;
 	box-shadow: rgba(0, 0, 0, 0.65) -10px 15px 15px;
 	@media ${bp.md} {
 		display: none;

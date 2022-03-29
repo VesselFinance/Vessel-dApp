@@ -146,7 +146,20 @@ const ConnectButton = ({ style }) => {
 			}
 		};
 		checkWalletInStorage();
-	}, []);
+		if (!window.ethereum) {
+			return;
+		}
+
+		window.ethereum.on('accountsChanged', accountChangedHandler);
+		window.ethereum.on('chainChanged', chainChangedHandler);
+		window.ethereum.on('disconnect', disconnect);
+
+		return () => {
+			window.ethereum.removeListener('accountsChanged', accountChangedHandler);
+			window.ethereum.removeListener('chainChanged', chainChangedHandler);
+			window.ethereum.removeListener('disconnect', disconnect);
+		};
+	}, [walletIsActive]);
 
 	// handler for connecting wallet
 	const connectWalletHandler = () => {
@@ -210,9 +223,13 @@ const ConnectButton = ({ style }) => {
 
 	// get balance of wallet account
 	const getAccountBalance = async account => {
-		const balance = await contractMethods.balanceOf(account);
-		const sanitisedBalance = roundedToTwo(removePrecision(balance));
-		setUserBalance(sanitisedBalance);
+		try {
+			const balance = await contractMethods.balanceOf(account);
+			const sanitisedBalance = roundedToTwo(removePrecision(balance));
+			setUserBalance(sanitisedBalance);
+		} catch (error) {
+			disconnect();
+		}
 	};
 
 	const chainChangedHandler = () => {
@@ -222,7 +239,7 @@ const ConnectButton = ({ style }) => {
 
 	// disconnect wallet
 	const disconnect = async () => {
-		setDefaultAccount(null);
+		setDefaultAccount('0x0');
 		setWalletIsActive(false);
 		localStorage.setItem('account', '');
 		window.dispatchEvent(new Event('storage'));
@@ -252,13 +269,6 @@ const ConnectButton = ({ style }) => {
 				document.removeEventListener('mousedown', handleClickOutside);
 			};
 		}, [ref]);
-	}
-
-	// listen for account changes
-	if (window.ethereum) {
-		window.ethereum.on('accountsChanged', accountChangedHandler);
-
-		window.ethereum.on('chainChanged', chainChangedHandler);
 	}
 
 	const removePrecision = num => {

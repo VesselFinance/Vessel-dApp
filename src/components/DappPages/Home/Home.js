@@ -378,12 +378,13 @@ const HomePage = () => {
 	/*change availability of vote button based on account connection and account vote status*/
 	React.useEffect(() => {
 		setVoteStatusOfUser();
-	}, [thisUserVotes, walletConnectedMode]);
+	}, [thisUserVotes, walletConnectedMode, userBalance, lastEpochVoteCast]);
 
 	/* get necessary data from Contract to display */
 	React.useEffect(() => {
 		const getContractData = async () => {
 			// if wallet is connected, pull contract data and wallet data
+			console.log('attempting wallet connect');
 			try {
 				if (!window.ethereum || localStorage.getItem('account') === '') {
 					console.log('no account found');
@@ -394,10 +395,14 @@ const HomePage = () => {
 				const accounts = await window.ethereum.request({ method: 'eth_accounts' });
 
 				if (recievedContractData === false) {
+					console.log('getting contract data');
 					await getContractDataWithoutAccount();
-					setRecievedContractData(true);
+					console.log('recieved contract data');
 				}
+				setRecievedContractData(true);
+				console.log('getting wallet data');
 				await getContractAccountData(accounts);
+				console.log('recieved wallet data');
 				setWalletConnectedMode(true);
 
 				// if wallet not connected, just pull contract data
@@ -408,7 +413,7 @@ const HomePage = () => {
 			setIsLoaded(true);
 		};
 		getContractData();
-	}, [walletConnectedMode]);
+	}, [walletConnectedMode, userBalance, recievedContractData]);
 
 	const setVoteStatusOfUser = () => {
 		if (!walletConnectedMode) {
@@ -443,6 +448,8 @@ const HomePage = () => {
 			contractMethods.balanceOf(account),
 		]);
 
+		console.log('got users wallet data + balance');
+		console.log(accountContractData[3] / 10 ** 18);
 		// if lastEpochVoteCast === epoch number, show votes, otherwise initialise votes displayed as 0's.
 		if (accountContractData[1] === accountContractData[2]) {
 			setUserVotes(accountContractData[0]);
@@ -452,6 +459,7 @@ const HomePage = () => {
 		setLastEpochVotesCast(accountContractData[1]);
 		setEpochNumber(accountContractData[2]);
 		setUserBalance(accountContractData[3] / 10 ** 18);
+		console.log(userBalance);
 	};
 
 	/*
