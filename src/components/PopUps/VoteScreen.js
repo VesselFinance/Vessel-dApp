@@ -229,7 +229,7 @@ const VoteModal = props => {
 
 	// whenever one of the sliders are moved on the vote screen, update the votes array
 	const onUpdate = (dif, vote, index) => {
-		setTotalAllocation(BigInt(Number(totalAllocation) + dif));
+		setTotalAllocation(Number(totalAllocation) + dif);
 		var tempUpdateVotes = newUserVotes;
 		tempUpdateVotes[index] = (vote * 10 ** 16).toString();
 		setNewUserVotes(tempUpdateVotes);
@@ -273,7 +273,7 @@ const VoteModal = props => {
 
 			const wi = Number(item) / 10 ** 18;
 
-			const newAllocation = BigInt((y2 / (x2 / wi)) * 10 ** 18);
+			const newAllocation = BigInt(Math.floor(y2 / (x2 / wi)) * 10 ** 18);
 
 			// the new weight of the token after auto-reallocation.
 			return !tokenIndexesToAvoidInReallocation.includes(index) ? newAllocation.toString() : item.toString();
