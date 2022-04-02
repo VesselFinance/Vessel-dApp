@@ -5,6 +5,7 @@ const StyledButton = styled.button`
 	color: ${theme.color.text.primary};
 	background: linear-gradient(250deg, #428afa 0%, #00bea8 100%);
 	font-weight: bold;
+	font-family: 'expletus-sans-regular';
 	border: none;
 	border-radius: 12px;
 	padding: 10px 10px 10px 10px;

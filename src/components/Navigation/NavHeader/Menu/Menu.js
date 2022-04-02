@@ -38,7 +38,7 @@ const Menu = () => {
 					window.open(buyVSLLink, '_blank');
 				}}
 			>
-				Buy $VSL
+				Buy VSL
 			</SecondaryButton>
 		</MenuNav>
 	);

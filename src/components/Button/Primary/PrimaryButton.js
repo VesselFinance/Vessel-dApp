@@ -8,6 +8,7 @@ const StyledButton = styled.button`
 	transition: all 0.2s ease;
 	color: ${theme.color.text.primary};
 	font-weight: bold;
+	font-family: 'expletus-sans-regular';
 	border: none;
 	&:hover {
 		cursor: pointer;

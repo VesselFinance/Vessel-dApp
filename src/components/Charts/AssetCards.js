@@ -279,6 +279,12 @@ const AssetCards = props => {
 									? (arcCountConst = 4)
 									: tokenRatio > 0.15
 									? (arcCountConst = 2.5)
+									: tokenRatio > 0.05
+									? (arcCountConst = 2.5)
+									: tokenRatio > 0.04
+									? (arcCountConst = 2)
+									: tokenRatio > 0.01
+									? (arcCountConst = 2)
 									: (arcCountConst = 2.2);
 								var tokenPercentMagnified = ((n + 1) * tokenRatio) / (n * tokenRatio + 1);
 								var wholePercent = Math.round(tokenRatio * 100);
@@ -304,7 +310,7 @@ const AssetCards = props => {
 											arcWidth={0.3}
 											needleBaseColor={'#00000000'}
 											needleColor={'#00000000'}
-											arcsLength={tokenRatio > 0.04 ? tokenRatioArcArray : zeroArcArray}
+											arcsLength={tokenRatio > 0.01 ? tokenRatioArcArray : zeroArcArray}
 											percent={tokenPercentMagnified}
 											cornerRadius={0}
 											formatTextValue={value =>

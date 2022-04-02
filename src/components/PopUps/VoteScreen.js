@@ -210,7 +210,7 @@ const VoteModal = props => {
 	const [tokenIndexesToAvoidInReallocation, setTokenIndexesToAvoidInReallocation] = React.useState([]);
 	const [newUserVotes, setNewUserVotes] = React.useState(props.supportCurrent);
 	const [adjustedUserVotes, setAdjustedUserVotes] = React.useState(props.supportCurrent);
-	const [tokenSelectorOpen, settokenSelectorOpen] = React.useState(false);
+	const [tokenSelectorOpen, settokenSelectorOpen] = React.useState(true);
 	const [tokensToVoteOn, setTokensToVoteOn] = React.useState([]);
 	const [tokensSelectedStatus, setTokenSelectedStatus] = React.useState(Array(20).fill(0));
 	const [totalDiff, setTotalDiff] = React.useState(0);
@@ -443,7 +443,7 @@ const VoteModal = props => {
 									...tokensToVoteOn.splice(0, tokensToVoteOn.length),
 								]);
 								props.onClose();
-								if (tokenSelectorOpen === true) {
+								if (tokenSelectorOpen === false) {
 									handleTokenSelector();
 								}
 							}}
