@@ -409,7 +409,7 @@ const EpochPage = () => {
 
 					//last epoch prices [4]
 					Promise.all(
-						[...Array(20)].map((e, i) => {
+						[...Array(21)].map((e, i) => {
 							return contractMethods.getLastEpochPrices(i);
 						}),
 					),
@@ -433,11 +433,8 @@ const EpochPage = () => {
 				var ethTime = EpochData[0];
 				var lengthOfEpoch = EpochData[1];
 				const contractBal = EpochData[2];
-				console.log(EpochData[4][20]);
 
-				// EPOCHDATA[4][20] DOES NOT EXIST, WE NEED TO DO SOMETHING ABOUT THIS
-				const deltaTval = (Number(priceOfVSL) - Number(EpochData[4][20])) / Number(EpochData[4][20]);
-				console.log(deltaTval);
+				const deltaTval = ((Number(priceOfVSL) - Number(EpochData[4][20])) / Number(EpochData[4][20])) * 100;
 				const deltaWval = EpochData[3]
 					.map((e, i) => {
 						return ((EpochData[5][i] / 10 ** 16) * (RTP[i] - EpochData[4][i])) / EpochData[4][i];
@@ -467,7 +464,7 @@ const EpochPage = () => {
 		};
 
 		getContractData();
-	});
+	}, []);
 
 	// function for triggering epoch rebalance
 	const HandleTriggerRebalance = async () => {
