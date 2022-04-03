@@ -13,7 +13,7 @@ const roundedToTwo = num => {
 };
 
 const AllocationSlider = props => {
-	const min = 5;
+	const min = 0;
 	const max = props.max;
 	const step = 5;
 	const [value, setValue] = React.useState(roundedToTwo(props.defaultVal));
@@ -24,22 +24,23 @@ const AllocationSlider = props => {
 		setValue(roundedToTwo(val));
 	};
 
-	React.useState(() => {
-		if (props.defaultVal > props.max) {
-			const val = Number(props.max);
-			onSliderChange(val);
-		}
-		if (props.defaultVal < min) {
-			const val = Number(min);
-			onSliderChange(val);
-		}
-	}, []);
+	//React.useState(() => {
+	//if (props.defaultVal > props.max) {
+	//	const val = Number(props.max);
+	//	onSliderChange(val);
+	//}
+	//if (props.defaultVal < min) {
+	//	const val = Number(min);
+	//	onSliderChange(val);
+	//}
+	//}, []);
 
 	return (
 		<LabelStyle>
 			<span>{value + '%'}</span>
-
-			<Slider value={value} min={min} max={max} step={step} onChange={onSliderChange} />
+			<div style={{ width: 17 + 'vw', maxWidth: 200 + 'px' }}>
+				<Slider value={value} min={min} max={max} step={step} onChange={onSliderChange} />
+			</div>
 		</LabelStyle>
 	);
 };

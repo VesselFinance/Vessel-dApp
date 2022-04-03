@@ -212,6 +212,15 @@ const UserBoxDataContainer = styled.div`
 	height: 22vh;
 `;
 
+const UserBoxDeltaContainer = styled.div`
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	color: #fff;
+	margin-top: -80px;
+`;
+
 const BoxHeader = styled.h1`
 	color: ${theme.color.text.primary};
 	margin-bottom: 16px;
@@ -284,7 +293,7 @@ const keyframesShimmer = keyframes`
 `;
 
 const shimmerAnimation = css`
-	background: linear-gradient(to right, #aaaaaa 4%, #888888 25%, #aaaaaa 36%);
+	background: linear-gradient(to right, #9b9b9b22 4%, #666666 25%, #9b9b9b22 36%);
 	background-size: 80vw 100%;
 	animation: ${keyframesShimmer} 2s infinite linear;
 `;
@@ -451,6 +460,24 @@ const HomePage = () => {
 
 						<BackgroundBlurRight src={pinkGlow} alt="blue Glow" />
 					</DappCardWrapper>
+					<UserBoxDeltaContainer>
+						<UserBoxDataBox>
+							<ShimmerWrapper>
+								<DataArea>
+									<Field />
+								</DataArea>
+							</ShimmerWrapper>
+							<UserBoxDataSubtitle> Change in token</UserBoxDataSubtitle>
+						</UserBoxDataBox>
+						<UserBoxDataBox>
+							<ShimmerWrapper>
+								<DataArea>
+									<Field />
+								</DataArea>
+							</ShimmerWrapper>
+							<UserBoxDataSubtitle> Change in wrapper</UserBoxDataSubtitle>
+						</UserBoxDataBox>
+					</UserBoxDeltaContainer>
 				</PageWrapper>
 			</AnimationOnScroll>
 			<Footer />

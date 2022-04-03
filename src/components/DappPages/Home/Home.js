@@ -16,6 +16,7 @@ import React from 'react';
 import Web3 from 'web3';
 import VoteModal from '../../PopUps/VoteScreen';
 import SkeletonHome from '../../skeletonLoads/skeletonHome';
+import { tokenData } from '../../../Data/tokens';
 
 const PageWrapper = styled.div`
 	padding: 0 28px 64px 28px;
@@ -342,6 +343,7 @@ const VoteDescriptionContainer = styled.div`
 
 const HomePage = () => {
 	const [walletConnectedMode, setWalletConnectedMode] = React.useState(false);
+	const [walletAddress, setWalletAddress] = React.useState('');
 	const [votedStatus, setVotedStatus] = React.useState('disconnected');
 	const [viewAssetAllocation, setViewAssetAllocation] = React.useState(true);
 	const [recievedContractData, setRecievedContractData] = React.useState(false);
@@ -358,18 +360,23 @@ const HomePage = () => {
 	const [epochNumber, setEpochNumber] = React.useState(0);
 	const [lastEpochVoteCast, setLastEpochVotesCast] = React.useState(0);
 	const [userBalance, setUserBalance] = React.useState(0);
+	const [userHasVotedThisSession, setUserHasVotedThisSession] = React.useState(0);
+	const [walletHasSwappedThisSession, setWalletHasSwappedThisSession] = React.useState(0);
+	const [tokenNames, setTokenNames] = React.useState([]);
 
 	/* listen to event emitted from change in local storage, set Wallet Connect Mode for 
 	appropriate component rerender */
 	window.addEventListener('storage', function getFromStorage() {
 		// When local storage changes, dump the list to
 		// the console.
-		console.log('hello from event listener');
+		//console.log('hello from event listener');
 		if (localStorage.getItem('account') === '' || localStorage.getItem('account') === null) {
 			setWalletConnectedMode(false);
 			setUserVotes([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
 		} else if (localStorage.getItem('account') !== '' || localStorage.getItem('account') !== null) {
 			setWalletConnectedMode(true);
+			setWalletAddress(localStorage.getItem('account'));
+			setWalletHasSwappedThisSession(walletHasSwappedThisSession + 1);
 		}
 		setVoteStatusOfUser();
 		window.removeEventListener('storage', getFromStorage);
@@ -395,14 +402,14 @@ const HomePage = () => {
 				const accounts = await window.ethereum.request({ method: 'eth_accounts' });
 
 				if (recievedContractData === false) {
-					console.log('getting contract data');
+					//	console.log('getting contract data');
 					await getContractDataWithoutAccount();
-					console.log('recieved contract data');
+					//	console.log('recieved contract data');
 				}
 				setRecievedContractData(true);
-				console.log('getting wallet data');
+				//console.log('getting wallet data');
 				await getContractAccountData(accounts);
-				console.log('recieved wallet data');
+				//console.log('recieved wallet data');
 				setWalletConnectedMode(true);
 
 				// if wallet not connected, just pull contract data
@@ -413,7 +420,7 @@ const HomePage = () => {
 			setIsLoaded(true);
 		};
 		getContractData();
-	}, [walletConnectedMode, userBalance, recievedContractData]);
+	}, [walletConnectedMode, userBalance, recievedContractData, userHasVotedThisSession, walletHasSwappedThisSession]);
 
 	const setVoteStatusOfUser = () => {
 		if (!walletConnectedMode) {
@@ -448,8 +455,8 @@ const HomePage = () => {
 			contractMethods.balanceOf(account),
 		]);
 
-		console.log('got users wallet data + balance');
-		console.log(accountContractData[3] / 10 ** 18);
+		//console.log('got users wallet data + balance');
+		//console.log(accountContractData[3] / 10 ** 18);
 		// if lastEpochVoteCast === epoch number, show votes, otherwise initialise votes displayed as 0's.
 		if (accountContractData[1] === accountContractData[2]) {
 			setUserVotes(accountContractData[0]);
@@ -459,7 +466,7 @@ const HomePage = () => {
 		setLastEpochVotesCast(accountContractData[1]);
 		setEpochNumber(accountContractData[2]);
 		setUserBalance(accountContractData[3] / 10 ** 18);
-		console.log(userBalance);
+		//console.log(userBalance);
 	};
 
 	/*
@@ -502,6 +509,26 @@ const HomePage = () => {
 			}),
 		);
 
+		const tokenNamesArr = [...Array(20)].map((e, i) => {
+			return tokenData[allContractData[0][i]].name;
+		});
+
+		function renameFiles(arr) {
+			var count = {};
+			arr.forEach(function (x, i) {
+				if (arr.indexOf(x) !== i) {
+					var c = x in count ? (count[x] = count[x] + 1) : (count[x] = 1);
+					var j = c + 1;
+					var k = x + '(' + j + ')';
+
+					while (arr.indexOf(k) !== -1) k = x + '(' + ++j + ')';
+					arr[i] = k;
+				}
+			});
+			return arr;
+		}
+
+		setTokenNames(renameFiles(tokenNamesArr));
 		setVSLTokens(allContractData[0]);
 		setBalancedRatio(allContractData[1]);
 		setAssetVotes(allContractData[2]);
@@ -513,6 +540,12 @@ const HomePage = () => {
 	/* handle the contract send transaction when the user submits their vote allocation for the 
 	current epoch. */
 	const handleVotesSubmission = async submittedVotes => {
+		// check if block number is valid => transaction included
+		const isTxMined = async txHash => {
+			const tx = await Web3.eth.getTransaction(txHash);
+			return tx.blockNumber !== null;
+		};
+
 		try {
 			if (!window.ethereum || localStorage.getItem('account') === '') {
 				throw new Error('No crypto wallet found. Please install it.');
@@ -536,12 +569,13 @@ const HomePage = () => {
 				method: 'eth_sendTransaction',
 				params: [transactionParameters],
 			});
+			setUserHasVotedThisSession(userHasVotedThisSession + 1);
+
 			// get contract data to activate state trigger updates
-			getContractAccountData();
 
 			// if wallet not connected, just pull contract data
 		} catch (err) {
-			console.log(err.message);
+			console.log('error submitting vote: ' + err.message);
 		}
 	};
 
@@ -599,9 +633,9 @@ const HomePage = () => {
 						<UserBoxContent>
 							<BoxHeader>Voting</BoxHeader>
 							<VoteContainer>
-								<BoxSubHeader>How Does voting work?</BoxSubHeader>
+								<BoxSubHeader>How does voting work?</BoxSubHeader>
 								<VoteDescriptionContainer>
-									Users must vote on the percentage allocation of tokens in the fund. In doing so,
+									Users can vote on the percentage allocation of tokens in the fund. In doing so,
 									users decide how Vessel evolves.
 								</VoteDescriptionContainer>
 								{votedStatus === 'canVote' ? (
@@ -632,6 +666,7 @@ const HomePage = () => {
 						<AssetAllocationContainer>
 							<AssetCardsContainer>
 								<AssetCards
+									names={tokenNames}
 									prices={assetPrices}
 									votes={assetVotes}
 									wrappertokens={VSLTokens}
@@ -644,6 +679,7 @@ const HomePage = () => {
 				) : (
 					<DappCardWrapper>
 						<VotesTable
+							names={tokenNames}
 							prices={assetPrices}
 							votes={assetVotes}
 							wrappertokens={VSLTokens}
@@ -666,10 +702,12 @@ const HomePage = () => {
 				}}
 				open={showModal}
 				wrappertokens={VSLTokens}
+				names={tokenNames}
 				onSubmit={submittedVotes => {
 					handleVotesSubmission(submittedVotes);
 				}}
-				supportCurrent={balancedRatio}
+				//supportCurrent={balancedRatio}
+				supportCurrent={thisUserVotes}
 			/>
 			<Footer />
 		</>

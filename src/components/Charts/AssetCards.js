@@ -235,10 +235,17 @@ const AssetCards = props => {
 		['#EDAEF9', '#81B1FA22'],
 	];
 
-	const sortedCards = (tokens, ratios, prices, RTPs, votes) => {
+	const sortedCards = (tokens, ratios, prices, RTPs, votes, names) => {
 		var allCardsList = [];
 		for (var i = 0; i < tokens.length; i++) {
-			allCardsList.push([tokens[i], Number(ratios[i]), Number(prices[i]), Number(RTPs[i]), Number(votes[i])]);
+			allCardsList.push([
+				tokens[i],
+				Number(ratios[i]),
+				Number(prices[i]),
+				Number(RTPs[i]),
+				Number(votes[i]),
+				names[i],
+			]);
 		}
 
 		function sortRatioFunction(a, b) {
@@ -252,7 +259,14 @@ const AssetCards = props => {
 		return allCardsList.sort(sortRatioFunction);
 	};
 
-	var sortedAssets = sortedCards(props.wrappertokens, props.ratio, props.prices, props.realtimeprices, props.votes);
+	var sortedAssets = sortedCards(
+		props.wrappertokens,
+		props.ratio,
+		props.prices,
+		props.realtimeprices,
+		props.votes,
+		props.names,
+	);
 
 	return (
 		<Carousel
@@ -296,11 +310,12 @@ const AssetCards = props => {
 
 								var zeroArcArray = [0.001, 1 - 0.001];
 								var imageSource = '/tokenImgs/' + tokenData[tokenDataContractKey].path;
+								var tokenName = sortedAssets[j + inner * i][5];
 								return (
 									<BoxContent key={(j + inner * i).toString()}>
 										<BoxHeader>
 											<TokenIcon src={imageSource}></TokenIcon>
-											{tokenData[tokenDataContractKey].name}
+											{tokenName}
 										</BoxHeader>
 										<GaugeChart
 											style={{ fontWeight: '200' }}

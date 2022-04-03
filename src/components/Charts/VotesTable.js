@@ -184,6 +184,7 @@ const VoteTable = props => {
 				);
 				newRatio = newRatio || 0;
 
+				var tokenName = props.names[i];
 				var newVotes = roundedToTwo(removePrecision(props.votes[i]));
 				var userTokenVotes = roundedToTwo(removePrecision(props.userVotes[i]));
 				var oldEpochRatio = roundedToTwo(removePrecision(props.ratio[i])) * 100;
@@ -195,7 +196,7 @@ const VoteTable = props => {
 					<TokenRow key={i}>
 						<TokenCellText>
 							<TokenIcon src={imageSource}></TokenIcon>
-							{tokenData[tokenDataContractKey].name}
+							{tokenName}
 						</TokenCellText>
 						<TokenCell>{RTP}</TokenCell>
 						<TokenCell>

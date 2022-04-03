@@ -160,11 +160,11 @@ const ConnectButton = ({ style }) => {
 			window.ethereum.removeListener('chainChanged', chainChangedHandler);
 			window.ethereum.removeListener('disconnect', disconnect);
 		};
-	}, [walletIsActive]);
+	}, [walletIsActive, defaultAccount]);
 
 	// handler for connecting wallet
 	const connectWalletHandler = () => {
-		console.log('hello from conect wallet handler');
+		//console.log('hello from conect wallet handler');
 		if (window.ethereum && window.ethereum.isMetaMask) {
 			console.log('MetaMask Here!');
 
@@ -201,10 +201,10 @@ const ConnectButton = ({ style }) => {
 					accountChangedHandler(result[0]);
 					localStorage.setItem('account', result[0]);
 					window.dispatchEvent(new Event('storage'));
-					console.log('event dispatched');
+					//console.log('event dispatched');
 					getAccountBalance(result[0]);
 					setWalletIsActive(true);
-					console.log('wallet connected');
+					//console.log('wallet connected');
 				})
 				.catch(error => {
 					setErrorMessage(error.message);
@@ -218,7 +218,9 @@ const ConnectButton = ({ style }) => {
 
 	// update account, will cause component re-render
 	const accountChangedHandler = newAccount => {
+		//console.log('OKAY WE ARE swapping account');
 		setDefaultAccount(newAccount);
+		localStorage.setItem('account', newAccount);
 		getAccountBalance(newAccount.toString());
 	};
 

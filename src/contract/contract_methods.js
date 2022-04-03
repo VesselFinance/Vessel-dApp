@@ -57,8 +57,9 @@ var lastEpochVoteCast = address => c.lastEpochVoteCast(address).call();
 var getQuote = address => c._getTokenPrice(address).call();
 
 var getUserVotes = (address, index) => c.getUserVotes(address, index).call({ from: address });
-
+var updateEpoch = () => c.updateEpoch().call();
 export {
+	updateEpoch,
 	cABI,
 	cAddr,
 	cRPC,

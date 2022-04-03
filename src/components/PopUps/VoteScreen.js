@@ -37,13 +37,14 @@ const ModalMain = styled.div`
 	transform: translate(calc(-50% - 0.4px), calc(-50% - 0.4px));
 	@media ${bp.sm} {
 		width: 55%;
+		max-width: 600px;
 		height: 60vh;
 	}
 `;
 
 const TokenomicsTable = styled.div`
 	display: grid;
-	grid-template-columns: 1fr 2fr 1fr;
+	grid-template-columns: 1fr 3fr 1fr;
 	grid-auto-rows: 50px;
 	width: 100%;
 	justify-content: center;
@@ -234,7 +235,9 @@ const VoteModal = props => {
 		tempUpdateVotes[index] = (vote * 10 ** 16).toString();
 		setNewUserVotes(tempUpdateVotes);
 		setTotalDiff(totalDiff + dif);
-		handleWeightReallocation();
+		console.log(totalAllocation);
+		// UNCOMMENT THIS TO ENABLE AUTOREALLOCATION
+		//handleWeightReallocation();
 	};
 
 	// token array for selector.
@@ -311,7 +314,7 @@ const VoteModal = props => {
 				{tokenSelectorOpen === true ? (
 					<BoxHeader>Select tokens:</BoxHeader>
 				) : (
-					<BoxHeader>Your vote: </BoxHeader>
+					<BoxHeader>Your vote: ( {totalAllocation}%)</BoxHeader>
 				)}
 
 				{tokenSelectorOpen === true ? (
@@ -371,7 +374,7 @@ const VoteModal = props => {
 										)}
 
 										<TokenIcon src={imageSource}></TokenIcon>
-										{tokenData[votableTokensList[i][0]].name}
+										{props.names[i]}
 									</SelectorListItem>
 								</SelectorUl>
 							);
@@ -383,16 +386,19 @@ const VoteModal = props => {
 						{[...Array(tokensToVoteOn.length)].map((e, i) => {
 							var tokenDataContractKey = tokensToVoteOn[i][0];
 							var imageSource = '/tokenImgs/' + tokenData[tokenDataContractKey].path;
+							var tokenName = props.names[tokensToVoteOn[i][2]];
 							return (
 								<TokenRow key={i}>
 									<TokenCell>
 										<TokenIcon src={imageSource}></TokenIcon>
-										{tokenData[tokenDataContractKey].name}
+										{tokenName}
 									</TokenCell>
 									<TokenCell>
 										<Slider
-											max={100 / tokensToVoteOn.length}
-											defaultVal={tokensToVoteOn[i][1] / 10 ** 16}
+											//max={100 / tokensToVoteOn.length}
+											max={100}
+											defaultVal={0}
+											//defaultVal={tokensToVoteOn[i][1] / 10 ** 16}
 											onUpdate={(val, vote) => {
 												onUpdate(tokensToVoteOn[i][1] + val, vote, tokensToVoteOn[i][2]);
 											}}
@@ -472,15 +478,18 @@ const VoteModal = props => {
 					</div>
 
 					{/* send off vote to smart contract */}
-					{tokensSelectedStatus.reduce((a, b) => Number(a) + Number(b), 0) === 0 ? (
+					{tokensSelectedStatus.reduce((a, b) => Number(a) + Number(b), 0) === 0 ||
+					totalAllocation !== 100 ? (
 						<InformationButtonGreyed>Submit Vote</InformationButtonGreyed>
 					) : (
 						<ActionButton
 							onClick={() => {
-								if (tokenSelectorOpen === true) {
+								if (tokenSelectorOpen === false) {
 									handleTokenSelector();
 								}
-								handleErrorCorrectionAndSubmitVote();
+								//UNCOMMENT THIS TO ENABLE AUTOREALLOCATION
+								//handleErrorCorrectionAndSubmitVote();
+								props.onSubmit(newUserVotes);
 								props.onClose();
 								setTokenSelectedStatus(Array(20).fill(0));
 								setTotalAllocation(

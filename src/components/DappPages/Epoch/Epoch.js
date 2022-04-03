@@ -248,6 +248,15 @@ const UserBoxDataContainer = styled.div`
 	height: 22vh;
 `;
 
+const UserBoxDeltaContainer = styled.div`
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	color: #fff;
+	margin-top: -80px;
+`;
+
 const BoxHeader = styled.h1`
 	color: ${theme.color.text.primary};
 	margin-bottom: 16px;
@@ -321,16 +330,66 @@ const EpochPage = () => {
 	const [timeToNextEpoch, setTimeToNextEpoch] = React.useState(0);
 	const [bountyValue, setBountyValue] = React.useState(0);
 	var [countDownKey, setCountDownKey] = React.useState(0);
+	const [deltaT, setDeltaT] = React.useState(0);
+	const [deltaW, setDeltaW] = React.useState(0);
 	const [bountyLockStatus, setBountyLockStatus] = React.useState(true);
 
 	// initialise getting lastEpochBalance time for calculating time to next epoch rebalance, and then get the value of the bounty reward.
 	React.useEffect(() => {
 		const getContractData = async () => {
 			const getAndSetVesselContractData = async () => {
+				const EpochData = await Promise.all([
+					contractMethods.lastEpochRebalance(), //[0]
+					contractMethods.epochLength(), //[1]
+					contractMethods.balanceOf(contractMethods.bountyAddr), //[2]
+
+					// addresses [3]
+					Promise.all(
+						[...Array(20)].map((e, i) => {
+							return contractMethods.getCoinAddress(i);
+						}),
+					),
+
+					//last epoch prices [4]
+					Promise.all(
+						[...Array(20)].map((e, i) => {
+							return contractMethods.getLastEpochPrices(i);
+						}),
+					),
+
+					// balancedratio [5]
+					Promise.all(
+						[...Array(20)].map((e, i) => {
+							return contractMethods.getBalancedRatio(i);
+						}),
+					),
+				]);
+
+				const RTP = await Promise.all(
+					EpochData[3].map((e, i) => {
+						return contractMethods.getQuote(EpochData[3][i]);
+					}),
+				);
+
+				var ethTime = EpochData[0];
+				var lengthOfEpoch = EpochData[1];
+				const contractBal = EpochData[2];
+				const deltaTval =
+					EpochData[3]
+						.map((e, i) => {
+							return (RTP[i] - EpochData[4][i]) / EpochData[4][i];
+						})
+						.reduce((a, b) => Number(a) + Number(b), 0) / 20;
+
+				const deltaWval =
+					EpochData[3]
+						.map((e, i) => {
+							return ((EpochData[5][i] / 10 ** 16) * (RTP[i] - EpochData[4][i])) / EpochData[4][i];
+						})
+						.reduce((a, b) => Number(a) + Number(b), 0) / 20;
+
 				// get lastEpochBalance time for calculating time to next epoch rebalance.
-				var ethTime = await contractMethods.lastEpochRebalance();
 				var jsTime = Date.now() / 1000;
-				var lengthOfEpoch = await contractMethods.epochLength();
 				const timeToGoInSeconds = parseInt(ethTime) + parseInt(lengthOfEpoch) - parseInt(jsTime);
 				if (timeToGoInSeconds > 0) {
 					setBountyLockStatus(true);
@@ -342,10 +401,12 @@ const EpochPage = () => {
 				setCountDownKey(countDownKey++);
 
 				// get bounty reward value
-				const contractBal = await contractMethods.balanceOf(contractMethods.bountyAddr);
 				setBountyValue(contractBal / 10 ** 18 > 1000000 ? 1000000 : contractBal / 10 ** 18);
+				// set delta values
+				setDeltaT(deltaTval);
+				setDeltaW(deltaWval);
 			};
-			getAndSetVesselContractData();
+			await getAndSetVesselContractData();
 			setIsLoaded(true);
 		};
 
@@ -424,78 +485,84 @@ const EpochPage = () => {
 		<SkeletonEpoch />
 	) : (
 		<>
-			<AnimationOnScroll animateIn="animate__fadeIn" animateOnce={true}>
-				<PageWrapper>
-					<PageHeader>
-						<AboutSectionHeader>Epoch</AboutSectionHeader>
-						<AboutSectionSubHeader>
-							Every 7 days the epoch is reset, triggering a rebalance of the synthetic wrapper.
-						</AboutSectionSubHeader>
-					</PageHeader>
+			<PageWrapper>
+				<PageHeader>
+					<AboutSectionHeader>Epoch</AboutSectionHeader>
+					<AboutSectionSubHeader>
+						Every 7 days the epoch is reset, triggering a rebalance of the synthetic wrapper.
+					</AboutSectionSubHeader>
+				</PageHeader>
 
-					<BackgroundBlurLeft src={darkBlueGlow} alt="blue Glow" />
+				<BackgroundBlurLeft src={darkBlueGlow} alt="blue Glow" />
 
-					<DappCardWrapper>
-						<AssetAllocationContainer>
-							<UserAndGraphContainer>
-								<UserBoxContent>
-									<BoxHeader>Reset</BoxHeader>
-									<UserBoxDataContainerTimer>
-										<Countdown
-											autoStart={true}
-											date={Date.now() + parseInt(timeToNextEpoch)}
-											renderer={countDownRenderer}
-											key={Date.now()}
-										/>
-									</UserBoxDataContainerTimer>
-								</UserBoxContent>
-								<UserBoxContent>
-									<BoxHeader>Collect Bounty</BoxHeader>
-									<UserBoxDataContainer>
-										<UserBoxDataBox>
-											<UserBoxDataCurrentRewardBigNum>
-												{bountyValue}
-											</UserBoxDataCurrentRewardBigNum>
-											<UserBoxDataSubtitle> $VSL reward</UserBoxDataSubtitle>
-										</UserBoxDataBox>
-										<UserBoxDataBox>
-											<UserBoxDataBigNum>
-												{' '}
-												{bountyLockStatus === false ? (
-													<BountyLockIcon src={unlockIcon} />
-												) : (
-													<BountyLockIcon src={lockIcon} />
-												)}
-											</UserBoxDataBigNum>
-											<UserBoxDataSubtitle>
-												status: &nbsp;
-												{bountyLockStatus === false ? (
-													<ClaimStatusUnlocked>unlocked</ClaimStatusUnlocked>
-												) : (
-													<ClaimStatusLocked>locked</ClaimStatusLocked>
-												)}
-											</UserBoxDataSubtitle>
-										</UserBoxDataBox>
-									</UserBoxDataContainer>
-									{bountyLockStatus === false ? (
-										<PrimaryButton
-											onClick={() => {
-												HandleTriggerRebalance();
-											}}
-										>
-											Reset Epoch & Collect
-										</PrimaryButton>
-									) : (
-										<InformationButtonGreyed>Reset Epoch & Collect</InformationButtonGreyed>
-									)}
-								</UserBoxContent>
-							</UserAndGraphContainer>
-						</AssetAllocationContainer>
+				<DappCardWrapper>
+					<AssetAllocationContainer>
+						<UserAndGraphContainer>
+							<UserBoxContent>
+								<BoxHeader>Reset</BoxHeader>
+								<UserBoxDataContainerTimer>
+									<Countdown
+										autoStart={true}
+										date={Date.now() + parseInt(timeToNextEpoch)}
+										renderer={countDownRenderer}
+										key={Date.now()}
+									/>
+								</UserBoxDataContainerTimer>
+							</UserBoxContent>
+							<UserBoxContent>
+								<BoxHeader>Collect Bounty</BoxHeader>
+								<UserBoxDataContainer>
+									<UserBoxDataBox>
+										<UserBoxDataCurrentRewardBigNum>{bountyValue}</UserBoxDataCurrentRewardBigNum>
+										<UserBoxDataSubtitle> VSL reward</UserBoxDataSubtitle>
+									</UserBoxDataBox>
+									<UserBoxDataBox>
+										<UserBoxDataBigNum>
+											{' '}
+											{bountyLockStatus === false ? (
+												<BountyLockIcon src={unlockIcon} />
+											) : (
+												<BountyLockIcon src={lockIcon} />
+											)}
+										</UserBoxDataBigNum>
+										<UserBoxDataSubtitle>
+											status: &nbsp;
+											{bountyLockStatus === false ? (
+												<ClaimStatusUnlocked>unlocked</ClaimStatusUnlocked>
+											) : (
+												<ClaimStatusLocked>locked</ClaimStatusLocked>
+											)}
+										</UserBoxDataSubtitle>
+									</UserBoxDataBox>
+								</UserBoxDataContainer>
+								{bountyLockStatus === false ? (
+									<PrimaryButton
+										onClick={() => {
+											HandleTriggerRebalance();
+										}}
+									>
+										Reset Epoch & Collect
+									</PrimaryButton>
+								) : (
+									<InformationButtonGreyed>Reset Epoch & Collect</InformationButtonGreyed>
+								)}
+							</UserBoxContent>
+						</UserAndGraphContainer>
+					</AssetAllocationContainer>
 
-						<BackgroundBlurRight src={pinkGlow} alt="blue Glow" />
-					</DappCardWrapper>
-				</PageWrapper>
-			</AnimationOnScroll>
+					<BackgroundBlurRight src={pinkGlow} alt="blue Glow" />
+				</DappCardWrapper>
+				<UserBoxDeltaContainer>
+					<UserBoxDataBox>
+						<UserBoxDataCurrentRewardBigNum>{Number(deltaT).toFixed(2)}%</UserBoxDataCurrentRewardBigNum>
+						<UserBoxDataSubtitle> Change in token</UserBoxDataSubtitle>
+					</UserBoxDataBox>
+					<UserBoxDataBox>
+						<UserBoxDataCurrentRewardBigNum>{Number(deltaW).toFixed(2)}%</UserBoxDataCurrentRewardBigNum>
+						<UserBoxDataSubtitle> Change in wrapper</UserBoxDataSubtitle>
+					</UserBoxDataBox>
+				</UserBoxDeltaContainer>
+			</PageWrapper>
 			<Footer />
 		</>
 	);
