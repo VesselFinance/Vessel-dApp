@@ -204,33 +204,32 @@ const VoteActionButtons = styled.div`
 `;
 
 const VoteModal = props => {
-	const [totalAllocation, setTotalAllocation] = React.useState(
-		props.supportCurrent.reduce((a, b) => Number(a) + Number(b), 0) / 10 ** 16,
-	);
+	const [totalAllocation, setTotalAllocation] = React.useState(0);
 	const [initTotalAllocation] = React.useState(props.supportCurrent.reduce((a, b) => Number(a) + Number(b), 0));
 	const [tokenIndexesToAvoidInReallocation, setTokenIndexesToAvoidInReallocation] = React.useState([]);
-	const [newUserVotes, setNewUserVotes] = React.useState(props.supportCurrent);
+	const [newUserVotes, setNewUserVotes] = React.useState(Array(20).fill(0));
 	const [adjustedUserVotes, setAdjustedUserVotes] = React.useState(props.supportCurrent);
 	const [tokenSelectorOpen, settokenSelectorOpen] = React.useState(true);
 	const [tokensToVoteOn, setTokensToVoteOn] = React.useState([]);
 	const [tokensSelectedStatus, setTokenSelectedStatus] = React.useState(Array(20).fill(0));
 	const [totalDiff, setTotalDiff] = React.useState(0);
 
-	React.useEffect(() => {
-		const initialTokensSelectedStatus = Array(20).fill(0);
-		setTokensToVoteOn(tokensToVoteOn => [...tokensToVoteOn.splice(0, tokensToVoteOn.length)]);
-		setTokenIndexesToAvoidInReallocation(tokenIndexesToAvoidInReallocation => [
-			...tokenIndexesToAvoidInReallocation.splice(0, tokenIndexesToAvoidInReallocation.length),
-		]);
-		setTokenSelectedStatus(initialTokensSelectedStatus);
-		setTotalAllocation(props.supportCurrent.reduce((a, b) => Number(a) + Number(b), 0) / 10 ** 16);
-		setNewUserVotes(newUservotes => [...props.supportCurrent]);
-		setAdjustedUserVotes(adjustedUserVotes => [...props.supportCurrent]);
-	}, [props.open]);
+	//React.useEffect(() => {
+	//	const initialTokensSelectedStatus = Array(20).fill(0);
+	//	setTokensToVoteOn(tokensToVoteOn => [...tokensToVoteOn.splice(0, tokensToVoteOn.length)]);
+	//	setTokenIndexesToAvoidInReallocation(tokenIndexesToAvoidInReallocation => [
+	//		...tokenIndexesToAvoidInReallocation.splice(0, tokenIndexesToAvoidInReallocation.length),
+	//	]);
+	//	setTokenSelectedStatus(initialTokensSelectedStatus);
+	//	setTotalAllocation(0);
+	//	setNewUserVotes(Array(20).fill(0));
+	//	setAdjustedUserVotes(adjustedUserVotes => [...props.supportCurrent]);
+	//}, [props.open]);
 
 	// whenever one of the sliders are moved on the vote screen, update the votes array
 	const onUpdate = (dif, vote, index) => {
-		setTotalAllocation(Number(totalAllocation) + dif);
+		console.log(dif);
+		setTotalAllocation(Number(totalAllocation + dif));
 		var tempUpdateVotes = newUserVotes;
 		tempUpdateVotes[index] = (vote * 10 ** 16).toString();
 		setNewUserVotes(tempUpdateVotes);
@@ -400,7 +399,7 @@ const VoteModal = props => {
 											defaultVal={0}
 											//defaultVal={tokensToVoteOn[i][1] / 10 ** 16}
 											onUpdate={(val, vote) => {
-												onUpdate(tokensToVoteOn[i][1] + val, vote, tokensToVoteOn[i][2]);
+												onUpdate(val, vote, tokensToVoteOn[i][2]);
 											}}
 										/>
 									</TokenCell>
@@ -448,6 +447,7 @@ const VoteModal = props => {
 								setTokensToVoteOn(tokensToVoteOn => [
 									...tokensToVoteOn.splice(0, tokensToVoteOn.length),
 								]);
+								setTotalAllocation(0);
 								props.onClose();
 								if (tokenSelectorOpen === false) {
 									handleTokenSelector();
@@ -484,6 +484,8 @@ const VoteModal = props => {
 					) : (
 						<ActionButton
 							onClick={() => {
+								setTokensToVoteOn(tokensToVoteOn => []);
+								setTotalAllocation(0);
 								if (tokenSelectorOpen === false) {
 									handleTokenSelector();
 								}
@@ -492,9 +494,7 @@ const VoteModal = props => {
 								props.onSubmit(newUserVotes);
 								props.onClose();
 								setTokenSelectedStatus(Array(20).fill(0));
-								setTotalAllocation(
-									props.supportCurrent.reduce((a, b) => Number(a) + Number(b), 0) / 10 ** 16,
-								);
+								setTotalAllocation(0);
 							}}
 						>
 							Submit Vote

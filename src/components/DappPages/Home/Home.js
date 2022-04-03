@@ -537,15 +537,13 @@ const HomePage = () => {
 		setRealTimeAssetPrices(RTP);
 	};
 
+	const sleep = milliseconds => {
+		return new Promise(resolve => setTimeout(resolve, milliseconds));
+	};
+
 	/* handle the contract send transaction when the user submits their vote allocation for the 
 	current epoch. */
 	const handleVotesSubmission = async submittedVotes => {
-		// check if block number is valid => transaction included
-		const isTxMined = async txHash => {
-			const tx = await Web3.eth.getTransaction(txHash);
-			return tx.blockNumber !== null;
-		};
-
 		try {
 			if (!window.ethereum || localStorage.getItem('account') === '') {
 				throw new Error('No crypto wallet found. Please install it.');
@@ -565,12 +563,22 @@ const HomePage = () => {
 				data: contract.methods.vote(submittedVotes).encodeABI(),
 			};
 
-			await window.ethereum.request({
+			const txHash = await window.ethereum.request({
 				method: 'eth_sendTransaction',
 				params: [transactionParameters],
 			});
-			setUserHasVotedThisSession(userHasVotedThisSession + 1);
-
+			let transactionReceipt = null;
+			while (transactionReceipt == null) {
+				// Waiting expectedBlockTime until the transaction is mined
+				transactionReceipt = await web3.eth.getTransactionReceipt(txHash);
+				await sleep(1000);
+			}
+			if (transactionReceipt.status === true) {
+				setUserHasVotedThisSession(userHasVotedThisSession + 1);
+				console.log('transaction confirmed, rerendering...');
+			} else {
+				console.log('transaction failed, VOTE DID NOT GO THROUGH. NOT RERENDERING');
+			}
 			// get contract data to activate state trigger updates
 
 			// if wallet not connected, just pull contract data

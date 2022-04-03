@@ -422,6 +422,8 @@ const EpochPage = () => {
 					),
 				]);
 
+				const priceOfVSL = await contractMethods.getQuote(contractMethods.cAddr);
+
 				const RTP = await Promise.all(
 					EpochData[3].map((e, i) => {
 						return contractMethods.getQuote(EpochData[3][i]);
@@ -431,12 +433,11 @@ const EpochPage = () => {
 				var ethTime = EpochData[0];
 				var lengthOfEpoch = EpochData[1];
 				const contractBal = EpochData[2];
-				const deltaTval = EpochData[3]
-					.map((e, i) => {
-						return (RTP[i] - EpochData[4][i]) / EpochData[4][i];
-					})
-					.reduce((a, b) => Number(a) + Number(b), 0);
+				console.log(EpochData[4][20]);
 
+				// EPOCHDATA[4][20] DOES NOT EXIST, WE NEED TO DO SOMETHING ABOUT THIS
+				const deltaTval = (Number(priceOfVSL) - Number(EpochData[4][20])) / Number(EpochData[4][20]);
+				console.log(deltaTval);
 				const deltaWval = EpochData[3]
 					.map((e, i) => {
 						return ((EpochData[5][i] / 10 ** 16) * (RTP[i] - EpochData[4][i])) / EpochData[4][i];

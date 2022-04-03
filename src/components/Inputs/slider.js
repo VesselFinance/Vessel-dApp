@@ -16,12 +16,12 @@ const AllocationSlider = props => {
 	const min = 0;
 	const max = props.max;
 	const step = 5;
-	const [value, setValue] = React.useState(roundedToTwo(props.defaultVal));
+	const [value, setValue] = React.useState(0);
 
 	const onSliderChange = val => {
 		props.onUpdate(Number(-(value - val)), val);
 
-		setValue(roundedToTwo(val));
+		setValue(val);
 	};
 
 	//React.useState(() => {
