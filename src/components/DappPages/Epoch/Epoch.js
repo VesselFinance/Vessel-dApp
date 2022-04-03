@@ -227,6 +227,63 @@ const UserBoxDataCurrentRewardBigNum = styled.h1`
 	}
 `;
 
+const UserBoxDataDeltasBigNum = styled.h1`
+	font-size: 22px;
+	color: #ffffff;
+	text-align: center;
+	height: 100%;
+	@media ${bp.sm} {
+		font-size: 22px;
+		color: #ffffff;
+	}
+	@media ${bp.md} {
+		font-size: 22px;
+		color: #ffffff;
+	}
+	@media ${bp.lg} {
+		font-size: 26px;
+		color: #ffffff;
+	}
+`;
+
+const UserBoxDataDeltasBigNumPos = styled.h1`
+	font-size: 22px;
+	color: #09b7b3;
+	text-align: center;
+	height: 100%;
+	@media ${bp.sm} {
+		font-size: 22px;
+		color: #09b7b3;
+	}
+	@media ${bp.md} {
+		font-size: 22px;
+		color: #09b7b3;
+	}
+	@media ${bp.lg} {
+		font-size: 26px;
+		color: #09b7b3;
+	}
+`;
+
+const UserBoxDataDeltasBigNumNeg = styled.h1`
+	font-size: 22px;
+	color: #fe7e8c;
+	text-align: center;
+	height: 100%;
+	@media ${bp.sm} {
+		font-size: 22px;
+		color: #fe7e8c;
+	}
+	@media ${bp.md} {
+		font-size: 22px;
+		color: #fe7e8c;
+	}
+	@media ${bp.lg} {
+		font-size: 26px;
+		color: #fe7e8c;
+	}
+`;
+
 const UserBoxDataSubtitle = styled.div`
 	display: flex;
 	just
@@ -374,19 +431,17 @@ const EpochPage = () => {
 				var ethTime = EpochData[0];
 				var lengthOfEpoch = EpochData[1];
 				const contractBal = EpochData[2];
-				const deltaTval =
-					EpochData[3]
-						.map((e, i) => {
-							return (RTP[i] - EpochData[4][i]) / EpochData[4][i];
-						})
-						.reduce((a, b) => Number(a) + Number(b), 0) / 20;
+				const deltaTval = EpochData[3]
+					.map((e, i) => {
+						return (RTP[i] - EpochData[4][i]) / EpochData[4][i];
+					})
+					.reduce((a, b) => Number(a) + Number(b), 0);
 
-				const deltaWval =
-					EpochData[3]
-						.map((e, i) => {
-							return ((EpochData[5][i] / 10 ** 16) * (RTP[i] - EpochData[4][i])) / EpochData[4][i];
-						})
-						.reduce((a, b) => Number(a) + Number(b), 0) / 20;
+				const deltaWval = EpochData[3]
+					.map((e, i) => {
+						return ((EpochData[5][i] / 10 ** 16) * (RTP[i] - EpochData[4][i])) / EpochData[4][i];
+					})
+					.reduce((a, b) => Number(a) + Number(b), 0);
 
 				// get lastEpochBalance time for calculating time to next epoch rebalance.
 				var jsTime = Date.now() / 1000;
@@ -554,11 +609,23 @@ const EpochPage = () => {
 				</DappCardWrapper>
 				<UserBoxDeltaContainer>
 					<UserBoxDataBox>
-						<UserBoxDataCurrentRewardBigNum>{Number(deltaT).toFixed(2)}%</UserBoxDataCurrentRewardBigNum>
+						{deltaT < 0 ? (
+							<UserBoxDataDeltasBigNumNeg>{Number(deltaT).toFixed(2)}%</UserBoxDataDeltasBigNumNeg>
+						) : deltaT > 0 ? (
+							<UserBoxDataDeltasBigNumPos>{Number(deltaT).toFixed(2)}%</UserBoxDataDeltasBigNumPos>
+						) : deltaT <= 0 && deltaT >= 0 ? (
+							<UserBoxDataDeltasBigNum>{Number(deltaT).toFixed(2)}%</UserBoxDataDeltasBigNum>
+						) : null}
 						<UserBoxDataSubtitle> Change in token</UserBoxDataSubtitle>
 					</UserBoxDataBox>
 					<UserBoxDataBox>
-						<UserBoxDataCurrentRewardBigNum>{Number(deltaW).toFixed(2)}%</UserBoxDataCurrentRewardBigNum>
+						{deltaW < 0 ? (
+							<UserBoxDataDeltasBigNumNeg>{Number(deltaW).toFixed(2)}%</UserBoxDataDeltasBigNumNeg>
+						) : deltaW > 0 ? (
+							<UserBoxDataDeltasBigNumPos>{Number(deltaW).toFixed(2)}%</UserBoxDataDeltasBigNumPos>
+						) : deltaW <= 0 && deltaW >= 0 ? (
+							<UserBoxDataDeltasBigNum>{Number(deltaW).toFixed(2)}%</UserBoxDataDeltasBigNum>
+						) : null}
 						<UserBoxDataSubtitle> Change in wrapper</UserBoxDataSubtitle>
 					</UserBoxDataBox>
 				</UserBoxDeltaContainer>
