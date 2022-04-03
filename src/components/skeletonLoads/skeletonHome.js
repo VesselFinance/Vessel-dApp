@@ -354,9 +354,9 @@ const HomePage = () => {
 							<UserBoxContent>
 								<BoxHeader>Voting</BoxHeader>
 								<VoteContainer>
-									<BoxSubHeader>How Does voting work?</BoxSubHeader>
+									<BoxSubHeader>How does voting work?</BoxSubHeader>
 									<VoteDescriptionContainer>
-										Users must vote on the percentage allocation of tokens in the fund. In doing so,
+										Users can vote on the percentage allocation of tokens in the fund. In doing so,
 										users decide how Vessel evolves.
 									</VoteDescriptionContainer>
 
