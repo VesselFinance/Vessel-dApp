@@ -139,7 +139,9 @@ const ConnectButton = ({ style }) => {
 	const [dropdownOpen, setDropdownOpen] = useState(false);
 
 	useEffect(() => {
+		console.log(defaultAccount);
 		const checkWalletInStorage = () => {
+			console.log('CHECKING WALLET');
 			if (localStorage.getItem('account') !== '' && localStorage.getItem('account') !== null) {
 				connectWalletHandler();
 			} else {
@@ -160,11 +162,10 @@ const ConnectButton = ({ style }) => {
 			window.ethereum.removeListener('chainChanged', chainChangedHandler);
 			window.ethereum.removeListener('disconnect', disconnect);
 		};
-	}, [walletIsActive, defaultAccount]);
+	}, [defaultAccount]);
 
 	// handler for connecting wallet
-	const connectWalletHandler = () => {
-		//console.log('hello from conect wallet handler');
+	const connectWalletHandler = async () => {
 		if (window.ethereum && window.ethereum.isMetaMask) {
 			console.log('MetaMask Here!');
 
@@ -195,21 +196,19 @@ const ConnectButton = ({ style }) => {
 				}
 				console.error(error);
 			}
-			window.ethereum
-				.request({ method: 'eth_requestAccounts' })
-				.then(result => {
-					accountChangedHandler(result[0]);
-					localStorage.setItem('account', result[0]);
-					window.dispatchEvent(new Event('storage'));
-					//console.log('event dispatched');
-					getAccountBalance(result[0]);
-					setWalletIsActive(true);
-					//console.log('wallet connected');
-				})
-				.catch(error => {
-					setErrorMessage(error.message);
-					console.log(errorMessage);
-				});
+			console.log('hello');
+			const ethGetAccounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+			if (ethGetAccounts) {
+				console.log('hello from conect wallet handlerXXX');
+				accountChangedHandler(ethGetAccounts[0]);
+				localStorage.setItem('account', ethGetAccounts[0]);
+				console.log('EMITTING EVENT');
+				window.dispatchEvent(new Event('storage'));
+				//console.log('event dispatched');
+				getAccountBalance(ethGetAccounts[0]);
+				setWalletIsActive(true);
+				//console.log('wallet connected');
+			}
 		} else {
 			console.log('Need to install MetaMask');
 			setErrorMessage('Please install MetaMask browser extension to interact');

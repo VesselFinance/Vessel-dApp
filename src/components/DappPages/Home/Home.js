@@ -405,8 +405,9 @@ const HomePage = () => {
 					//	console.log('getting contract data');
 					await getContractDataWithoutAccount();
 					//	console.log('recieved contract data');
+					setRecievedContractData(true);
 				}
-				setRecievedContractData(true);
+
 				//console.log('getting wallet data');
 				await getContractAccountData(accounts);
 				//console.log('recieved wallet data');
@@ -420,7 +421,7 @@ const HomePage = () => {
 			setIsLoaded(true);
 		};
 		getContractData();
-	}, [walletConnectedMode, userBalance, recievedContractData, userHasVotedThisSession, walletHasSwappedThisSession]);
+	}, [walletConnectedMode, recievedContractData, userHasVotedThisSession]);
 
 	const setVoteStatusOfUser = () => {
 		if (!walletConnectedMode) {
