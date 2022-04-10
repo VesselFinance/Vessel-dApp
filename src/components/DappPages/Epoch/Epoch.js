@@ -466,6 +466,10 @@ const EpochPage = () => {
 		getContractData();
 	}, []);
 
+	const sleep = milliseconds => {
+		return new Promise(resolve => setTimeout(resolve, milliseconds));
+	};
+
 	// function for triggering epoch rebalance
 	const HandleTriggerRebalance = async () => {
 		try {
@@ -488,12 +492,22 @@ const EpochPage = () => {
 				data: contract.methods._rebalanceEpoch().encodeABI(),
 			};
 
-			await window.ethereum.request({
+			const txHash = await window.ethereum.request({
 				method: 'eth_sendTransaction',
 				params: [transactionParameters],
 			});
 
-			setBountyLockStatus(true);
+			let transactionReceipt = null;
+			while ((transactionReceipt = null)) {
+				transactionReceipt = await web3.eth.getTransactionReceipt(txHash);
+				await sleep(1000);
+			}
+			if (transactionReceipt.status === true) {
+				setBountyLockStatus(true);
+				console.log('epoch successfully reset. rerendering...');
+			} else {
+				console.log('transaction failed, not rerendering.');
+			}
 		} catch (err) {
 			console.log(err.message);
 		}

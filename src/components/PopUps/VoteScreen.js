@@ -444,9 +444,9 @@ const VoteModal = props => {
 						<InformationButton
 							// cancel vote
 							onClick={() => {
-								setTokensToVoteOn(tokensToVoteOn => [
-									...tokensToVoteOn.splice(0, tokensToVoteOn.length),
-								]);
+								setTokensToVoteOn(tokensToVoteOn => []);
+								setTokenSelectedStatus(Array(20).fill(0));
+								setNewUserVotes(Array(20).fill(0));
 								setTotalAllocation(0);
 								props.onClose();
 								if (tokenSelectorOpen === false) {
@@ -470,6 +470,8 @@ const VoteModal = props => {
 							<ActionButton
 								onClick={() => {
 									handleTokenSelector();
+									setTotalAllocation(0);
+									setNewUserVotes(Array(20).fill(0));
 								}}
 							>
 								Select Tokens

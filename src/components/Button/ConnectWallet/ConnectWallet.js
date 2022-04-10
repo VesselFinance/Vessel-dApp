@@ -139,11 +139,13 @@ const ConnectButton = ({ style }) => {
 	const [dropdownOpen, setDropdownOpen] = useState(false);
 
 	useEffect(() => {
-		console.log(defaultAccount);
 		const checkWalletInStorage = () => {
 			console.log('CHECKING WALLET');
 			if (localStorage.getItem('account') !== '' && localStorage.getItem('account') !== null) {
-				connectWalletHandler();
+				if (localStorage.getItem('account') !== defaultAccount) {
+					console.log('hello from eager connect, CONNECT WALLET HANDLER EXECUTING');
+					connectWalletHandler();
+				}
 			} else {
 				setWalletIsActive(false);
 			}
@@ -212,6 +214,7 @@ const ConnectButton = ({ style }) => {
 		} else {
 			console.log('Need to install MetaMask');
 			setErrorMessage('Please install MetaMask browser extension to interact');
+			console.log(errorMessage);
 		}
 	};
 
