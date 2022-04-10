@@ -32,6 +32,8 @@ const ModalMain = styled.div`
 	color: ${theme.color.text.primary};
 	width: 80%;
 	height: 70vh;
+	min-height: 470px;
+	max-height: 500px;
 	top: 50%;
 	left: 50%;
 	transform: translate(calc(-50% - 0.4px), calc(-50% - 0.4px));
@@ -197,6 +199,7 @@ const SelectorListItem = styled.li`
 `;
 
 const VoteActionButtons = styled.div`
+	position: relative;
 	display: flex;
 	width: 100%;
 	flex-direction: row;
