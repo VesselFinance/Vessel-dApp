@@ -383,6 +383,7 @@ const BountyLockIcon = styled.img`
 `;
 
 const EpochPage = () => {
+	const [walletConnectedMode, setWalletConnectedMode] = React.useState(false);
 	const [isLoaded, setIsLoaded] = React.useState(false);
 	const [timeToNextEpoch, setTimeToNextEpoch] = React.useState(0);
 	const [bountyValue, setBountyValue] = React.useState(0);
@@ -390,6 +391,21 @@ const EpochPage = () => {
 	const [deltaT, setDeltaT] = React.useState(0);
 	const [deltaW, setDeltaW] = React.useState(0);
 	const [bountyLockStatus, setBountyLockStatus] = React.useState(true);
+	const [walletHasSwappedThisSession, setWalletHasSwappedThisSession] = React.useState(0);
+
+	/* listen to event emitted from change in local storage, set Wallet Connect Mode for 
+	appropriate component rerender */
+	window.addEventListener('storage', function getFromStorage() {
+		// When local storage changes, dump the list to
+		// the console.
+		if (localStorage.getItem('account') === '' || localStorage.getItem('account') === null) {
+			setWalletConnectedMode(false);
+		} else if (localStorage.getItem('account') !== '' || localStorage.getItem('account') !== null) {
+			setWalletConnectedMode(true);
+			setWalletHasSwappedThisSession(walletHasSwappedThisSession + 1);
+		}
+		window.removeEventListener('storage', getFromStorage);
+	});
 
 	// initialise getting lastEpochBalance time for calculating time to next epoch rebalance, and then get the value of the bounty reward.
 	React.useEffect(() => {
@@ -464,7 +480,7 @@ const EpochPage = () => {
 		};
 
 		getContractData();
-	}, []);
+	}, [walletConnectedMode, walletHasSwappedThisSession]);
 
 	const sleep = milliseconds => {
 		return new Promise(resolve => setTimeout(resolve, milliseconds));
@@ -602,7 +618,7 @@ const EpochPage = () => {
 										</UserBoxDataSubtitle>
 									</UserBoxDataBox>
 								</UserBoxDataContainer>
-								{bountyLockStatus === false ? (
+								{bountyLockStatus === false && walletConnectedMode === true ? (
 									<PrimaryButton
 										onClick={() => {
 											HandleTriggerRebalance();
@@ -610,9 +626,11 @@ const EpochPage = () => {
 									>
 										Reset Epoch & Collect
 									</PrimaryButton>
-								) : (
+								) : bountyLockStatus === false && walletConnectedMode === false ? (
+									<InformationButtonGreyed>Connect wallet to reset</InformationButtonGreyed>
+								) : bountyLockStatus === true ? (
 									<InformationButtonGreyed>Reset Epoch & Collect</InformationButtonGreyed>
-								)}
+								) : null}
 							</UserBoxContent>
 						</UserAndGraphContainer>
 					</AssetAllocationContainer>
