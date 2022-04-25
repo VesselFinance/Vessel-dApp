@@ -1,8 +1,8 @@
 import theme from '../Theme/theme';
 import bp from '../Theme/breakpoints';
 import Footer from '../Navigation/Footer/Footer';
-import pinkGlow from '../../assets/images/PINK_round.svg';
-import darkBlueGlow from '../../assets/images/PURPLE_round.svg';
+import blueGlow from '../../assets/images/BLUE_round.svg';
+import greenGlow from '../../assets/images/GREEN_round.svg';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requires a loader
 import InformationButtonGreyed from '../Button/InformationButton/InformationButtonGreyed';
 import Countdown from 'react-countdown';
@@ -409,7 +409,7 @@ const HomePage = () => {
 						</AboutSectionSubHeader>
 					</PageHeader>
 
-					<BackgroundBlurLeft src={darkBlueGlow} alt="blue Glow" />
+					<BackgroundBlurLeft src={blueGlow} alt="blue Glow" />
 
 					<DappCardWrapper>
 						<AssetAllocationContainer>
@@ -458,7 +458,7 @@ const HomePage = () => {
 							</UserAndGraphContainer>
 						</AssetAllocationContainer>
 
-						<BackgroundBlurRight src={pinkGlow} alt="blue Glow" />
+						<BackgroundBlurRight src={greenGlow} alt="blue Glow" />
 					</DappCardWrapper>
 					<UserBoxDeltaContainer>
 						<UserBoxDataBox>
