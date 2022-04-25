@@ -411,6 +411,21 @@ const EpochPage = () => {
 	React.useEffect(() => {
 		const getContractData = async () => {
 			const getAndSetVesselContractData = async () => {
+				try {
+					if (!window.ethereum || localStorage.getItem('account') === '') {
+						console.log('no account found');
+						throw new Error('No crypto wallet found. Please install it.');
+					}
+					const web3 = new Web3(window.ethereum);
+					web3.eth.setProvider(Web3.givenProvider);
+					const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+					accounts !== null ? setWalletConnectedMode(true) : setWalletConnectedMode(false);
+
+					// if wallet not connected, just pull contract data
+				} catch (err) {
+					console.log(err.message);
+				}
+
 				const EpochData = await Promise.all([
 					contractMethods.lastEpochRebalance(), //[0]
 					contractMethods.epochLength(), //[1]
@@ -626,7 +641,7 @@ const EpochPage = () => {
 									>
 										Reset Epoch & Collect
 									</PrimaryButton>
-								) : bountyLockStatus === false && walletConnectedMode === false ? (
+								) : walletConnectedMode === false ? (
 									<InformationButtonGreyed>Connect wallet to reset</InformationButtonGreyed>
 								) : bountyLockStatus === true ? (
 									<InformationButtonGreyed>Reset Epoch & Collect</InformationButtonGreyed>

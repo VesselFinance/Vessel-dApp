@@ -453,7 +453,7 @@ const HomePage = () => {
 										</UserBoxDataBox>
 									</UserBoxDataContainer>
 
-									<InformationButtonGreyed>Reset Epoch & Collect</InformationButtonGreyed>
+									<InformationButtonGreyed>Loading...</InformationButtonGreyed>
 								</UserBoxContent>
 							</UserAndGraphContainer>
 						</AssetAllocationContainer>

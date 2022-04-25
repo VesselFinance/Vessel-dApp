@@ -360,7 +360,7 @@ const HomePage = () => {
 										users decide how Vessel evolves.
 									</VoteDescriptionContainer>
 
-									<InformationButtonGreyed>loading...</InformationButtonGreyed>
+									<InformationButtonGreyed>Loading...</InformationButtonGreyed>
 								</VoteContainer>
 							</UserBoxContent>
 						</UserAndGraphContainer>
